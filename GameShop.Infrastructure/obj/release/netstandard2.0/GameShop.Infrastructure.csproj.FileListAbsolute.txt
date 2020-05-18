@@ -1,0 +1,14 @@
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\bin\release\netstandard2.0\GameShop.Infrastructure.deps.json
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\bin\release\netstandard2.0\GameShop.Infrastructure.dll
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\bin\release\netstandard2.0\GameShop.Infrastructure.pdb
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\bin\release\netstandard2.0\GameShop.Application.dll
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\bin\release\netstandard2.0\GameShop.Domain.dll
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\bin\release\netstandard2.0\GameShop.Application.pdb
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\bin\release\netstandard2.0\GameShop.Domain.pdb
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\obj\release\netstandard2.0\GameShop.Infrastructure.csprojAssemblyReference.cache
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\obj\release\netstandard2.0\GameShop.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\obj\release\netstandard2.0\GameShop.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\obj\release\netstandard2.0\GameShop.Infrastructure.AssemblyInfo.cs
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\obj\release\netstandard2.0\GameShop.Infrastructure.csproj.CopyComplete
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\obj\release\netstandard2.0\GameShop.Infrastructure.dll
+C:\Users\Dawid\Documents\GameShop\GameShop.Infrastructure\obj\release\netstandard2.0\GameShop.Infrastructure.pdb
