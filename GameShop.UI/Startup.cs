@@ -36,8 +36,10 @@ namespace GameShop.UI
             services.AddDbContext<Infrastructure.ApplicationDbContext>(x => x.UseSqlite
             (Configuration.GetConnectionString("DefaultConnection") , b => b.MigrationsAssembly("GameShop.Infrastructure")));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson();
             services.AddScoped<IAuthRepository , AuthRepository>();
+            services.AddScoped<IGameShopRepository , GameShopRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters 

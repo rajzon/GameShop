@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "9AZGnZvf5OP4c0IEvQFdCdi09VnHszEsMq1R35uJvhqJCuNsgEWSuXV5UZmUitcEoOakx7SYVRhyAkUSwJXmjA==",
+  "dgSpecHash": "2jq3MErDq6+UeG1x73OMnPU79xndRsCJ6o7RSqhe5H+QUqneNXa1SApfztVGsdEZKUBZBfMNGRXoQ9mMN8/OUw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Infrastructure\\GameShop.Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -36,6 +36,7 @@
     "C:\\Users\\Dawid\\.nuget\\packages\\microsoft.net.http.headers\\2.2.0\\microsoft.net.http.headers.2.2.0.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\Dawid\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.0.2\\sqlitepclraw.bundle_e_sqlite3.2.0.2.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\sqlitepclraw.core\\2.0.2\\sqlitepclraw.core.2.0.2.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.0.2\\sqlitepclraw.lib.e_sqlite3.2.0.2.nupkg.sha512",
