@@ -1,3 +1,8 @@
+import { AdminService } from './_services/admin.service';
+import { ProductManagementComponent } from './admin/product-management/product-management.component';
+import { UserManagementComponent } from './admin/user-management/user-management.component';
+import { HasRoleDirective } from './_directives/hasRole.directive';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { AuthService } from './_services/auth.service';
 import { appRoutes } from './routes';
 import { BrowserModule } from '@angular/platform-browser';
@@ -7,6 +12,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -21,7 +28,12 @@ import { ContactComponent } from './contact/contact.component';
 import { RegisterComponent } from './register/register.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
+import { JwtModule } from '@auth0/angular-jwt';
+import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 
+export function tokenGetter() {
+   return localStorage.getItem('token');
+}
 
 @NgModule({
    declarations: [
@@ -36,7 +48,12 @@ import { ErrorInterceptorProvider } from './_services/error.interceptor';
       BasketComponent,
       ContactComponent,
       RegisterComponent,
-      SignInComponent
+      SignInComponent,
+      AdminPanelComponent,
+      HasRoleDirective,
+      UserManagementComponent,
+      ProductManagementComponent,
+      RolesModalComponent
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal'}),
@@ -44,11 +61,24 @@ import { ErrorInterceptorProvider } from './_services/error.interceptor';
       FormsModule,
       BrowserAnimationsModule,
       BsDropdownModule.forRoot(),
-      RouterModule.forRoot(appRoutes)
+      TabsModule.forRoot(),
+      RouterModule.forRoot(appRoutes),
+      ModalModule.forRoot(),
+      JwtModule.forRoot({
+         config: {
+            tokenGetter: tokenGetter,
+            whitelistedDomains: ['localhost:5000'],
+            blacklistedRoutes: ['localhost:5000/api/auth']
+         }
+      })
   ],
   providers: [
      ErrorInterceptorProvider,
-     AuthService
+     AuthService,
+     AdminService
+  ],
+  entryComponents: [
+     RolesModalComponent
   ],
   bootstrap: [AppComponent]
 })

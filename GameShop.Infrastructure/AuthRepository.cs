@@ -25,8 +25,7 @@ namespace GameShop.Infrastructure
 
             if(user == null) return null;
 
-            if(!VerifyPasswordHash(password, user.PasswordHash , user.PasswordSalt)) 
-                return null;
+            
             
             return user;
             
@@ -58,9 +57,7 @@ namespace GameShop.Infrastructure
         {
             byte[] passwordHash , passwordSalt;
             CreatePasswordHash(password ,out passwordHash , out passwordSalt);
-
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+  
 
             await _ctx.Users.AddAsync(user);
             await _ctx.SaveChangesAsync();

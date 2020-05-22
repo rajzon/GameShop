@@ -18,6 +18,10 @@ using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Identity;
+using GameShop.Domain.Model;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace GameShop.UI
 {
@@ -33,12 +37,26 @@ namespace GameShop.UI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityBuilder builder = services.AddIdentityCore<User>(opt => {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 4;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+                opt.User.RequireUniqueEmail = true;              
+            });
+
+            builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
+            builder.AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.AddRoleValidator<RoleValidator<Role>>();
+            builder.AddRoleManager<RoleManager<Role>>();
+            builder.AddSignInManager<SignInManager<User>>();
+
             services.AddDbContext<Infrastructure.ApplicationDbContext>(x => x.UseSqlite
             (Configuration.GetConnectionString("DefaultConnection") , b => b.MigrationsAssembly("GameShop.Infrastructure")));
 
             services.AddControllersWithViews()
                 .AddNewtonsoftJson();
-            services.AddScoped<IAuthRepository , AuthRepository>();
+            // services.AddScoped<IAuthRepository , AuthRepository>();
             services.AddScoped<IGameShopRepository , GameShopRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
@@ -51,7 +69,21 @@ namespace GameShop.UI
                         ValidateAudience = false
                     };
                 });
-            
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("ModerateProductRole", policy => policy.RequireRole("Admin", 
+                "Moderator"));                
+            });
+
+            services.AddControllers(options => 
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });        
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

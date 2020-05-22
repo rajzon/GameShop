@@ -1,3 +1,4 @@
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { NegateAuthGuard } from './_guards/negate-auth.guard';
 
 import { AuthGuard } from './_guards/auth.guard';
@@ -16,5 +17,6 @@ export const appRoutes: Routes = [
     {path: 'contact' , component: ContactComponent },
     {path: 'sign-in' , component: SignInComponent, canActivate: [NegateAuthGuard]},
     {path: 'register' , component: RegisterComponent, canActivate: [NegateAuthGuard]},
+    {path: 'admin' , component: AdminPanelComponent, canActivate: [AuthGuard], data: {roles: ['Admin','Moderator']}},
     {path: '**' , redirectTo: 'home' , pathMatch: 'full' },
 ];

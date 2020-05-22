@@ -9,78 +9,121 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using GameShop.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace GameShop.UI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
-    {
-        private readonly IAuthRepository _repo;
+    {      
         private readonly IConfiguration _config;
-        public AuthController(IAuthRepository repo, IConfiguration config)
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
+        public AuthController(IConfiguration config,  
+            UserManager<User> userManager, SignInManager<User> signInManager)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
             _config = config;
-            _repo = repo;
+            
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
+    {
+
+        
+        var userToCreate = new User
         {
+            UserName = userForRegisterDto.Username,
+            Email = userForRegisterDto.Email
+        };
 
-            userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
+        var result = await _userManager.CreateAsync(userToCreate , userForRegisterDto.Password);
 
-            if (await _repo.UserExist(userForRegisterDto.Username))
-            {
-                return BadRequest("Username already exisits");
-            }
-            var userToCreate = new User
-            {
-                UserName = userForRegisterDto.Username
-            };
-
-            var createdUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
-
+        if(result.Succeeded) 
+        {
             //TO DO: Change that to CreateAtRoute / CreateAtAction instead of Status Code(201)
             return StatusCode(201);
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
+        //var createdUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
+
+        
+        return BadRequest(result.Errors);
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
+    {
+
+
+        var user = await _userManager.FindByNameAsync(userForLoginDto.Username);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        var result = await _signInManager.CheckPasswordSignInAsync(user, userForLoginDto.Password, false);
+
+        var userToReturn = new User() 
+        {
+            UserName = user.UserName,
+            UserRoles = user.UserRoles,
+            Email = user.Email      
+        };
+
+        if (result.Succeeded)
         {
             
-
-            var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
-
-
-            if (userFromRepo == null)
-                return Unauthorized();
-
-            var claims = new[]
+            return Ok(new
             {
-                new Claim(ClaimTypes.NameIdentifier , userFromRepo.Id.ToString()),
-                new Claim(ClaimTypes.Name, userFromRepo.UserName)
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(_config.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var tokenDescriptor = new SecurityTokenDescriptor 
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return Ok(new {
-                token = tokenHandler.WriteToken(token)
+                token = await GenerateJwtToken(user),
+                userToReturn               
             });
         }
+
+
+        return Unauthorized();
+        
     }
+
+    private async Task<string> GenerateJwtToken(User user)
+    {
+        var claims = new List<Claim>
+        {
+                new Claim( ClaimTypes.NameIdentifier , user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName)
+        };
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8
+            .GetBytes(_config.GetSection("AppSettings:Token").Value));
+
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.Now.AddDays(1),
+            SigningCredentials = creds
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        return tokenHandler.WriteToken(token);
+    }
+}
 }

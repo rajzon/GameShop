@@ -12,6 +12,10 @@
         <a class="nav-link " [routerLink]="['/basket']"   tabindex="-1" aria-disabled="true">Basket</a>
       </li>
 
+      <li *appHasRole="['Admin', 'Moderator']" class="nav-item" routerLinkActive="active">
+        <a class="nav-link " [routerLink]="['/admin']"   tabindex="-1" aria-disabled="true">Admin</a>
+      </li>
+
       <!-- <li class="nav-item dropdown" dropdown >
         <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" dropdowntoggle >Sign in | Register</a>
         <div class="dropdown-menu" aria-labelledby="dropdown01" >
