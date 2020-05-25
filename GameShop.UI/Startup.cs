@@ -51,11 +51,18 @@ namespace GameShop.UI
             builder.AddRoleManager<RoleManager<Role>>();
             builder.AddSignInManager<SignInManager<User>>();
 
-            services.AddDbContext<Infrastructure.ApplicationDbContext>(x => x.UseSqlite
-            (Configuration.GetConnectionString("DefaultConnection") , b => b.MigrationsAssembly("GameShop.Infrastructure")));
+            services.AddDbContext<Infrastructure.ApplicationDbContext>(x => 
+            {
+                x.UseLazyLoadingProxies();
+                x.UseSqlite(Configuration.GetConnectionString("DefaultConnection") , b => b.MigrationsAssembly("GameShop.Infrastructure"));
+            }); 
 
             services.AddControllersWithViews()
-                .AddNewtonsoftJson();
+                .AddNewtonsoftJson(opt =>
+                {
+                    opt.SerializerSettings.ReferenceLoopHandling =
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
             // services.AddScoped<IAuthRepository , AuthRepository>();
             services.AddScoped<IGameShopRepository , GameShopRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

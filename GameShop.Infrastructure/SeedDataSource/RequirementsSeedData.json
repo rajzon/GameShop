@@ -1,0 +1,73 @@
+[
+    {
+        "Id": 1,
+        "OS": "Windows 7/8/10",
+        "Processor": "Intel Core i7 4790 3.6 GHz / AMD FX-9590 4.7 GHz",
+        "RAM": 6,
+        "GraphicsCard": "NVIDIA GeForce RTX 2080Ti 11GB / AMD Radeon RX 5700XT 8GB",
+        "HDD": 50,
+        "IsNetworkConnectionRequire": true,
+        "ProductId": 1
+    },
+    {
+        "Id": 2,
+        "OS": "None",
+        "Processor": "None",
+        "RAM": 0,
+        "GraphicsCard": "None",
+        "HDD": 30,
+        "IsNetworkConnectionRequire": true,
+        "ProductId": 2
+    },
+    {
+        "Id": 3,
+        "OS": "None",
+        "Processor": "None",
+        "RAM": 0,
+        "GraphicsCard": "None",
+        "HDD": 10,
+        "IsNetworkConnectionRequire": true,
+        "ProductId": 3
+    },
+    {
+        "Id": 4,
+        "OS": "Windows 10",
+        "Processor": "Intel Core i7 4790 3.6 GHz / AMD FX-9590 4.7 GHz",
+        "RAM": 2,
+        "GraphicsCard": "NVIDIA GeForce GTX 780 3GB / AMD Radeon R9 290X 4GB",
+        "HDD": 10,
+        "IsNetworkConnectionRequire": true,
+        "ProductId": 4
+    },
+    {
+        "Id": 5,
+        "OS": "None",
+        "Processor": "None",
+        "RAM": 0,
+        "GraphicsCard": "None",
+        "HDD": 50,
+        "IsNetworkConnectionRequire": true,
+        "ProductId": 5
+    },
+    {
+        "Id": 6,
+        "OS": "None",
+        "Processor": "None",
+        "RAM": 0,
+        "GraphicsCard": "None",
+        "HDD": 30,
+        "IsNetworkConnectionRequire": true,
+        "ProductId": 6
+    },
+    {
+        "Id": 7,
+        "OS": "Windows 8/10",
+        "Processor": "Intel Core i5 4690 3.3 GHz / AMD Ryzen 5 3600x 3.8 GHz",
+        "RAM": 16,
+        "GraphicsCard": "NVIDIA GeForce RTX 2080Ti 11GB / AMD Radeon RX 5700XT 8GB",
+        "HDD": 30,
+        "IsNetworkConnectionRequire": true,
+        "ProductId": 7
+    }
+      
+]

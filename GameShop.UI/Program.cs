@@ -20,11 +20,12 @@ namespace GameShop.UI
                 var services = scope.ServiceProvider;
                 try 
                 {
-                    var ctx = services.GetRequiredService<ApplicationDbContext>();
+                    var ctx = services.GetRequiredService<ApplicationDbContext>();        
                     var userManager = services.GetRequiredService<UserManager<User>>();
                     var roleManager = services.GetRequiredService<RoleManager<Role>>();
                     ctx.Database.Migrate();
-                    Seed.SeedUsers(userManager, roleManager);
+                    Seed.SeedUsers(userManager, roleManager);     
+                    Seed.SeedProductsFKs(ctx);                
                 }
                 catch (Exception ex)
                 {

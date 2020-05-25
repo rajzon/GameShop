@@ -9,14 +9,184 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200520182306_IdentityInit")]
-    partial class IdentityInit
+    [Migration("20200525172155_IdentityAndProductWithRelatedEntities")]
+    partial class IdentityAndProductWithRelatedEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.3");
+
+            modelBuilder.Entity("GameShop.Domain.Model.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.CategorySubCategory", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CategoryId", "SubCategoryId");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("CategoriesSubCategories");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.Language", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Languages");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.Photo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("isMain")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Photos");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDigitalMedia")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte>("Pegi")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.ProductLanguage", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ProductId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("ProductsLanaguages");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.ProductSubCategory", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ProductId", "SubCategoryId");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("ProductsSubCategories");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.Requirements", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("GraphicsCard")
+                        .HasColumnType("TEXT");
+
+                    b.Property<ushort>("HDD")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsNetworkConnectionRequire")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("OS")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Processor")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte>("RAM")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("Requirements");
+                });
 
             modelBuilder.Entity("GameShop.Domain.Model.Role", b =>
                 {
@@ -43,6 +213,23 @@ namespace GameShop.Infrastructure.Migrations
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.SubCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("GameShop.Domain.Model.User", b =>
@@ -87,9 +274,6 @@ namespace GameShop.Infrastructure.Migrations
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("TEXT");
-
-                    b.Property<byte[]>("PasswordSalt")
-                        .HasColumnType("BLOB");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("TEXT");
@@ -230,6 +414,76 @@ namespace GameShop.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.CategorySubCategory", b =>
+                {
+                    b.HasOne("GameShop.Domain.Model.Category", "Category")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GameShop.Domain.Model.SubCategory", "SubCategory")
+                        .WithMany("Categories")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.Photo", b =>
+                {
+                    b.HasOne("GameShop.Domain.Model.Product", "Product")
+                        .WithMany("Photos")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.Product", b =>
+                {
+                    b.HasOne("GameShop.Domain.Model.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.ProductLanguage", b =>
+                {
+                    b.HasOne("GameShop.Domain.Model.Language", "Language")
+                        .WithMany("Products")
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GameShop.Domain.Model.Product", "Product")
+                        .WithMany("Languages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.ProductSubCategory", b =>
+                {
+                    b.HasOne("GameShop.Domain.Model.Product", "Product")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GameShop.Domain.Model.SubCategory", "SubCategory")
+                        .WithMany("Products")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.Requirements", b =>
+                {
+                    b.HasOne("GameShop.Domain.Model.Product", "Product")
+                        .WithOne("Requirements")
+                        .HasForeignKey("GameShop.Domain.Model.Requirements", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GameShop.Domain.Model.UserRole", b =>

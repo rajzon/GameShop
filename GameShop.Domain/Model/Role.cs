@@ -5,6 +5,6 @@ namespace GameShop.Domain.Model
 {
     public class Role : IdentityRole<int>
     {
-        public ICollection<UserRole> UserRoles { get; set; }
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

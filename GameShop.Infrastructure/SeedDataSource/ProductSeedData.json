@@ -1,0 +1,72 @@
+[
+    {
+      "Id": 1,
+      "Description": "Nulla amet commodo minim esse adipisicing commodo sint esse laboris adipisicing. Officia Lorem laboris ipsum labore mollit ipsum est enim elit exercitation quis deserunt. Nostrud dolore ut sint est ut officia voluptate consequat mollit. Nulla cupidatat mollit dolore non consequat amet Lorem. Magna dolor veniam anim aliquip aliquip esse consequat velit veniam tempor in.\r\n",
+      "IsDigitalMedia": true,
+      "Price": 48.82,
+      "Name": "The Witcher 3 Wild Hunt",
+      "Pegi": 18,
+      "ReleaseDate": "2017-03-31",
+      "CategoryId": 1   
+    },
+    {
+      "Id": 2,
+      "Description": "Exercitation occaecat esse sunt elit adipisicing magna quis laborum. Sunt consequat nulla minim labore. Laborum ut irure cupidatat et ullamco minim occaecat id consequat officia non. Deserunt incididunt ea qui incididunt. Duis laborum proident do nulla anim laboris eiusmod incididunt velit.\r\n",
+      "IsDigitalMedia": false,
+      "Price": 26.81,
+      "Name": "Assassin’s Creed Odyssey",
+      "Pegi": 16,
+      "ReleaseDate": "2017-07-31",
+      "CategoryId": 2 
+    },
+    {
+      "Id": 3,
+      "Description": "Voluptate ut in commodo eu dolore aliquip ex. Pariatur velit laborum anim cillum et sit irure sit. Ipsum cillum officia ipsum irure consectetur irure occaecat deserunt aliquip esse consectetur eu. Cupidatat sit consequat magna sit pariatur consequat. Enim labore commodo nisi sunt commodo.\r\n",
+      "IsDigitalMedia": true,
+      "Price": 34.82,
+      "Name": "Battlefield V",
+      "Pegi": 12,
+      "ReleaseDate": "2017-06-01",
+      "CategoryId": 3
+    },
+    {
+      "Id": 4,
+      "Description": "Ex consectetur nisi id laborum laboris. Officia eu culpa nisi sint incididunt tempor consequat reprehenderit cillum proident minim laboris. Eiusmod proident nulla laboris eiusmod excepteur fugiat adipisicing voluptate aliqua sunt anim est. Non tempor duis veniam et consequat ipsum ullamco. Culpa aute dolor commodo amet proident deserunt consequat pariatur reprehenderit officia.\r\n",
+      "IsDigitalMedia": true,
+      "Price": 42.02,
+      "Name": "Layers of Fear",
+      "Pegi": 18,
+      "ReleaseDate": "2017-05-16",
+      "CategoryId": 1
+    },
+    {
+      "Id": 5,
+      "Description": "Velit in ea aliqua sint veniam fugiat eiusmod. Incididunt cillum do pariatur cillum dolore occaecat ad. Minim aute laborum ex dolore. Ea exercitation minim et nostrud in elit eu esse amet eiusmod. Ad ut nostrud qui consectetur sunt consequat magna magna labore qui.\r\n",
+      "IsDigitalMedia": true,
+      "Price": 55.15,
+      "Name": "The Last of Us",
+      "Pegi": 16,
+      "ReleaseDate": "2017-07-30",
+      "CategoryId": 2
+    },
+    {
+      "Id": 6,
+      "Description": "Incididunt ullamco quis eu consectetur. Elit nostrud ipsum amet minim non nostrud ipsum dolore magna magna. Ad deserunt elit velit esse aliqua quis proident in cupidatat quis. Ullamco ut in labore ad tempor aliqua aute quis amet occaecat irure. Amet deserunt velit ut ipsum ad anim mollit reprehenderit ea ipsum.\r\n",
+      "IsDigitalMedia": false,
+      "Price": 33.02,
+      "Name": "Forza Horizon 4",
+      "Pegi": 12,
+      "ReleaseDate": "2017-08-21",
+      "CategoryId": 3
+    },
+    {
+      "Id": 7,
+      "Description": "Incididunt minim excepteur adipisicing Lorem labore irure incididunt proident sint id qui. Culpa exercitation adipisicing minim sit elit magna nisi pariatur do sint minim irure. Ut do nisi in fugiat aliquip proident. Eiusmod elit et aliquip consectetur eu irure.\r\n",
+      "IsDigitalMedia": false,
+      "Price": 5.53,
+      "Name": "Might & Magic: Heroes VII",
+      "Pegi": 12,
+      "ReleaseDate": "2017-06-07",
+      "CategoryId": 1   
+    }
+  ]

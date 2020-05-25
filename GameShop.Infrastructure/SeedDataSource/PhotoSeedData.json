@@ -1,0 +1,51 @@
+[
+    {
+        "Id":1,
+        "url": "http://placehold.it/200x300.jpg",
+        "isMain": true,
+        "DateAdded": "2020-04-07",
+        "ProductId": 1
+    },
+    {
+        "Id":2,
+        "url": "http://placehold.it/200x300.jpg",
+        "isMain": true,
+        "DateAdded": "2020-06-28",
+        "ProductId": 2
+    },
+    {
+        "Id":3,
+        "url": "http://placehold.it/200x300.jpg",
+        "isMain": true,
+        "DateAdded": "2020-03-31",
+        "ProductId": 3
+    },
+    {
+        "Id":4,
+        "url": "http://placehold.it/200x300.jpg",
+        "isMain": true,
+        "DateAdded": "2020-01-03",
+        "ProductId": 4
+    },
+    {
+        "Id":5,
+        "url": "http://placehold.it/200x300.jpg",
+        "isMain": true,
+        "DateAdded": "2020-07-01",
+        "ProductId": 5
+    },
+    {
+        "Id":6,
+        "url": "http://placehold.it/200x300.jpg",
+        "isMain": true,
+        "DateAdded": "2020-01-13",
+        "ProductId": 6
+    },
+    {
+        "Id":7,
+        "url": "http://placehold.it/200x300.jpg",
+        "isMain": true,
+        "DateAdded": "2020-07-17",
+        "ProductId": 7
+    }
+]

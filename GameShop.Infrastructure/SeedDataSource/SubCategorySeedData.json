@@ -1,0 +1,37 @@
+[
+    {
+      "Id": 1,
+      "Name": "RPG",
+      "Description": "RPG Description"
+    },
+    {
+      "Id": 2,
+      "Name": "FPS",
+      "Description": "FPS Description"
+    },
+    {
+      "Id": 3,
+      "Name": "Horror",
+      "Description": "Horror Description"
+    },
+    {
+      "Id": 4,
+      "Name": "MMO",
+      "Description": "MMO Description"
+    },
+    {
+      "Id": 5,
+      "Name": "RTS",
+      "Description": "RTS Description"
+    },
+    {
+        "Id": 6,
+        "Name": "Racing",
+        "Description": "Racing Description"
+    },
+    {
+        "Id": 7,
+        "Name": "Adventure",
+        "Description": "Adventure Description"
+    }   
+  ]

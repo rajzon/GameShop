@@ -9,6 +9,6 @@ namespace GameShop.Domain.Model
        
         public DateTime Created { get; set; }
         public DateTime LastActive { get; set; }   
-        public ICollection<UserRole> UserRoles { get; set; } 
+        public virtual ICollection<UserRole> UserRoles { get; set; } 
     }
 }
