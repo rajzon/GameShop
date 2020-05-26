@@ -70,9 +70,26 @@ namespace GameShop.UI.Controllers
 
         [Authorize(Policy = "ModerateProductRole")]
         [HttpGet("prodcuts-for-moderation")]
-        public IActionResult GetProductsForModeration()
+        public async Task<IActionResult> GetProductsForModeration()
         {
-            return Ok("Only Admin and Moderator can see that content");
+            var productList = await _ctx.Products.OrderBy(x => x.Id)
+                .Select(product => new
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                        Description = product.Description,
+                        Pegi = product.Pegi,
+                        Price = product.Price,
+                        IsDigitalMedia = product.IsDigitalMedia,
+                        ReleaseDate = product.ReleaseDate,
+                        SubCategories = (from productSubCategory in product.SubCategories
+                                        join subCategory in _ctx.SubCategories
+                                        on productSubCategory.SubCategoryId
+                                        equals subCategory.Id
+                                        select subCategory.Name).ToList()
+                    }).ToListAsync(); 
+
+            return Ok(productList);
         }
 
     }

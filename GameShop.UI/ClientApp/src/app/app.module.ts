@@ -16,10 +16,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ValueComponent } from './value/value.component';
 import { NavComponent } from './nav/nav.component';
 import { MyAccountComponent } from './my-account/my-account.component';
@@ -38,10 +35,7 @@ export function tokenGetter() {
 @NgModule({
    declarations: [
       AppComponent,
-      NavMenuComponent,
       HomeComponent,
-      CounterComponent,
-      FetchDataComponent,
       ValueComponent,
       NavComponent,
       MyAccountComponent,

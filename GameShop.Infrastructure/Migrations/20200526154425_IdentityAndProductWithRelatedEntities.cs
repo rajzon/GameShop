@@ -56,8 +56,8 @@ namespace GameShop.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 40, nullable: false),
+                    Description = table.Column<string>(maxLength: 500, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,7 +70,7 @@ namespace GameShop.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,8 +83,8 @@ namespace GameShop.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 40, nullable: false),
+                    Description = table.Column<string>(maxLength: 500, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -216,8 +216,8 @@ namespace GameShop.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 2000, nullable: false),
                     Pegi = table.Column<byte>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     IsDigitalMedia = table.Column<bool>(nullable: false),
@@ -265,7 +265,7 @@ namespace GameShop.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Url = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(maxLength: 130, nullable: false),
                     DateAdded = table.Column<DateTime>(nullable: false),
                     isMain = table.Column<bool>(nullable: false),
                     ProductId = table.Column<int>(nullable: false)
@@ -335,10 +335,10 @@ namespace GameShop.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    OS = table.Column<string>(nullable: true),
-                    Processor = table.Column<string>(nullable: true),
+                    OS = table.Column<string>(maxLength: 20, nullable: true),
+                    Processor = table.Column<string>(maxLength: 30, nullable: true),
                     RAM = table.Column<byte>(nullable: false),
-                    GraphicsCard = table.Column<string>(nullable: true),
+                    GraphicsCard = table.Column<string>(maxLength: 40, nullable: true),
                     HDD = table.Column<ushort>(nullable: false),
                     IsNetworkConnectionRequire = table.Column<bool>(nullable: false),
                     ProductId = table.Column<int>(nullable: false)

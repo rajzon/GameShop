@@ -23,10 +23,14 @@ namespace GameShop.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(500);
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(40);
 
                     b.HasKey("Id");
 
@@ -162,7 +166,9 @@ namespace GameShop.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(25);
 
                     b.HasKey("Id");
 
@@ -214,7 +220,9 @@ namespace GameShop.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Url")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(130);
 
                     b.Property<bool>("isMain")
                         .HasColumnType("INTEGER");
@@ -294,13 +302,17 @@ namespace GameShop.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(2000);
 
                     b.Property<bool>("IsDigitalMedia")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.Property<byte>("Pegi")
                         .HasColumnType("INTEGER");
@@ -563,7 +575,8 @@ namespace GameShop.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("GraphicsCard")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(40);
 
                     b.Property<ushort>("HDD")
                         .HasColumnType("INTEGER");
@@ -572,10 +585,12 @@ namespace GameShop.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("OS")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(20);
 
                     b.Property<string>("Processor")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(30);
 
                     b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
@@ -704,10 +719,14 @@ namespace GameShop.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(500);
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(40);
 
                     b.HasKey("Id");
 

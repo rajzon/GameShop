@@ -1,5 +1,6 @@
 using GameShop.Domain.Model;
 using GameShop.Extensions.Infrastructure;
+using GameShop.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,12 @@ namespace GameShop.Infrastructure
 
             base.OnModelCreating(builder);
 
+            builder.ApplyConfiguration(new ProductConfiguration());
+            builder.ApplyConfiguration(new RequirementsConfiguration());
+            builder.ApplyConfiguration(new LanguageConfiguration());
+            builder.ApplyConfiguration(new PhotoConfiguration());
+            builder.ApplyConfiguration(new CategoryConfiguration());
+            builder.ApplyConfiguration(new SubCategoryConfiguration());
 
 
             builder.Entity<Product>()

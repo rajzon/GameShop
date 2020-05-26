@@ -3,7 +3,6 @@ using System.Text;
 using GameShop.Infrastructure;
 using GameShop.Application.Interfaces;
 using GameShop.Application.Helpers;
-using GameShop.UI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
