@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 @Injectable({
@@ -7,10 +8,12 @@ import { CanActivate, Router } from '@angular/router';
 })
 export class NegateAuthGuard implements CanActivate {
   private loggedIn: boolean;
+  jwtHelper = new JwtHelperService();
 
   constructor(private router: Router) {}
   canActivate():  boolean  {
-    this.loggedIn = !!localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    this.loggedIn = !this.jwtHelper.isTokenExpired(token);
     console.log(this.loggedIn);
     if (!this.loggedIn) {
       return true;

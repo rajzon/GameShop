@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Identity;
 using GameShop.Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using AutoMapper;
+using GameShop.Application.Mappings;
 
 namespace GameShop.UI
 {
@@ -52,7 +54,7 @@ namespace GameShop.UI
 
             services.AddDbContext<Infrastructure.ApplicationDbContext>(x => 
             {
-                x.UseLazyLoadingProxies();
+                //x.UseLazyLoadingProxies();
                 x.UseSqlite(Configuration.GetConnectionString("DefaultConnection") , b => b.MigrationsAssembly("GameShop.Infrastructure"));
             }); 
 
@@ -63,6 +65,7 @@ namespace GameShop.UI
                     Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
             // services.AddScoped<IAuthRepository , AuthRepository>();
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddScoped<IGameShopRepository , GameShopRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {

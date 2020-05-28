@@ -12,7 +12,8 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router, private authService: AuthService) {}
   canActivate(next: ActivatedRouteSnapshot):  boolean  {
     const roles = next.data['roles'] as Array<string>;
-    if (roles) {
+    this.loggedIn = this.authService.loggedIn();
+    if (roles && this.loggedIn) {
       const match = this.authService.roleMatch(roles);
       if (match) {
         return true;
@@ -23,7 +24,6 @@ export class AuthGuard implements CanActivate {
 
     }
 
-    this.loggedIn = this.authService.loggedIn();
     console.log(this.loggedIn);
     if (this.loggedIn) {
       return true;

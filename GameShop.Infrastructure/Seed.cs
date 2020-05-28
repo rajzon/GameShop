@@ -57,18 +57,23 @@ namespace GameShop.Infrastructure
 
         public static void SeedProductsFKs(ApplicationDbContext ctx)
         {
-            var products = ctx.Products;
-            int categoryId = 1;
-            foreach (var product in products)
+            if (!ctx.Products.Any())
             {
-                if (categoryId > 3)
-                {
-                    categoryId = 1;
-                }
 
-                ctx.Entry(product).Property("CategoryId").CurrentValue = categoryId++;
+
+                var products = ctx.Products;
+                int categoryId = 1;
+                foreach (var product in products)
+                {
+                    if (categoryId > 3)
+                    {
+                        categoryId = 1;
+                    }
+
+                    ctx.Entry(product).Property("CategoryId").CurrentValue = categoryId++;
+                }
+                ctx.SaveChanges();
             }
-            ctx.SaveChanges();
 
 
         }
