@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GameShop.Infrastructure.Migrations
 {
-    public partial class IdentityAndProductWithRelatedEntities : Migration
+    public partial class IdentityAdnProductWithRelatedEntities : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -296,13 +296,13 @@ namespace GameShop.Infrastructure.Migrations
                         column: x => x.LanguageId,
                         principalTable: "Languages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductsLanaguages_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

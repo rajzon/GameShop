@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
 using GameShop.Domain.Model;
 using GameShop.Infrastructure;
@@ -20,8 +22,10 @@ namespace GameShop.UI.Controllers
         private readonly ApplicationDbContext _ctx;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
-        public AdminController(ApplicationDbContext ctx, UserManager<User> userManager, IMapper mapper)
+        private readonly IGameShopRepository _repo;
+        public AdminController(ApplicationDbContext ctx, UserManager<User> userManager, IMapper mapper, IGameShopRepository repo)
         {
+            _repo = repo;
             _mapper = mapper;
             _userManager = userManager;
             _ctx = ctx;
@@ -118,58 +122,11 @@ namespace GameShop.UI.Controllers
                 return BadRequest("Sended blank product description");
             }
 
-            //var populateProdductLanguage = _ctx.ProductsLanaguages.add
+            var selectedCategory = await _repo.GetCategory(productForCreationDto.CategoryId);
 
-            var selectedCategory = await _ctx.Categories.FirstOrDefaultAsync(c => c.Id == productForCreationDto.CategoryId);
+            var requirementsToUpdate = _mapper.Map<Requirements>(productForCreationDto.Requirements);
 
-            var requirementsForProduct = new Requirements
-            {
-                OS = productForCreationDto.Requirements.OS,
-                HDD = productForCreationDto.Requirements.HDD,
-                Processor = productForCreationDto.Requirements.Processor,
-                GraphicsCard = productForCreationDto.Requirements.GraphicsCard,
-                IsNetworkConnectionRequire = productForCreationDto.Requirements.IsNetworkConnectionRequire,
-                RAM = productForCreationDto.Requirements.RAM,
-            };
-
-            var product = new Product
-            {
-                Name = productForCreationDto.Name,
-                Description = productForCreationDto.Description,
-                Pegi = productForCreationDto.Pegi,
-                Price = productForCreationDto.Price,
-                IsDigitalMedia = productForCreationDto.IsDigitalMedia,
-                ReleaseDate = productForCreationDto.ReleaseDate,
-                Category = selectedCategory,
-                Requirements = requirementsForProduct,
-                Languages = new List<ProductLanguage>(),
-                Photos = new List<Photo>(),
-                SubCategories = new List<ProductSubCategory>()
-            };
-
-            foreach (var languageId in productForCreationDto.LanguagesId)
-            {
-
-                var selectedLanguages = await _ctx.Languages.FirstOrDefaultAsync(l => l.Id == languageId);
-                var pl = new ProductLanguage { Product = product, Language = selectedLanguages };
-                product.Languages.Add(pl);
-
-            }
-            foreach (var photo in productForCreationDto.Photos)
-            {
-                var photoToCreate = new Photo { Url = photo };
-                product.Photos.Add(photoToCreate);
-            }
-
-            foreach (var subCategoryId in productForCreationDto.SubCategoriesId)
-            {
-                var selectedSubCategory = await _ctx.SubCategories.FirstOrDefaultAsync(sc => sc.Id == subCategoryId);
-                var psc = new ProductSubCategory { Product = product, SubCategory = selectedSubCategory };
-                product.SubCategories.Add(psc);
-            }
-
-            _ctx.Add(product);
-            await _ctx.SaveChangesAsync();
+            var prodcuts = await _repo.CreateProduct(productForCreationDto, requirementsToUpdate, selectedCategory);
 
             return Ok(_ctx.Products.FirstOrDefault(x => x.Name == productForCreationDto.Name));
         }
@@ -189,59 +146,11 @@ namespace GameShop.UI.Controllers
             var selectedCategory = await _ctx.Categories.FirstOrDefaultAsync(c => c.Id == productToEditDto.CategoryId);
 
 
-            var reqTest = _mapper.Map<Requirements>(productToEditDto.Requirements);
-           
+            var requirementsToUpdate = _mapper.Map<Requirements>(productToEditDto.Requirements);
 
-            var updatedProduct = new Product
-            {
-                Id = id,
-                Name = productToEditDto.Name,
-                Description = productToEditDto.Description,
-                Pegi = productToEditDto.Pegi,
-                Price = productToEditDto.Price,
-                IsDigitalMedia = productToEditDto.IsDigitalMedia,
-                ReleaseDate = productToEditDto.ReleaseDate,
-                Category = selectedCategory,
-                Requirements = reqTest,
-                Languages = new List<ProductLanguage>(),
-                Photos = new List<Photo>(),
-                SubCategories = new List<ProductSubCategory>()
+            var updatedProduct = await _repo.EditProduct(id, productToEditDto, requirementsToUpdate, selectedCategory, productFromDb);  
 
-            };
-
-            foreach (var languageId in productToEditDto.LanguagesId)
-            {
-
-                var selectedLanguages = await _ctx.Languages.FirstOrDefaultAsync(l => l.Id == languageId);
-
-                var pl = new ProductLanguage { Product = updatedProduct, Language = selectedLanguages };
-                if (!productFromDb.Languages.Contains(pl))
-                {
-                    updatedProduct.Languages.Add(pl);
-                }
-
-            }
-            foreach (var photo in productToEditDto.Photos)
-            {
-                var photoToCreate = new Photo { Url = photo };
-                updatedProduct.Photos.Add(photoToCreate);
-            }
-
-            foreach (var subCategoryId in productToEditDto.SubCategoriesId)
-            {
-                var selectedSubCategory = await _ctx.SubCategories.FirstOrDefaultAsync(sc => sc.Id == subCategoryId);
-                var psc = new ProductSubCategory { Product = updatedProduct, SubCategory = selectedSubCategory };
-                if (!productFromDb.SubCategories.Contains(psc))
-                {
-                    updatedProduct.SubCategories.Add(psc);
-                }
-                updatedProduct.SubCategories.Add(psc);
-            }
-            //var up = _mapper.Map<Product>(productToEditDto);
-
-
-
-
+            productFromDb.Id = updatedProduct.Id;
             productFromDb.Name = updatedProduct.Name;
             productFromDb.Description = updatedProduct.Description;
             productFromDb.Pegi = updatedProduct.Pegi;
@@ -249,19 +158,52 @@ namespace GameShop.UI.Controllers
             productFromDb.IsDigitalMedia = updatedProduct.IsDigitalMedia;
             productFromDb.ReleaseDate = updatedProduct.ReleaseDate;
             productFromDb.Category = selectedCategory;
-            if (updatedProduct.Languages != null)
-            {
-                productFromDb.Languages = updatedProduct.Languages;
-            }
-            productFromDb.Requirements = reqTest;
-            if (updatedProduct.SubCategories != null)
-            {
-                productFromDb.SubCategories = updatedProduct.SubCategories;
-            }
+            productFromDb.Languages = updatedProduct.Languages;
+            productFromDb.Requirements = requirementsToUpdate;
+            productFromDb.SubCategories = updatedProduct.SubCategories;
             productFromDb.Photos = updatedProduct.Photos;
 
+
+            // productFromDb.Languages = updatedProduct.Languages;
+      
+            // productFromDb.Requirements = requirementsToUpdate;
+            // //_ctx.Entry(productFromDb.Requirements).State = EntityState.Modified;
+            // productFromDb.SubCategories = updatedProduct.SubCategories;
+ 
+            //  productFromDb.Photos = updatedProduct.Photos;
+
+             
+              //_ctx.Entry(productFromDb).State = EntityState.Modified;
+           // _ctx.Update(productFromDb);
             await _ctx.SaveChangesAsync();
             return Ok(await _ctx.Products.FindAsync(id));
+        }
+
+        [Authorize(Policy = "ModerateProductRole")]
+        [HttpDelete("delete-product/{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {          
+
+            var selectedProduct = await _ctx.Products
+                   .Include(c => c.SubCategories)
+                   .Include(r => r.Requirements)
+                    .Include(l => l.Languages)
+                   .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (selectedProduct == null ) 
+            {
+                return BadRequest("Product for that Id doesn't exist");
+            }
+
+            _repo.Delete(selectedProduct);
+
+
+            await _ctx.SaveChangesAsync();
+            if (_ctx.Products.Find(id) != null)
+            {
+                return BadRequest("Product wasn't deleted");
+            }
+            return Ok("Product deleted successfully");
         }
 
     }

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200526154425_IdentityAndProductWithRelatedEntities")]
-    partial class IdentityAndProductWithRelatedEntities
+    [Migration("20200529145148_IdentityAdnProductWithRelatedEntities")]
+    partial class IdentityAdnProductWithRelatedEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -471,13 +471,13 @@ namespace GameShop.Infrastructure.Migrations
                     b.HasOne("GameShop.Domain.Model.Language", "Language")
                         .WithMany("Products")
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GameShop.Domain.Model.Product", "Product")
                         .WithMany("Languages")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

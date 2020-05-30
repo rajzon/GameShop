@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameShop.Domain.Dtos;
 using GameShop.Domain.Model;
 
 namespace GameShop.Application.Interfaces
@@ -11,5 +12,8 @@ namespace GameShop.Application.Interfaces
          Task<bool> SaveAll();
          Task<IEnumerable<User>> GetUsers();
          Task<User> GetUser(int id);
+         Task<Category> GetCategory(int categoryId);
+         Task<Product> CreateProduct(ProductForCreationDto productForCreationDto, Requirements requirements, Category selectedCategory);
+         Task<Product> EditProduct(int id,ProductToEditDto productForCreationDto, Requirements requirements, Category selectedCategory, Product productFromDb);
     }
 }

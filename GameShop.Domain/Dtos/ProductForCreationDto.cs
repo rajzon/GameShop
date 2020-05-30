@@ -21,13 +21,13 @@ namespace GameShop.Domain.Dtos
         public bool IsDigitalMedia { get; set; }
         [Required]       
         public DateTime ReleaseDate { get; set; }
-       // [Required]
+        [Required]
         public RequirementsForCreationDto  Requirements { get; set; }
         [Required]
         public int CategoryId { get; set; }
-        //[Required]
+        [Required]
         public int[] LanguagesId { get; set; }
-        //[Required]
+        [Required]
         public int[] SubCategoriesId { get; set; }       
         public string[] Photos { get; set; }
     }

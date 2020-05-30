@@ -88,13 +88,13 @@ namespace GameShop.Infrastructure
                 .HasOne(pl => pl.Product)
                 .WithMany(p => p.Languages)
                 .HasForeignKey(pl => pl.ProductId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<ProductLanguage>()
                 .HasOne(pl => pl.Language)
                 .WithMany(l => l.Products)
                 .HasForeignKey(pl => pl.LanguageId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
 
 

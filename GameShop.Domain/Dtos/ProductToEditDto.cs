@@ -19,7 +19,9 @@ namespace GameShop.Domain.Dtos
         [Required]       
         public DateTime ReleaseDate { get; set; }
        // [Required]
-        public RequirementsForCreationDto  Requirements { get; set; }
+        // public RequirementsForCreationDto  Requirements { get; set; }
+        [Required]
+        public RequirementsForEditDto  Requirements { get; set; }
         [Required]
         public int CategoryId { get; set; }
         //[Required]

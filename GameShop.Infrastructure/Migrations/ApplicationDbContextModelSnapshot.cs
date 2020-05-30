@@ -997,13 +997,13 @@ namespace GameShop.Infrastructure.Migrations
                     b.HasOne("GameShop.Domain.Model.Language", "Language")
                         .WithMany("Products")
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GameShop.Domain.Model.Product", "Product")
                         .WithMany("Languages")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
