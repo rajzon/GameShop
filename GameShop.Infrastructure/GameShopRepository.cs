@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
@@ -32,6 +33,50 @@ namespace GameShop.Infrastructure
 
             return category;
         }
+
+        public async Task<IEnumerable<Category>> GetCategories()
+        {
+            // var categoriesToRetrun = new List<Category>();
+            // var categories = await _ctx.Categories.OrderBy(x => x.Id)
+            //             .Select(category => new 
+            //             {   
+            //                 Id = category.Id,
+            //                 Name = category.Name,
+            //                 Description = category.Description
+            //             }).ToListAsync();
+            
+            // for (int i = 0; i < categories.Count; i++)
+            // {
+            //     var category = new Category
+            //     {
+            //         Id = categories.ElementAt(i).Id,
+            //         Name = categories.ElementAt(i).Name,
+            //         Description = categories.ElementAt(i).Description
+            //     };
+            //     categoriesToRetrun.Add(category);
+            // }
+            // return categoriesToRetrun;
+            var categories = await _ctx.Categories.OrderBy(x => x.Id).ToListAsync();
+
+            return categories;
+        }
+
+        public async Task<IEnumerable<SubCategory>> GetSubCategories()
+        {
+            var subCategories = await _ctx.SubCategories.OrderBy(x => x.Id).ToListAsync();
+                        
+            return subCategories;
+            
+        }
+
+        public async Task<IEnumerable<Language>> GetLanguages()
+        {
+            var languages = await _ctx.Languages.OrderBy(x => x.Id).ToListAsync();
+                        
+            return languages;
+            
+        }
+
         public async Task<Product> CreateProduct(ProductForCreationDto productForCreationDto , Requirements requirements, Category selectedCategory)
         {
             var product = new Product

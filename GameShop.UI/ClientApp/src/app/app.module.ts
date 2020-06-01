@@ -1,3 +1,4 @@
+import { CreateProductComponent } from './admin/create-product/create-product.component';
 import { AdminService } from './_services/admin.service';
 import { ProductManagementComponent } from './admin/product-management/product-management.component';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
@@ -47,7 +48,8 @@ export function tokenGetter() {
       HasRoleDirective,
       UserManagementComponent,
       ProductManagementComponent,
-      RolesModalComponent
+      RolesModalComponent,
+      CreateProductComponent
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal'}),

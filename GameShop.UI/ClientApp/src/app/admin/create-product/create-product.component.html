@@ -1,0 +1,55 @@
+<div class="container">
+  <form #createProductForm="ngForm" (ngSubmit)="createProduct()">
+      <h2 class="text-center text-primary">Create Product</h2>
+      <hr>
+    
+      <div class="form-group">
+        <input type="text" class="form-control" name="name" required placeholder="ProductName" [(ngModel)]="model.name">
+      </div>
+    
+      <div class="form-group">
+        <input type="number" class="form-control" name="categoryId" required placeholder="Category" [(ngModel)]="model.categoryId">
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control" name="subCategoriesId" required placeholder="SubCategory" [(ngModel)]="model.subCategoriesId">
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control" name="languagesId" required placeholder="Language" [(ngModel)]="model.languagesId">
+      </div>
+
+      <div class="form-group">
+        <input type="number" class="form-control" name="pegi" required placeholder="Pegi" [(ngModel)]="model.pegi">
+      </div>
+
+      <div class="form-group">
+        <input type="number" class="form-control" name="price" required placeholder="Price" [(ngModel)]="model.price">
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control" name="isDigitalMedia" required placeholder="IsDigitalMedia" [(ngModel)]="model.isDigitalMedia">
+      </div>
+
+      <!-- <div class="form-group">
+        <input type="datetime" class="form-control" name="releaseDate"  placeholder="ReleaseDate" [(ngModel)]="model.releaseDate">
+      </div> -->
+      
+      <div class="form-group">
+        <input type="text" class="form-control" name="requirements" required placeholder="Requirements" [(ngModel)]="model.requirements">
+      </div>
+     
+      <div class="form-group">
+        <input type="text" class="form-control" name="description" required placeholder="Description" [(ngModel)]="model.description">
+      </div>
+
+      <div class="form-group">
+        <input type="text" class="form-control" name="photos"  placeholder="Photos" [(ngModel)]="model.photos">
+      </div>
+    
+      <div class="form-group text-center">
+        <button [disabled]="!createProductForm.valid" class="btn btn-success"  type="submit">Create Product</button>
+        <button class="btn btn-default"  type="button" (click)="cancelButton()">Cancel</button>
+      </div> 
+    </form>
+</div>

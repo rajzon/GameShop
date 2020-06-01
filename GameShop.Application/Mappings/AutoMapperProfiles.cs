@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AutoMapper;
 using GameShop.Domain.Dtos;
 using GameShop.Domain.Model;
@@ -17,6 +18,9 @@ namespace GameShop.Application.Mappings
             //     .ForMember(dest => dest.SubCategories, opt => opt.Ignore());
             // CreateMap<ProductToEditDto,Product>()
             //     .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => new Photo {Url = src.Photos[0]}));
+            CreateMap<Category,CategoryToReturnDto>();
+            CreateMap<SubCategory,SubCategoryToReturnDto>();
+            CreateMap<Language,LanguagesToReturnDto>();
         }
 
         

@@ -1,3 +1,29 @@
-<p>
-  product-management works!
-</p>
+<div class="container">
+  <button class="btn btn-info" (click)="createProductButtonSelected()">Create Product</button>
+  <div *ngIf="createButtonClicked">
+    <app-create-product (creationMode)="canceledOrSuccesfullCreation($event)"></app-create-product>   
+  </div>
+  <div *ngIf="!createButtonClicked" class="row">
+    <table class="table">
+      <tr>
+        <th style="width: 5%">Product ID</th>
+        <th style="width: 30%">Product Name</th>
+        <th style="width: 10%">Category</th>
+        <th style="width: 30%">SubCategories</th>
+        <th style="width: 5%">Price</th>
+        <th style="width: 10%"></th>
+        <th style="width: 10%"></th>
+      </tr>
+      <tr *ngFor="let product of products">
+        <td>{{product.id}}</td>
+        <td>{{product.name}}</td>
+        <td>{{product.categoryName}}</td>
+        <td>{{product.subCategories}}</td>
+        <td>{{product.price}}</td>
+        <td><button class="btn btn-info">Edit Product</button></td>
+        <td><button class="btn btn-danger"(click)="deleteProduct(product.id)">Delete Product</button></td>
+        
+      </tr>
+    </table>
+  </div> 
+</div>

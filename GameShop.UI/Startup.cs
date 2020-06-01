@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using AutoMapper;
 using GameShop.Application.Mappings;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace GameShop.UI
 {
@@ -92,6 +93,8 @@ namespace GameShop.UI
                     .RequireAuthenticatedUser()
                     .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
+                //automaticaly converts string(plain text) response as json  
+                //options.OutputFormatters.RemoveType<StringOutputFormatter>();
             });        
 
             // In production, the Angular files will be served from this directory

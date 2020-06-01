@@ -82,30 +82,20 @@ namespace GameShop.UI.Controllers
         public async Task<IActionResult> GetProductsForModeration()
         {
 
-            var categoryId = (int)_ctx.Entry<Product>(await _ctx.Products.FirstOrDefaultAsync()).Property("CategoryId").CurrentValue;
+            //var categoryId = (int)_ctx.Entry<Product>(await _ctx.Products.FirstOrDefaultAsync()).Property("CategoryId").CurrentValue;
             var productList = await _ctx.Products.OrderBy(x => x.Id)
                 .Select(product => new
                 {
                     Id = product.Id,
                     Name = product.Name,
-                    Description = product.Description,
-                    Pegi = product.Pegi,
                     Price = product.Price,
-                    IsDigitalMedia = product.IsDigitalMedia,
                     ReleaseDate = product.ReleaseDate,
                     SubCategories = (from productSubCategory in product.SubCategories
                                      join subCategory in _ctx.SubCategories
                                      on productSubCategory.SubCategoryId
                                      equals subCategory.Id
-                                     select subCategory.Name).ToList(),
-                    Languages = (from productLanguage in product.Languages
-                                 join language in _ctx.Languages
-                                 on productLanguage.LanguageId
-                                 equals language.Id
-                                 select language.Name).ToList(),
-                    CategoryName = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Name,
-                    PhotosUrl = _ctx.Photos.Where(p => p.ProductId == product.Id).ToList()
-
+                                     select subCategory.Name).ToList(),                  
+                    CategoryName = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Name,                    
                 }).ToListAsync();
 
 
@@ -203,7 +193,60 @@ namespace GameShop.UI.Controllers
             {
                 return BadRequest("Product wasn't deleted");
             }
-            return Ok("Product deleted successfully");
+            //"Product deleted successfully" problem with parsing , ui try parse this to JSON instead of keep this as text
+            return Ok();
+        }
+
+
+        [Authorize(Policy = "ModerateProductRole")]
+        [HttpGet("available-categories")]
+        public async Task<IActionResult> GetCategories()
+        {          
+
+            var categoriesList = await _repo.GetCategories();
+
+            if ( categoriesList == null || !categoriesList.Any())
+            {
+                return BadRequest("There is no categories in Database");
+            }
+
+            var categoryToRetrun = _mapper.Map<IEnumerable<CategoryToReturnDto>>(categoriesList);
+
+            return Ok(categoryToRetrun);
+        }
+
+        [Authorize(Policy = "ModerateProductRole")]
+        [HttpGet("available-subCategories")]
+        public async Task<IActionResult> GetSubCategories()
+        {          
+
+            var subCategoriesList = await _repo.GetSubCategories();
+
+            if ( subCategoriesList == null || !subCategoriesList.Any())
+            {
+                return BadRequest("There is no subCategories in Database");
+            }
+
+            var subCategoryToRetrun = _mapper.Map<IEnumerable<SubCategoryToReturnDto>>(subCategoriesList);
+
+            return Ok(subCategoryToRetrun);
+        }
+
+        [Authorize(Policy = "ModerateProductRole")]
+        [HttpGet("available-languages")]
+        public async Task<IActionResult> GetLanguages()
+        {          
+
+            var languagesList = await _repo.GetLanguages();
+
+            if ( languagesList == null || !languagesList.Any())
+            {
+                return BadRequest("There is no languages in Database");
+            }
+            
+            var languagesListToReturn = _mapper.Map<IEnumerable<LanguagesToReturnDto>>(languagesList);
+
+            return Ok(languagesListToReturn);
         }
 
     }

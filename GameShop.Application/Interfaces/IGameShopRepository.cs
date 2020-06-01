@@ -13,6 +13,9 @@ namespace GameShop.Application.Interfaces
          Task<IEnumerable<User>> GetUsers();
          Task<User> GetUser(int id);
          Task<Category> GetCategory(int categoryId);
+         Task<IEnumerable<Category>> GetCategories();
+         Task<IEnumerable<SubCategory>> GetSubCategories();
+         Task<IEnumerable<Language>> GetLanguages();
          Task<Product> CreateProduct(ProductForCreationDto productForCreationDto, Requirements requirements, Category selectedCategory);
          Task<Product> EditProduct(int id,ProductToEditDto productForCreationDto, Requirements requirements, Category selectedCategory, Product productFromDb);
     }
