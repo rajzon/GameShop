@@ -1,0 +1,71 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Insert Requirements</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #requirementsForm="ngForm" id="subCategoryFrom">
+    <div class="form-group">
+      <input type="text"
+        name="os" 
+        class="form-control"
+        placeholder="OS"     
+        [(ngModel)]="requirements.os"
+        >
+    </div>
+
+    <div class="form-group">
+      <input type="text"  
+        name="processor" 
+        class="form-control"
+        placeholder="Processor"
+        [(ngModel)]="requirements.processor"      
+        >
+    </div>
+
+    <div class="form-group">
+      <input type="number" 
+        name="hdd"
+        class="form-control"
+        placeholder="HDD"
+        [(ngModel)]="requirements.hdd"      
+        >
+    </div>
+
+    <div class="form-group">
+      <input type="number" 
+        name="ram"
+        class="form-control"
+        placeholder="RAM"
+        [(ngModel)]="requirements.ram"      
+        >
+    </div>
+
+    <div class="form-group">
+      <input type="text" 
+        name="graphicsCard"
+        class="form-control"
+        placeholder="GraphicsCard"
+        [(ngModel)]="requirements.graphicsCard"      
+        >
+    </div>
+
+    <div class="form-group">
+      <div class="form-check">
+      <input type="checkbox" 
+        name="isNetworkConnetctionRequire"
+        class="form-check-input"
+        (change)="requirements.isNetworkConnectionRequire = $event.target.checked ? true : false"
+        [checked]="requirements.isNetworkConnectionRequire === true"
+        [(ngModel)]="requirements.isNetworkConnectionRequire"      
+        >
+        <label>Is network connection require?</label>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancel</button>
+  <button type="button" class="btn btn-success" (click)="createRequirements()" form="requirementsForm" >Submit</button>
+</div>

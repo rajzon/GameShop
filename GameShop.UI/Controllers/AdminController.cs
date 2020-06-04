@@ -103,6 +103,49 @@ namespace GameShop.UI.Controllers
         }
 
         [Authorize(Policy = "ModerateProductRole")]
+        [HttpGet("product-for-edit/{id}")]
+        public async Task<IActionResult> GetProductForEdit(int id)
+        {
+
+            //var categoryId = (int)_ctx.Entry<Product>(await _ctx.Products.FirstOrDefaultAsync()).Property("CategoryId").CurrentValue;
+            var requirements = await  _ctx.Requirements.Where(r => r.ProductId == id)
+                        .Select(requriements => new {
+                            OS = requriements.OS,
+                            Processor = requriements.Processor,
+                            RAM = requriements.RAM,
+                            GraphicsCard = requriements.GraphicsCard,
+                            HDD = requriements.HDD,
+                            IsNetworkConnectionRequire = requriements.IsNetworkConnectionRequire
+                        }).FirstOrDefaultAsync();
+
+            var productList = await _ctx.Products.Where(x => x.Id == id)
+                .Select(product => new
+                {               
+                    Name = product.Name,
+                    Description = product.Description,
+                    Pegi = product.Pegi,
+                    Price = product.Price,
+                    ReleaseDate = product.ReleaseDate,
+                    IsDigitalMedia = product.IsDigitalMedia,
+                    SubCategoriesId = (from productSubCategory in product.SubCategories
+                                     join subCategory in _ctx.SubCategories
+                                     on productSubCategory.SubCategoryId
+                                     equals subCategory.Id
+                                     select subCategory.Id).ToList(),
+                    LanguagesId = (from productLangauge in product.Languages
+                                     join language in _ctx.Languages
+                                     on productLangauge.LanguageId
+                                     equals language.Id
+                                     select language.Id).ToList(),
+                    Requirements = requirements, 
+                    CategoryId = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Id                    
+                }).FirstOrDefaultAsync();
+
+
+            return Ok(productList);
+        }
+
+        [Authorize(Policy = "ModerateProductRole")]
         [HttpPost("create-product")]
         public async Task<IActionResult> CreateProduct(ProductForCreationDto productForCreationDto)
         {

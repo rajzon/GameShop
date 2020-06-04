@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Select demanded subCategories</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <!-- <ul *ngIf="list.length">
+    <li *ngFor="let item of list">{{item}}</li>
+  </ul> -->
+  <form #subCategoryFrom="ngForm" id="subCategoryFrom">
+    <div class="form-check" *ngFor="let subCategory of subCategories">
+      <input type="checkbox" 
+        class="form-check-input" 
+        value="{{subCategory.name}}"
+        (change)="subCategory.checked = !subCategory.checked"
+        >
+      <label>{{subCategory.name}}</label>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancel</button>
+  <button type="button" class="btn btn-success" (click)="selectSubCategories()" form="subCategoryFrom" >Submit</button>
+</div>

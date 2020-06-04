@@ -1,7 +1,8 @@
 import { Router } from '@angular/router';
 import { ProductFromServer } from './../../_models/ProductFromServer';
 import { AdminService } from './../../_services/admin.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
+
 
 @Component({
   selector: 'app-product-management',
@@ -10,13 +11,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductManagementComponent implements OnInit {
   products: ProductFromServer[];
-
   createButtonClicked: boolean;
+  editButtonClicked: boolean;
+  productIdToEdit: Number;
+
 
   constructor(private adminService: AdminService, private router: Router) { }
 
   ngOnInit() {
     this.createButtonClicked = false;
+    this.editButtonClicked = false;
     this.getProducts();
   }
 
@@ -40,12 +44,25 @@ export class ProductManagementComponent implements OnInit {
     
   }
 
+  editProductButtonSelected(id: Number) {
+    this.editButtonClicked = true;
+    // this.productIdToEdit = id;
+    this.productIdToEdit = id;
+  }
+
   createProductButtonSelected() {
     this.createButtonClicked = true;
   }
 
   canceledOrSuccesfullCreation(creationMode: boolean) {
     this.createButtonClicked = creationMode;
+    this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/admin']);
+     });
+  }
+
+  canceledOrSuccesfullEdit(creationMode: boolean) {
+    this.editButtonClicked = creationMode;
     this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/admin']);
      });

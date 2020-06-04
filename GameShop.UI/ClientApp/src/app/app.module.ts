@@ -1,3 +1,5 @@
+import { EditProductComponent } from './admin/edit-product/edit-product.component';
+import { RequirementsModalComponent } from './admin/requirements-modal/requirements-modal.component';
 import { CreateProductComponent } from './admin/create-product/create-product.component';
 import { AdminService } from './_services/admin.service';
 import { ProductManagementComponent } from './admin/product-management/product-management.component';
@@ -15,6 +17,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -49,7 +52,9 @@ export function tokenGetter() {
       UserManagementComponent,
       ProductManagementComponent,
       RolesModalComponent,
-      CreateProductComponent
+      CreateProductComponent,
+      EditProductComponent,
+      RequirementsModalComponent
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal'}),
@@ -60,6 +65,7 @@ export function tokenGetter() {
       TabsModule.forRoot(),
       RouterModule.forRoot(appRoutes),
       ModalModule.forRoot(),
+      NgSelectModule,
       JwtModule.forRoot({
          config: {
             tokenGetter: tokenGetter,
@@ -74,7 +80,8 @@ export function tokenGetter() {
      AdminService
   ],
   entryComponents: [
-     RolesModalComponent
+     RolesModalComponent,
+     RequirementsModalComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -1,6 +1,13 @@
+import { RequirementsModalComponent } from './../requirements-modal/requirements-modal.component';
+import { Languague } from './../../_models/Languague';
+import { SubCategory } from './../../_models/SubCategory';
+import { SubCategoriesModalComponent } from './../sub-categories-modal/sub-categories-modal.component';
+import { Category } from './../../_models/Category';
 import { Requirements } from './../../_models/Requirements';
 import { AdminService } from './../../_services/admin.service';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+
 
 
 @Component({
@@ -11,17 +18,27 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 export class CreateProductComponent implements OnInit {
   @Output() creationMode = new EventEmitter();
   model: any = {};
+  categories: Category[];
+  bsModalRef: BsModalRef;
+  subCategories: SubCategory[];
+  languages: Languague[];
 
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService, private modalService: BsModalService) { }
 
   ngOnInit() {
+    this.model.categoryId = null;
+    this.getCategories();
+    this.getSubCategories();
+    this.getLanguages();
   }
 
+
   createProduct() {
-    this.parseStringToRequirements();
+    console.log(this.model.subCategoriesId);
+    //this.parseStringToRequirements();
     this.parsePhotosUrlToArray();
-    this.parseLanguageIdToArray();
-    this.parseSubCategoriesIdToArray();
+    //this.parseLanguageIdToArray();
+    //this.parseSubCategoriesIdToArray();
     console.log(this.model.requirements);
     this.adminService.createProduct(this.model).subscribe(next => {
       console.log('Product Created');
@@ -30,6 +47,68 @@ export class CreateProductComponent implements OnInit {
       console.log(error);
     });
   }
+
+  selectSubCategoriesModal() {
+    console.log(this.subCategories);
+    const initialState = {
+      subCategories: this.subCategories
+    };   
+    this.bsModalRef = this.modalService.show(SubCategoriesModalComponent, {initialState});
+    this.bsModalRef.content.selectedSubCategories.subscribe((values) => {
+      const selectedSubCategories = {
+        id: [...values.filter(el => el.checked === true).map(el => el.id)],
+        name: [...values.filter(el => el.checked === true).map(el => el.name)],
+        // description: [...values.filter(el => el.checked === true).map(el => el.description)]
+      };
+      this.model.subCategoriesId = [...values.filter(el => el.checked === true).map(el => el.id)];
+      console.log(selectedSubCategories);
+      console.log(this.model.subCategoriesId);
+    });
+  }
+
+  createRequirementsModal() {
+
+    if( this.model.requirements != null ) {
+      const initialState = {
+        requirements: this.model.requirements
+      }
+      console.log(initialState);
+      this.bsModalRef = this.modalService.show(RequirementsModalComponent, {initialState});
+    } else {
+      this.bsModalRef = this.modalService.show(RequirementsModalComponent);
+    }
+
+    this.bsModalRef.content.createdRequirements.subscribe((requirements: Requirements) => {
+      this.model.requirements = requirements;
+    });
+  }
+
+  getLanguages() {
+    this.adminService.getLanguages().subscribe((next: Languague[]) => {
+      this.languages = next;
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  getSubCategories() {
+    this.adminService.getSubCategories().subscribe((next: SubCategory[]) => {
+      this.subCategories = next;
+      console.log(this.subCategories);
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  getCategories() {
+    this.adminService.getCategories().subscribe((next: Category[]) => {
+      this.categories = next;
+      console.log(this.categories);
+    }, error => {
+      console.log(error);
+    });
+  }
+
 
   parseLanguageIdToArray() {
     if  (this.model.languagesId != null) {
@@ -97,7 +176,7 @@ export class CreateProductComponent implements OnInit {
 
   }
 
-  cancelButton() {
+  cancelButton() {   
     this.creationMode.emit(false);
   }
 

@@ -1,0 +1,96 @@
+<div class="container">
+    <form #createProductForm="ngForm" (ngSubmit)="editProduct()">
+        <h2 class="text-center text-primary">Edit Product</h2>
+        <hr>
+      
+        <div class="form-group">
+          <input type="text" class="form-control" name="name" required placeholder="ProductName" [(ngModel)]="model.name">
+        </div>
+  
+        <div class="form-group">
+            <ng-select
+              required
+              name="categoryId"
+              [items]="categories"
+              [multiple]="false"
+              [closeOnSelect]="true"
+              [searchable]="false"
+              bindLabel="name"
+              bindValue="id"
+              placeholder="Select category"
+              [(ngModel)]="model.categoryId">
+            </ng-select>
+          </div>
+
+        <div class="form-group">
+          <ng-select
+            required
+            name="subCategoriesId"
+            [items]="subCategories"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [searchable]="false"
+            bindLabel="name"
+            bindValue="id"
+            placeholder="Select subCategories"
+            [(ngModel)]="model.subCategoriesId">
+          </ng-select>
+        </div>
+        
+  
+        <div class="form-group">
+          <ng-select
+            required
+            name="languagesId"
+            [items]="languages"
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [searchable]="false"
+            bindLabel="name"
+            bindValue="id"
+            placeholder="Select languages"
+            [(ngModel)]="model.languagesId">
+          </ng-select>
+        </div>
+  
+        <div class="form-group">
+          <input type="number" class="form-control" name="pegi" required placeholder="Pegi" [(ngModel)]="model.pegi">
+        </div>
+  
+        <div class="form-group">
+          <input type="number" class="form-control" name="price" required placeholder="Price" [(ngModel)]="model.price">
+        </div>
+  
+  
+        <div class="form-group">
+            <div class="form-check">
+            <input type="checkbox" 
+              name="isNetworkConnetctionRequire"
+              class="form-check-input"
+              (change)="model.isDigitalMedia = $event.target.checked ? true : false"
+              [checked]="model.isDigitalMedia === true"
+              [(ngModel)]="model.isDigitalMedia"      
+              >
+              <label>Is network connection require?</label>
+            </div>
+          </div>
+  
+  
+        <div class="form-group">       
+          <button class="btn btn-info" (click)="createRequirementsModal()" type="button">Create Requirements</button>
+        </div>
+       
+        <div class="form-group">
+          <input type="text" class="form-control" name="description" required placeholder="Description" [(ngModel)]="model.description">
+        </div>
+  
+        <div class="form-group">
+          <input type="text" class="form-control" name="photos"  placeholder="Photos" [(ngModel)]="model.photos">
+        </div>
+      
+        <div class="form-group text-center">
+          <button [disabled]="!createProductForm.valid" class="btn btn-success"  type="submit">Edit Product</button>
+          <button class="btn btn-default"  type="button" (click)="cancelButton()">Cancel</button>
+        </div> 
+      </form>
+  </div>

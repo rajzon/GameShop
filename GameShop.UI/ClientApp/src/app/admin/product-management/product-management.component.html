@@ -1,9 +1,12 @@
 <div class="container">
-  <button class="btn btn-info" (click)="createProductButtonSelected()">Create Product</button>
+  <button *ngIf="!createButtonClicked && !editButtonClicked" class="btn btn-info" (click)="createProductButtonSelected()">Create Product</button>
   <div *ngIf="createButtonClicked">
     <app-create-product (creationMode)="canceledOrSuccesfullCreation($event)"></app-create-product>   
   </div>
-  <div *ngIf="!createButtonClicked" class="row">
+  <div *ngIf="editButtonClicked && !createButtonClicked">
+    <app-edit-product [productIdFromProductsPanel]="productIdToEdit" (editMode)="canceledOrSuccesfullEdit($event)"></app-edit-product>
+  </div>
+  <div *ngIf="!createButtonClicked && !editButtonClicked" class="row">
     <table class="table">
       <tr>
         <th style="width: 5%">Product ID</th>
@@ -20,7 +23,7 @@
         <td>{{product.categoryName}}</td>
         <td>{{product.subCategories}}</td>
         <td>{{product.price}}</td>
-        <td><button class="btn btn-info">Edit Product</button></td>
+        <td><button class="btn btn-info" (click)="editProductButtonSelected(product.id)">Edit Product</button></td>
         <td><button class="btn btn-danger"(click)="deleteProduct(product.id)">Delete Product</button></td>
         
       </tr>

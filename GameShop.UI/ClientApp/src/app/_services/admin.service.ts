@@ -19,12 +19,20 @@ export class AdminService {
 
   deleteProduct(id: Number) {
     const httpOpitons = {
-      headers: new HttpHeaders({responseType:'application/octet-stream'})};
+      headers: new HttpHeaders({responseType: 'application/octet-stream'})};
     return this.http.delete(this.baseUrl + 'admin/delete-product/' + id);
+  }
+
+  editProduct(product: Product, id: Number) {
+    return this.http.post(this.baseUrl + 'admin/edit-product/' + id, product);
   }
 
   getProducts() {
     return this.http.get(this.baseUrl + 'admin/prodcuts-for-moderation');
+  }
+
+  getProductForEdit(id: Number) {
+    return this.http.get(this.baseUrl + 'admin/product-for-edit/' + id);
   }
 
   getCategories() {
