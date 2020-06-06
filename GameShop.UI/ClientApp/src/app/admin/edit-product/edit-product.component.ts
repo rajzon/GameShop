@@ -7,6 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { RequirementsModalComponent } from '../requirements-modal/requirements-modal.component';
 import { Requirements } from 'src/app/_models/Requirements';
+import { isArray } from 'util';
 
 @Component({
   selector: 'app-edit-product',
@@ -82,7 +83,12 @@ export class EditProductComponent implements OnInit {
   editProduct() {
     console.log(this.model);
     this.parsePhotosUrlToArray();
-    this.adminService.editProduct(this.model, this.productIdFromProductsPanel).subscribe();
+    this.adminService.editProduct(this.model, this.productIdFromProductsPanel).subscribe(() => {
+      console.log('Product edited successfully');
+      this.editMode.emit(false);
+    }, error => {
+      console.log(error);
+    });
   }
 
   getProductForEdit(id: Number) {
@@ -95,16 +101,23 @@ export class EditProductComponent implements OnInit {
   }
 
   parsePhotosUrlToArray() {
+    if (Array.isArray(this.model.photos)) {
+      return;
+    } else {
     let array = [];
     if (this.model.photos != null) {
     if (this.model.photos.includes(',')) {
     array = this.model.photos.split(',');
     this.model.photos = array;
+    } else {
+      array.push(this.model.photos);
+      this.model.photos = array;
     }
   } else {
     this.model.photos = array;
   }
-  }
+}
+}
 
   cancelButton() {
     this.editMode.emit(false);

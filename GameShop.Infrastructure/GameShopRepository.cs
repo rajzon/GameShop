@@ -159,14 +159,18 @@ namespace GameShop.Infrastructure
                 }
 
             }
-            foreach (var photo in productToEditDto.Photos)
+
+            if (productToEditDto.Photos != null) 
             {
-                var photoToCreate = new Photo { Url = photo };
-                if (!productFromDb.Photos.Contains(photoToCreate))
+                foreach (var photo in productToEditDto.Photos)
                 {
-                    updatedProduct.Photos.Add(photoToCreate);
+                    var photoToCreate = new Photo { Url = photo };
+                    if (!productFromDb.Photos.Contains(photoToCreate))
+                    {
+                        updatedProduct.Photos.Add(photoToCreate);
+                    }
+                    
                 }
-                
             }
 
             foreach (var subCategoryId in productToEditDto.SubCategoriesId)
