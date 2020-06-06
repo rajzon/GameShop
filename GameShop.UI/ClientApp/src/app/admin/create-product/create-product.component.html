@@ -7,16 +7,6 @@
         <input type="text" class="form-control" name="name" required placeholder="ProductName" [(ngModel)]="model.name">
       </div>
     
-      <!-- <div class="form-group">
-        <select type="text" class="form-control" name="categoryId" required [(ngModel)]="model.categoryId">
-          <option [ngValue]="null" hidden >Choose a category</option>
-          <option *ngFor="let category of categories" value={{category.id}}>
-            {{category.id}}
-            {{category.name}}
-            {{category.description}}
-          </option>
-        </select>
-      </div> -->
 
       <div class="form-group">
           <ng-select
@@ -33,12 +23,6 @@
           </ng-select>
         </div>
 
-      <!-- <div class="form-group">       
-        <button class="btn btn-info" (click)="selectSubCategoriesModal()" type="button">Select SubCategories</button>
-        <div *ngFor="let subCategory of subCategories">
-          <label name="subCategoryId" *ngIf="subCategory.checked"> {{subCategory.id}}: {{subCategory.name}}</label>   
-        </div>
-      </div> -->
 
       <div class="form-group">
         <ng-select
@@ -55,22 +39,6 @@
         </ng-select>
       </div>
       
-      
-
-      <!-- <div class="form-group">
-        <select multiple  type="text" class="form-control" name="subCategoriesId" required [(ngModel)]="model.subCategoriesId">
-          <option [ngValue]="null" hidden >Choose a subCategories</option>
-          <option *ngFor="let subCategory of subCategories" value={{subCategory.id}}>
-            {{subCategory.id}}
-            {{subCategory.name}}
-            {{subCategory.description}}
-          </option>
-        </select>
-      </div> -->
-
-      <!-- <div class="form-group">
-        <input type="text" class="form-control" name="languagesId" required placeholder="Language" [(ngModel)]="model.languagesId">
-      </div> -->
 
       <div class="form-group">
         <ng-select
@@ -94,10 +62,6 @@
       <div class="form-group">
         <input type="number" class="form-control" name="price" required placeholder="Price" [(ngModel)]="model.price">
       </div>
-
-      <!-- <div class="form-group">
-        <input type="text" class="form-control" name="isDigitalMedia" required placeholder="IsDigitalMedia" [(ngModel)]="model.isDigitalMedia">
-      </div> -->
 
       <div class="form-group">
           <div class="form-check">

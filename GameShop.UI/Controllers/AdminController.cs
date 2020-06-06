@@ -138,7 +138,8 @@ namespace GameShop.UI.Controllers
                                      equals language.Id
                                      select language.Id).ToList(),
                     Requirements = requirements, 
-                    CategoryId = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Id                    
+                    CategoryId = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Id,
+                    Photos = _ctx.Photos.Where(p => p.ProductId == product.Id).Select(p => p.Url).ToList()                    
                 }).FirstOrDefaultAsync();
 
 
@@ -174,6 +175,7 @@ namespace GameShop.UI.Controllers
                    .Include(l => l.Languages)
                    .Include(c => c.SubCategories)
                    .Include(r => r.Requirements)
+                   .Include(p => p.Photos)
                    .FirstOrDefaultAsync(p => p.Id == id);
 
             var selectedCategory = await _ctx.Categories.FirstOrDefaultAsync(c => c.Id == productToEditDto.CategoryId);

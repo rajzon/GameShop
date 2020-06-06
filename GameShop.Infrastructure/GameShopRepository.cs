@@ -162,7 +162,11 @@ namespace GameShop.Infrastructure
             foreach (var photo in productToEditDto.Photos)
             {
                 var photoToCreate = new Photo { Url = photo };
-                updatedProduct.Photos.Add(photoToCreate);
+                if (!productFromDb.Photos.Contains(photoToCreate))
+                {
+                    updatedProduct.Photos.Add(photoToCreate);
+                }
+                
             }
 
             foreach (var subCategoryId in productToEditDto.SubCategoriesId)

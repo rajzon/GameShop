@@ -81,6 +81,7 @@ export class EditProductComponent implements OnInit {
 
   editProduct() {
     console.log(this.model);
+    this.parsePhotosUrlToArray();
     this.adminService.editProduct(this.model, this.productIdFromProductsPanel).subscribe();
   }
 
@@ -91,6 +92,18 @@ export class EditProductComponent implements OnInit {
     }, error => {
       console.log(error);
     });
+  }
+
+  parsePhotosUrlToArray() {
+    let array = [];
+    if (this.model.photos != null) {
+    if (this.model.photos.includes(',')) {
+    array = this.model.photos.split(',');
+    this.model.photos = array;
+    }
+  } else {
+    this.model.photos = array;
+  }
   }
 
   cancelButton() {
