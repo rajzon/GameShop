@@ -1,3 +1,4 @@
+import { ShopSearchingService } from './_services/shop-searching.service';
 import { EditProductComponent } from './admin/edit-product/edit-product.component';
 import { RequirementsModalComponent } from './admin/requirements-modal/requirements-modal.component';
 import { CreateProductComponent } from './admin/create-product/create-product.component';
@@ -77,7 +78,8 @@ export function tokenGetter() {
   providers: [
      ErrorInterceptorProvider,
      AuthService,
-     AdminService
+     AdminService,
+     ShopSearchingService
   ],
   entryComponents: [
      RolesModalComponent,

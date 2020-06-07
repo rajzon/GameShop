@@ -26,6 +26,7 @@ export class AdminService {
   editProduct(product: Product, id: Number) {
     return this.http.post(this.baseUrl + 'admin/edit-product/' + id, product);
   }
+ 
 
   getProducts() {
     return this.http.get(this.baseUrl + 'admin/prodcuts-for-moderation');

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
 using GameShop.Domain.Model;
@@ -11,9 +12,11 @@ namespace GameShop.Infrastructure
     public class GameShopRepository : IGameShopRepository
     {
         private readonly ApplicationDbContext _ctx;
+        private readonly IMapper _mapper;
 
-        public GameShopRepository(ApplicationDbContext ctx)
+        public GameShopRepository(ApplicationDbContext ctx, IMapper mapper)
         {
+            _mapper = mapper;
             _ctx = ctx;
         }
 
@@ -25,6 +28,21 @@ namespace GameShop.Infrastructure
         public void Delete<T>(T entity) where T : class
         {
             _ctx.Remove(entity);
+        }
+
+        public async Task<IEnumerable<ProductForSearchingDto>> GetProductsForSearchingAsync()
+        {
+            var products = await _ctx.Products.Select(product => new ProductForSearchingDto
+            {
+                Name = product.Name,
+                Price = product.Price,
+                PhotosUrl = product.Photos.Where(p => p.ProductId == product.Id).Select(p => p.Url).ToArray(),
+                CategoryName = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Name
+            }).ToListAsync();
+
+            // var productToReturn = _mapper.Map<IEnumerable<ProductForSearchingDto>>(products);
+
+            return products;
         }
 
         public async Task<Category> GetCategory(int categoryId)
@@ -44,7 +62,7 @@ namespace GameShop.Infrastructure
             //                 Name = category.Name,
             //                 Description = category.Description
             //             }).ToListAsync();
-            
+
             // for (int i = 0; i < categories.Count; i++)
             // {
             //     var category = new Category
@@ -64,20 +82,20 @@ namespace GameShop.Infrastructure
         public async Task<IEnumerable<SubCategory>> GetSubCategories()
         {
             var subCategories = await _ctx.SubCategories.OrderBy(x => x.Id).ToListAsync();
-                        
+
             return subCategories;
-            
+
         }
 
         public async Task<IEnumerable<Language>> GetLanguages()
         {
             var languages = await _ctx.Languages.OrderBy(x => x.Id).ToListAsync();
-                        
+
             return languages;
-            
+
         }
 
-        public async Task<Product> CreateProduct(ProductForCreationDto productForCreationDto , Requirements requirements, Category selectedCategory)
+        public async Task<Product> CreateProduct(ProductForCreationDto productForCreationDto, Requirements requirements, Category selectedCategory)
         {
             var product = new Product
             {
@@ -114,13 +132,13 @@ namespace GameShop.Infrastructure
                 var psc = new ProductSubCategory { Product = product, SubCategory = selectedSubCategory };
                 product.SubCategories.Add(psc);
             }
-             _ctx.Add(product);
-             await _ctx.SaveChangesAsync();
+            _ctx.Add(product);
+            await _ctx.SaveChangesAsync();
 
             return product;
         }
 
-        public async Task<Product> EditProduct(int id,ProductToEditDto productToEditDto, Requirements requirements, Category selectedCategory,Product productFromDb)
+        public async Task<Product> EditProduct(int id, ProductToEditDto productToEditDto, Requirements requirements, Category selectedCategory, Product productFromDb)
         {
 
             //  productFromDb = await _ctx.Products
@@ -160,7 +178,7 @@ namespace GameShop.Infrastructure
 
             }
 
-            if (productToEditDto.Photos != null) 
+            if (productToEditDto.Photos != null)
             {
                 foreach (var photo in productToEditDto.Photos)
                 {
@@ -169,7 +187,7 @@ namespace GameShop.Infrastructure
                     {
                         updatedProduct.Photos.Add(photoToCreate);
                     }
-                    
+
                 }
             }
 
@@ -211,7 +229,7 @@ namespace GameShop.Infrastructure
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-             //Later on I am gonna add Addreses Table so probably I may want to Include Address Table here
+            //Later on I am gonna add Addreses Table so probably I may want to Include Address Table here
             var users = await _ctx.Users.ToListAsync();
 
             return users;
@@ -219,7 +237,7 @@ namespace GameShop.Infrastructure
 
         public async Task<bool> SaveAll()
         {
-           return await _ctx.SaveChangesAsync() > 0;
+            return await _ctx.SaveChangesAsync() > 0;
         }
     }
 }
