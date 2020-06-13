@@ -17,6 +17,10 @@ export class AdminService {
     return this.http.post(this.baseUrl + 'admin/create-product', product);
   }
 
+  deletePhoto(productId: Number, id: Number) {
+    return this.http.delete(this.baseUrl + 'admin/product/' + productId + '/photos/' + id);
+  }
+
   deleteProduct(id: Number) {
     const httpOpitons = {
       headers: new HttpHeaders({responseType: 'application/octet-stream'})};
@@ -25,6 +29,10 @@ export class AdminService {
 
   editProduct(product: Product, id: Number) {
     return this.http.post(this.baseUrl + 'admin/edit-product/' + id, product);
+  }
+
+  setMainPhoto(productId: Number, id: Number) {
+    return this.http.post(this.baseUrl + 'admin/product/' + productId + '/photos/' + id + '/setMain', {});
   }
  
 

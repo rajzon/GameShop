@@ -20,7 +20,10 @@ namespace GameShop.Application.Mappings
             //     .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => new Photo {Url = src.Photos[0]}));
             CreateMap<Category,CategoryToReturnDto>();
             CreateMap<SubCategory,SubCategoryToReturnDto>();
-            CreateMap<Language,LanguagesToReturnDto>();      
+            CreateMap<Language,LanguagesToReturnDto>();
+            CreateMap<Photo,PhotoForReturnDto>();      
+            CreateMap<PhotoForCreationDto,Photo>();
+       
                 
         }
 

@@ -66,6 +66,7 @@ namespace GameShop.UI
                     Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
             // services.AddScoped<IAuthRepository , AuthRepository>();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddScoped<IGameShopRepository , GameShopRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

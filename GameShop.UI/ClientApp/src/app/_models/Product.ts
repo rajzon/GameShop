@@ -1,3 +1,4 @@
+import { Photo } from 'src/app/_models/Photo';
 import { Requirements } from './Requirements';
 export interface Product {
     name: string;
@@ -8,7 +9,7 @@ export interface Product {
     categoryId: number;
     subCategoriesId: number[];
     languagesId: number[];
-    photos: string[];
+    photos: Photo[];
     isDigitalMedia: boolean;
     //releaseDate: Date;
 }

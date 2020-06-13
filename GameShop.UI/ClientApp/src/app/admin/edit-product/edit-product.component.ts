@@ -7,7 +7,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { RequirementsModalComponent } from '../requirements-modal/requirements-modal.component';
 import { Requirements } from 'src/app/_models/Requirements';
-import { isArray } from 'util';
+import { FileUploader } from 'ng2-file-upload';
+import { Photo } from 'src/app/_models/Photo';
 
 @Component({
   selector: 'app-edit-product',
@@ -18,11 +19,17 @@ export class EditProductComponent implements OnInit {
   @Input() productIdFromProductsPanel: any;
   @Output() editMode = new EventEmitter();
   bsModalRef: BsModalRef;
-  model: any = {};
+  model: Product = <Product>{ };
   categories: Category[];
   languages: Languague[];
   subCategories: SubCategory[];
-  //product: Product;
+  currentMainPhoto: Photo;
+
+
+  uploader: FileUploader;
+  hasBaseDropZoneOver = false;
+  response: string;
+  baseUrl = 'api/';
 
   constructor(private adminService: AdminService, private modalService: BsModalService) { }
 
@@ -32,8 +39,58 @@ export class EditProductComponent implements OnInit {
     this.getCategories();
     this.getSubCategories();
     this.getLanguages();
+
+    this.initializeUploader();
   }
 
+  public fileOverBase(e: any): void {
+    this.hasBaseDropZoneOver = e;
+  }
+
+  initializeUploader() {
+    this.uploader = new FileUploader({
+      url: this.baseUrl + 'admin/product/' + this.productIdFromProductsPanel + '/photos',
+      authToken: 'Bearer ' + localStorage.getItem('token'),
+      isHTML5: true,
+      allowedFileType: ['image'],
+      removeAfterUpload: true,
+      autoUpload: false,
+      maxFileSize: 10 * 1024 * 1024 //10MB
+    });
+
+    this.uploader.onSuccessItem = (item, response, status, headers ) => {
+      if (response) {
+        const res: Photo = JSON.parse(response);
+        const photo = {
+          id: res.id,
+          url: res.url,
+          dateAdded: res.dateAdded,
+          isMain: res.isMain
+        };
+        this.model.photos.push(photo);
+      }
+    };
+  }
+
+  setMainPhoto(photo: Photo) {
+    this.adminService.setMainPhoto(this.productIdFromProductsPanel, photo.id).subscribe(() => {
+      console.log('Successfully set to main');
+      this.currentMainPhoto = this.model.photos.filter(p => p.isMain === true)[0];
+      this.currentMainPhoto.isMain = false;
+      photo.isMain = true;
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  deletePhoto(id: number) {
+    this.adminService.deletePhoto(this.productIdFromProductsPanel, id).subscribe(() => {
+      this.model.photos.splice(this.model.photos.findIndex(p => p.id === id), 1);
+      console.log('Photo has been deleted')
+    }, error => {
+      console.log(error);
+    });
+  }
 
   createRequirementsModal() {
 
@@ -82,9 +139,11 @@ export class EditProductComponent implements OnInit {
 
   editProduct() {
     console.log(this.model);
-    this.parsePhotosUrlToArray();
+    //this.parsePhotosUrlToArray();
     this.adminService.editProduct(this.model, this.productIdFromProductsPanel).subscribe(() => {
       console.log('Product edited successfully');
+      this.uploader.uploadAll();
+
       this.editMode.emit(false);
     }, error => {
       console.log(error);
@@ -100,24 +159,24 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-  parsePhotosUrlToArray() {
-    if (Array.isArray(this.model.photos)) {
-      return;
-    } else {
-    let array = [];
-    if (this.model.photos != null) {
-    if (this.model.photos.includes(',')) {
-    array = this.model.photos.split(',');
-    this.model.photos = array;
-    } else {
-      array.push(this.model.photos);
-      this.model.photos = array;
-    }
-  } else {
-    this.model.photos = array;
-  }
-}
-}
+//   parsePhotosUrlToArray() {
+//     if (Array.isArray(this.model.photos)) {
+//       return;
+//     } else {
+//     let array = [];
+//     if (this.model.photos != null) {
+//     if (this.model.photos.includes(',')) {
+//     array = this.model.photos.split(',');
+//     this.model.photos = array;
+//     } else {
+//       array.push(this.model.photos);
+//       this.model.photos = array;
+//     }
+//   } else {
+//     this.model.photos = array;
+//   }
+// }
+// }
 
   cancelButton() {
     this.editMode.emit(false);

@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "LXcU8eXBMVeuUUy8WXujr6ziEH9iTJRVM8mkFyG53N6UuIG7OjevpoPvajnQoD3y2MP0TbsjxAKNfBB+rjVOkg==",
+  "dgSpecHash": "OwKmPKZS5mi6PhdAzQu3b5bltg3qfdZcPMGtxh/xhgNL50SJPaJMT/zl0dwNAzImmrjMrIjfHw6tTgWnk7sR9w==",
   "success": true,
   "projectFilePath": "C:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Infrastructure\\GameShop.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dawid\\.nuget\\packages\\automapper\\9.0.0\\automapper.9.0.0.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\7.0.0\\automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",
+    "C:\\Users\\Dawid\\.nuget\\packages\\cloudinarydotnet\\1.11.0\\cloudinarydotnet.1.11.0.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\microsoft.aspnetcore.authentication.cookies\\2.2.0\\microsoft.aspnetcore.authentication.cookies.2.2.0.nupkg.sha512",

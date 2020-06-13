@@ -1,3 +1,4 @@
+import { Photo } from './../_models/Photo';
 import { ProductForSearching } from './../_models/ProductForSearching';
 import { ShopSearchingService } from './../_services/shop-searching.service';
 import { Component, OnInit } from '@angular/core';
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
-  products = <ProductForSearching>{};
+  products = Array<ProductForSearching>();
 
   constructor(private shopSearchingService: ShopSearchingService) { }
 
@@ -16,11 +17,20 @@ export class HomeComponent implements OnInit {
   }
 
   getProductsForSearching() {
-    this.shopSearchingService.getProductsForSearching().subscribe( (next: ProductForSearching) => {
+    this.shopSearchingService.getProductsForSearching().subscribe( (next: Array<ProductForSearching>) => {
       this.products = next;
+      this.initPhotoIfItsNull();
       console.log(this.products);
     }, error => {
       console.log(error);
     });
   }
-}
+
+  initPhotoIfItsNull() {
+    this.products.forEach(element => {
+      if (!element.photo) {
+        element.photo = <Photo>{ };
+      }
+    });
+  }
+} 

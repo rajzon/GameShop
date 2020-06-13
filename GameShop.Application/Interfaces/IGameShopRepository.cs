@@ -13,6 +13,9 @@ namespace GameShop.Application.Interfaces
          Task<IEnumerable<User>> GetUsers();
          Task<User> GetUser(int id);
          Task<Category> GetCategory(int categoryId);
+         Task<Product> GetProductWithPhotos(int productId);
+         Task<Photo> GetPhoto(int photoId);
+         Task<Photo> GetMainPhotoForProduct(int productId);
          Task<IEnumerable<ProductForSearchingDto>> GetProductsForSearchingAsync();
          Task<IEnumerable<Category>> GetCategories();
          Task<IEnumerable<SubCategory>> GetSubCategories();

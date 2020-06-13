@@ -32,6 +32,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { JwtModule } from '@auth0/angular-jwt';
 import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
+import { FileUploadModule } from 'ng2-file-upload';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -67,6 +68,7 @@ export function tokenGetter() {
       RouterModule.forRoot(appRoutes),
       ModalModule.forRoot(),
       NgSelectModule,
+      FileUploadModule,
       JwtModule.forRoot({
          config: {
             tokenGetter: tokenGetter,

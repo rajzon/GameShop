@@ -30,17 +30,43 @@ namespace GameShop.Infrastructure
             _ctx.Remove(entity);
         }
 
+        public async Task<Product> GetProductWithPhotos(int productId)
+        {
+            var product = await _ctx.Products
+                    .Include(p => p.Photos)
+                    .FirstOrDefaultAsync(x => x.Id == productId);
+
+            return product;
+        }
+
+        public async Task<Photo> GetMainPhotoForProduct(int productId)
+        {
+           return await _ctx.Photos.Where(p => p.ProductId == productId).FirstOrDefaultAsync(p => p.isMain);
+        }
+
+        public async Task<Photo> GetPhoto(int photoId)
+        {
+            var photo = await _ctx.Photos.FirstOrDefaultAsync(x => x.Id == photoId);
+
+            return photo;
+        }
+
         public async Task<IEnumerable<ProductForSearchingDto>> GetProductsForSearchingAsync()
         {
             var products = await _ctx.Products.Select(product => new ProductForSearchingDto
             {
                 Name = product.Name,
                 Price = product.Price,
-                PhotosUrl = product.Photos.Where(p => p.ProductId == product.Id).Select(p => p.Url).ToArray(),
+                Photo = product.Photos.Where(p => p.ProductId == product.Id).Select(p => new Photo {
+                    Id = p.Id,
+                    Url = p.Url,
+                    DateAdded = p.DateAdded,
+                    isMain = p.isMain
+                } ).FirstOrDefault(p => p.isMain == true),
                 CategoryName = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Name
             }).ToListAsync();
 
-            // var productToReturn = _mapper.Map<IEnumerable<ProductForSearchingDto>>(products);
+             //var productToReturn = _mapper.Map<IEnumerable<ProductForSearchingDto>>(products);
 
             return products;
         }
@@ -159,8 +185,7 @@ namespace GameShop.Infrastructure
                 ReleaseDate = productToEditDto.ReleaseDate,
                 Category = selectedCategory,
                 Requirements = requirements,
-                Languages = new List<ProductLanguage>(),
-                Photos = new List<Photo>(),
+                Languages = new List<ProductLanguage>(),               
                 SubCategories = new List<ProductSubCategory>()
 
             };
@@ -176,19 +201,6 @@ namespace GameShop.Infrastructure
                     updatedProduct.Languages.Add(pl);
                 }
 
-            }
-
-            if (productToEditDto.Photos != null)
-            {
-                foreach (var photo in productToEditDto.Photos)
-                {
-                    var photoToCreate = new Photo { Url = photo };
-                    if (!productFromDb.Photos.Contains(photoToCreate))
-                    {
-                        updatedProduct.Photos.Add(photoToCreate);
-                    }
-
-                }
             }
 
             foreach (var subCategoryId in productToEditDto.SubCategoriesId)
@@ -239,5 +251,7 @@ namespace GameShop.Infrastructure
         {
             return await _ctx.SaveChangesAsync() > 0;
         }
+
+        
     }
 }

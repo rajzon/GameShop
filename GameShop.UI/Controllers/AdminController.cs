@@ -139,7 +139,12 @@ namespace GameShop.UI.Controllers
                                      select language.Id).ToList(),
                     Requirements = requirements, 
                     CategoryId = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Id,
-                    Photos = _ctx.Photos.Where(p => p.ProductId == product.Id).Select(p => p.Url).ToList()                    
+                    Photos = _ctx.Photos.Where(p => p.ProductId == product.Id).Select(p => new {
+                        id = p.Id,
+                        Url = p.Url,
+                        DateAdded = p.DateAdded,
+                        isMain = p.isMain
+                    }).ToList()                    
                 }).FirstOrDefaultAsync();
 
 
@@ -195,8 +200,7 @@ namespace GameShop.UI.Controllers
             productFromDb.Category = selectedCategory;
             productFromDb.Languages = updatedProduct.Languages;
             productFromDb.Requirements = requirementsToUpdate;
-            productFromDb.SubCategories = updatedProduct.SubCategories;
-            productFromDb.Photos = updatedProduct.Photos;
+            productFromDb.SubCategories = updatedProduct.SubCategories;          
 
 
             // productFromDb.Languages = updatedProduct.Languages;
@@ -293,6 +297,8 @@ namespace GameShop.UI.Controllers
 
             return Ok(languagesListToReturn);
         }
+
+        
 
     }
 }
