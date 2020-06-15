@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using GameShop.Domain.Model;
 
 namespace GameShop.Domain.Dtos
 {
@@ -25,9 +27,11 @@ namespace GameShop.Domain.Dtos
         [Required]
         public int CategoryId { get; set; }
         //[Required]
-        public int[] LanguagesId { get; set; }
+        public ICollection<int> LanguagesId { get; set; }
         //[Required]
-        public int[] SubCategoriesId { get; set; }       
+        public ICollection<int> SubCategoriesId { get; set; }       
         //public string[] Photos { get; set; }
+
+        public ICollection<Photo> Photos { get; set; }
     }
 }

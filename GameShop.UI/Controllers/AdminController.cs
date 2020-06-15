@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using GameShop.Application.Helpers;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
 using GameShop.Domain.Model;
@@ -11,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace GameShop.UI.Controllers
@@ -23,12 +27,23 @@ namespace GameShop.UI.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly IGameShopRepository _repo;
-        public AdminController(ApplicationDbContext ctx, UserManager<User> userManager, IMapper mapper, IGameShopRepository repo)
+        private readonly IOptions<CloudinarySettings> _cloudinaryConfig;
+        private Cloudinary _cloudinary;
+        public AdminController(ApplicationDbContext ctx, UserManager<User> userManager, IMapper mapper, 
+                IGameShopRepository repo, IOptions<CloudinarySettings> cloudinaryConfig)
         {
+            _cloudinaryConfig = cloudinaryConfig;
             _repo = repo;
             _mapper = mapper;
             _userManager = userManager;
             _ctx = ctx;
+
+             Account acc = new Account (_cloudinaryConfig.Value.CloudName,
+                _cloudinaryConfig.Value.ApiKey,
+                _cloudinaryConfig.Value.ApiSecret
+            );
+
+            _cloudinary = new Cloudinary(acc);
 
         }
         [Authorize(Policy = "RequireAdminRole")]
@@ -94,8 +109,8 @@ namespace GameShop.UI.Controllers
                                      join subCategory in _ctx.SubCategories
                                      on productSubCategory.SubCategoryId
                                      equals subCategory.Id
-                                     select subCategory.Name).ToList(),                  
-                    CategoryName = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Name,                    
+                                     select subCategory.Name).ToList(),
+                    CategoryName = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Name,
                 }).ToListAsync();
 
 
@@ -106,10 +121,9 @@ namespace GameShop.UI.Controllers
         [HttpGet("product-for-edit/{id}")]
         public async Task<IActionResult> GetProductForEdit(int id)
         {
-
-            //var categoryId = (int)_ctx.Entry<Product>(await _ctx.Products.FirstOrDefaultAsync()).Property("CategoryId").CurrentValue;
-            var requirements = await  _ctx.Requirements.Where(r => r.ProductId == id)
-                        .Select(requriements => new {
+            var requirements = await _ctx.Requirements.Where(r => r.ProductId == id)
+                        .Select(requriements => new RequirementsForEditDto
+                        {
                             OS = requriements.OS,
                             Processor = requriements.Processor,
                             RAM = requriements.RAM,
@@ -118,9 +132,11 @@ namespace GameShop.UI.Controllers
                             IsNetworkConnectionRequire = requriements.IsNetworkConnectionRequire
                         }).FirstOrDefaultAsync();
 
+            var photosFromRepo = await _repo.GetPhotosForProduct(id);
+
             var productList = await _ctx.Products.Where(x => x.Id == id)
-                .Select(product => new
-                {               
+                .Select(product => new ProductToEditDto
+                {
                     Name = product.Name,
                     Description = product.Description,
                     Pegi = product.Pegi,
@@ -128,23 +144,18 @@ namespace GameShop.UI.Controllers
                     ReleaseDate = product.ReleaseDate,
                     IsDigitalMedia = product.IsDigitalMedia,
                     SubCategoriesId = (from productSubCategory in product.SubCategories
-                                     join subCategory in _ctx.SubCategories
-                                     on productSubCategory.SubCategoryId
-                                     equals subCategory.Id
-                                     select subCategory.Id).ToList(),
+                                       join subCategory in _ctx.SubCategories
+                                       on productSubCategory.SubCategoryId
+                                       equals subCategory.Id
+                                       select subCategory.Id).ToList(),
                     LanguagesId = (from productLangauge in product.Languages
-                                     join language in _ctx.Languages
-                                     on productLangauge.LanguageId
-                                     equals language.Id
-                                     select language.Id).ToList(),
-                    Requirements = requirements, 
+                                   join language in _ctx.Languages
+                                   on productLangauge.LanguageId
+                                   equals language.Id
+                                   select language.Id).ToList(),
+                    Requirements = requirements,
                     CategoryId = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Id,
-                    Photos = _ctx.Photos.Where(p => p.ProductId == product.Id).Select(p => new {
-                        id = p.Id,
-                        Url = p.Url,
-                        DateAdded = p.DateAdded,
-                        isMain = p.isMain
-                    }).ToList()                    
+                    Photos = photosFromRepo
                 }).FirstOrDefaultAsync();
 
 
@@ -167,7 +178,7 @@ namespace GameShop.UI.Controllers
 
             var prodcuts = await _repo.CreateProduct(productForCreationDto, requirementsToUpdate, selectedCategory);
 
-            return Ok(_ctx.Products.FirstOrDefault(x => x.Name == productForCreationDto.Name));
+            return Ok(await _ctx.Products.OrderByDescending(p => p.Id).FirstOrDefaultAsync());
         }
 
 
@@ -176,19 +187,14 @@ namespace GameShop.UI.Controllers
         public async Task<IActionResult> EditProduct(int id, ProductToEditDto productToEditDto)
         {
 
-            var productFromDb = await _ctx.Products
-                   .Include(l => l.Languages)
-                   .Include(c => c.SubCategories)
-                   .Include(r => r.Requirements)
-                   .Include(p => p.Photos)
-                   .FirstOrDefaultAsync(p => p.Id == id);
+            var productFromDb = await _repo.GetProductForEdit(id);
 
             var selectedCategory = await _ctx.Categories.FirstOrDefaultAsync(c => c.Id == productToEditDto.CategoryId);
 
 
             var requirementsToUpdate = _mapper.Map<Requirements>(productToEditDto.Requirements);
 
-            var updatedProduct = await _repo.EditProduct(id, productToEditDto, requirementsToUpdate, selectedCategory, productFromDb);  
+            var updatedProduct = await _repo.EditProduct(id, productToEditDto, requirementsToUpdate, selectedCategory, productFromDb);
 
             productFromDb.Id = updatedProduct.Id;
             productFromDb.Name = updatedProduct.Name;
@@ -200,47 +206,76 @@ namespace GameShop.UI.Controllers
             productFromDb.Category = selectedCategory;
             productFromDb.Languages = updatedProduct.Languages;
             productFromDb.Requirements = requirementsToUpdate;
-            productFromDb.SubCategories = updatedProduct.SubCategories;          
+            productFromDb.SubCategories = updatedProduct.SubCategories;
+
+            //var productToUpdate = _mapper.Map<Product>(updatedProduct);          
 
 
             // productFromDb.Languages = updatedProduct.Languages;
-      
+
             // productFromDb.Requirements = requirementsToUpdate;
             // //_ctx.Entry(productFromDb.Requirements).State = EntityState.Modified;
             // productFromDb.SubCategories = updatedProduct.SubCategories;
- 
+
             //  productFromDb.Photos = updatedProduct.Photos;
 
-             
-              //_ctx.Entry(productFromDb).State = EntityState.Modified;
-           // _ctx.Update(productFromDb);
-            await _ctx.SaveChangesAsync();
-            return Ok(await _ctx.Products.FindAsync(id));
+
+
+
+            //_ctx.Entry(productFromDb).State = EntityState.Modified;
+            // _ctx.Update(productFromDb);
+            //  _ctx.Entry(productFromDb).CurrentValues.SetValues(productToUpdate);            
+            if (await _repo.SaveAll())
+            {
+                return Ok(await _ctx.Products.FindAsync(id));
+            }
+
+            return BadRequest("Fail occured during editing Product");
         }
 
         [Authorize(Policy = "ModerateProductRole")]
         [HttpDelete("delete-product/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
-        {          
+        {
 
-            var selectedProduct = await _ctx.Products
-                   .Include(c => c.SubCategories)
-                   .Include(r => r.Requirements)
-                    .Include(l => l.Languages)
-                   .FirstOrDefaultAsync(p => p.Id == id);
+            var selectedProduct = await _repo.GetProductForDelete(id);
 
-            if (selectedProduct == null ) 
+            if (selectedProduct == null)
             {
                 return BadRequest("Product for that Id doesn't exist");
             }
 
+            var photos = selectedProduct.Photos.ToList();
+
+            if (photos.Select(p => p.PublicId).Any()) 
+            {
+
+                foreach (var photo in photos)
+                {
+                    if (photo.PublicId != null)
+                    {
+                        var deleteParams = new DeletionParams(photo.PublicId);
+                        
+                        var result = _cloudinary.Destroy(deleteParams);
+
+                        if (result.Result == "ok")
+                        {
+                            _repo.Delete(photo);
+                        }
+                    }
+                    else 
+                    {
+                        _repo.Delete(photo);
+                    }
+                }
+
+            }
             _repo.Delete(selectedProduct);
 
 
-            await _ctx.SaveChangesAsync();
-            if (_ctx.Products.Find(id) != null)
+            if (!await _repo.SaveAll())
             {
-                return BadRequest("Product wasn't deleted");
+                return BadRequest("Something went wrong during deleting product");
             }
             //"Product deleted successfully" problem with parsing , ui try parse this to JSON instead of keep this as text
             return Ok();
@@ -250,11 +285,11 @@ namespace GameShop.UI.Controllers
         [Authorize(Policy = "ModerateProductRole")]
         [HttpGet("available-categories")]
         public async Task<IActionResult> GetCategories()
-        {          
+        {
 
             var categoriesList = await _repo.GetCategories();
 
-            if ( categoriesList == null || !categoriesList.Any())
+            if (categoriesList == null || !categoriesList.Any())
             {
                 return BadRequest("There is no categories in Database");
             }
@@ -267,11 +302,11 @@ namespace GameShop.UI.Controllers
         [Authorize(Policy = "ModerateProductRole")]
         [HttpGet("available-subCategories")]
         public async Task<IActionResult> GetSubCategories()
-        {          
+        {
 
             var subCategoriesList = await _repo.GetSubCategories();
 
-            if ( subCategoriesList == null || !subCategoriesList.Any())
+            if (subCategoriesList == null || !subCategoriesList.Any())
             {
                 return BadRequest("There is no subCategories in Database");
             }
@@ -284,21 +319,21 @@ namespace GameShop.UI.Controllers
         [Authorize(Policy = "ModerateProductRole")]
         [HttpGet("available-languages")]
         public async Task<IActionResult> GetLanguages()
-        {          
+        {
 
             var languagesList = await _repo.GetLanguages();
 
-            if ( languagesList == null || !languagesList.Any())
+            if (languagesList == null || !languagesList.Any())
             {
                 return BadRequest("There is no languages in Database");
             }
-            
+
             var languagesListToReturn = _mapper.Map<IEnumerable<LanguagesToReturnDto>>(languagesList);
 
             return Ok(languagesListToReturn);
         }
 
-        
+
 
     }
 }

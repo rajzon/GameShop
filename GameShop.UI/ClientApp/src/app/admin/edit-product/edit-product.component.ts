@@ -142,9 +142,14 @@ export class EditProductComponent implements OnInit {
     //this.parsePhotosUrlToArray();
     this.adminService.editProduct(this.model, this.productIdFromProductsPanel).subscribe(() => {
       console.log('Product edited successfully');
-      this.uploader.uploadAll();
-
-      this.editMode.emit(false);
+      if (this.uploader.queue.length > 0) {
+        this.uploader.uploadAll();
+        this.uploader.onCompleteAll = () => {
+        this.editMode.emit(false);
+      };
+      } else {
+        this.editMode.emit(false);
+      }
     }, error => {
       console.log(error);
     });

@@ -1,3 +1,4 @@
+import { Product } from './../../_models/Product';
 import { RequirementsModalComponent } from './../requirements-modal/requirements-modal.component';
 import { Languague } from './../../_models/Languague';
 import { SubCategory } from './../../_models/SubCategory';
@@ -6,6 +7,8 @@ import { Requirements } from './../../_models/Requirements';
 import { AdminService } from './../../_services/admin.service';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { FileUploader } from 'ng2-file-upload';
+import { ProductFromServer } from 'src/app/_models/ProductFromServer';
 
 @Component({
   selector: 'app-create-product',
@@ -14,11 +17,18 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 })
 export class CreateProductComponent implements OnInit {
   @Output() creationMode = new EventEmitter();
-  model: any = {};
+  model: Product = <Product>{ };
   categories: Category[];
   bsModalRef: BsModalRef;
   subCategories: SubCategory[];
   languages: Languague[];
+  productIdFromServer: number;
+
+
+  uploader: FileUploader;
+  hasBaseDropZoneOver = false;
+  response: string;
+  baseUrl = 'api/';
 
   constructor(
     private adminService: AdminService,
@@ -30,16 +40,44 @@ export class CreateProductComponent implements OnInit {
     this.getCategories();
     this.getSubCategories();
     this.getLanguages();
+
+    this.initializeUploader();
+  }
+
+  public fileOverBase(e: any): void {
+    this.hasBaseDropZoneOver = e;
+  }
+
+  initializeUploader() {
+    this.uploader = new FileUploader({
+      authToken: 'Bearer ' + localStorage.getItem('token'),
+      isHTML5: true,
+      allowedFileType: ['image'],
+      removeAfterUpload: true,
+      autoUpload: false,
+      maxFileSize: 10 * 1024 * 1024 //10MB
+    });
   }
 
   createProduct() {
     console.log(this.model.subCategoriesId);
-    this.parsePhotosUrlToArray();
     console.log(this.model.requirements);
     this.adminService.createProduct(this.model).subscribe(
-      next => {
+      (next: ProductFromServer) => {
         console.log('Product Created');
+        this.productIdFromServer = next.id;
+        console.log(this.productIdFromServer);
+        if (this.uploader.queue.length > 0) {
+          this.uploader.onBeforeUploadItem  = (file) => {
+            file.url = this.baseUrl + 'admin/product/' + this.productIdFromServer + '/photos'};
+          console.log(this.uploader.options.url);
+          this.uploader.uploadAll();
+          this.uploader.onCompleteAll = () => {
+            this.creationMode.emit(false);
+          };
+      } else {
         this.creationMode.emit(false);
+      }
       },
       error => {
         console.log(error);
@@ -101,21 +139,6 @@ export class CreateProductComponent implements OnInit {
         console.log(error);
       }
     );
-  }
-
-  parsePhotosUrlToArray() {
-    let array = [];
-    if (this.model.photos != null) {
-      if (this.model.photos.includes(',')) {
-        array = this.model.photos.split(',');
-        this.model.photos = array;
-      } else {
-        array.push(this.model.photos);
-        this.model.photos = array;
-      }
-    } else {
-      this.model.photos = array;
-    }
   }
 
   cancelButton() {

@@ -148,7 +148,7 @@ namespace GameShop.UI.Controllers
                 return Unauthorized();
             }      
 
-            var photoFromRepo = await _repo.GetPhoto(id);
+            var photoFromRepo = await _repo.GetPhoto(id);        
 
             if (photoFromRepo.PublicId !=null) 
             {

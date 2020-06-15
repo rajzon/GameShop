@@ -39,6 +39,30 @@ namespace GameShop.Infrastructure
             return product;
         }
 
+        public async Task<Product> GetProductForDelete(int productId)
+        {
+            var selectedProduct = await _ctx.Products
+                   .Include(l => l.Languages)
+                   .Include(c => c.SubCategories)
+                   .Include(r => r.Requirements)
+                   .Include(p => p.Photos)
+                   .FirstOrDefaultAsync(p => p.Id == productId);
+
+            return selectedProduct;
+        }
+
+        public async Task<Product> GetProductForEdit(int productId)
+        {
+            var selectedProduct = await _ctx.Products
+                   .Include(c => c.SubCategories)
+                   .Include(r => r.Requirements)
+                   .Include(l => l.Languages)
+                   .Include(c => c.Category)
+                   .FirstOrDefaultAsync(p => p.Id == productId);
+
+            return selectedProduct;
+        }
+
         public async Task<Photo> GetMainPhotoForProduct(int productId)
         {
            return await _ctx.Photos.Where(p => p.ProductId == productId).FirstOrDefaultAsync(p => p.isMain);
@@ -47,6 +71,18 @@ namespace GameShop.Infrastructure
         public async Task<Photo> GetPhoto(int photoId)
         {
             var photo = await _ctx.Photos.FirstOrDefaultAsync(x => x.Id == photoId);
+
+            return photo;
+        }
+
+        public async Task<ICollection<Photo>> GetPhotosForProduct(int productId)
+        {
+            var photo = await _ctx.Photos.Where(p => p.ProductId == productId).Select(p => new Photo {
+                        Id = p.Id,
+                        Url = p.Url,
+                        DateAdded = p.DateAdded,
+                        isMain = p.isMain
+                    }).ToListAsync();
 
             return photo;
         }
@@ -134,7 +170,6 @@ namespace GameShop.Infrastructure
                 Category = selectedCategory,
                 Requirements = requirements,
                 Languages = new List<ProductLanguage>(),
-                Photos = new List<Photo>(),
                 SubCategories = new List<ProductSubCategory>()
             };
 
@@ -145,11 +180,6 @@ namespace GameShop.Infrastructure
                 var pl = new ProductLanguage { Product = product, Language = selectedLanguages };
                 product.Languages.Add(pl);
 
-            }
-            foreach (var photo in productForCreationDto.Photos)
-            {
-                var photoToCreate = new Photo { Url = photo };
-                product.Photos.Add(photoToCreate);
             }
 
             foreach (var subCategoryId in productForCreationDto.SubCategoriesId)
@@ -166,13 +196,6 @@ namespace GameShop.Infrastructure
 
         public async Task<Product> EditProduct(int id, ProductToEditDto productToEditDto, Requirements requirements, Category selectedCategory, Product productFromDb)
         {
-
-            //  productFromDb = await _ctx.Products
-            //        .Include(l => l.Languages)
-            //        .Include(c => c.SubCategories)
-            //        .Include(r => r.Requirements)
-            //        .FirstOrDefaultAsync(p => p.Id == id);
-
 
             var updatedProduct = new Product
             {

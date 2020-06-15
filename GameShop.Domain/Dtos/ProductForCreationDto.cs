@@ -29,6 +29,5 @@ namespace GameShop.Domain.Dtos
         public int[] LanguagesId { get; set; }
         [Required]
         public int[] SubCategoriesId { get; set; }       
-        public string[] Photos { get; set; }
     }
 }
