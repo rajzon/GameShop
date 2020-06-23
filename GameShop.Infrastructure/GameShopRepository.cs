@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using GameShop.Application.Helpers;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
 using GameShop.Domain.Model;
@@ -87,9 +88,9 @@ namespace GameShop.Infrastructure
             return photo;
         }
 
-        public async Task<IEnumerable<ProductForSearchingDto>> GetProductsForSearchingAsync()
+        public async Task<PagedList<ProductForSearchingDto>> GetProductsForSearchingAsync(ProductParams productParams)
         {
-            var products = await _ctx.Products.Select(product => new ProductForSearchingDto
+            var products =  _ctx.Products.Select(product => new ProductForSearchingDto
             {
                 Name = product.Name,
                 Price = product.Price,
@@ -100,11 +101,9 @@ namespace GameShop.Infrastructure
                     isMain = p.isMain
                 } ).FirstOrDefault(p => p.isMain == true),
                 CategoryName = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Name
-            }).ToListAsync();
+            });
 
-             //var productToReturn = _mapper.Map<IEnumerable<ProductForSearchingDto>>(products);
-
-            return products;
+            return await PagedList<ProductForSearchingDto>.CreateAsync(products, productParams.PageNumber, productParams.PageSize);
         }
 
         public async Task<Category> GetCategory(int categoryId)

@@ -18,8 +18,6 @@ export class AppComponent implements OnInit {
     this.decodedToken = this.jwtHelper.decodeToken(token);
     console.log(this.decodedToken);
     this.authService.decodedToken = this.decodedToken;
-    //this.authService.activateHasRoleDiractive();
-    //this.authService.sendDecodedToken(this.authService.decodedToken);
    }
   }
 }

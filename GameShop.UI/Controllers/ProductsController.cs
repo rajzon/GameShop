@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using GameShop.Application.Helpers;
 using GameShop.Application.Interfaces;
+using GameShop.Domain.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,12 +27,17 @@ namespace GameShop.UI.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetProductsForSearching() 
+        public async Task<IActionResult> GetProductsForSearching([FromQuery]ProductParams productParams) 
         {
-            var productsToReturn = await _repo.GetProductsForSearchingAsync(); 
+            var products = await _repo.GetProductsForSearchingAsync(productParams);
+
+            var productToReturn = _mapper.Map<IEnumerable<ProductForSearchingDto>>(products);
+
+            Response.AddPagination(products.CurrentPage, products.PageSize, 
+                            products.TotalCount, products.TotalPages); 
 
 
-            return Ok(productsToReturn);
+            return Ok(productToReturn);
         }
 
     }

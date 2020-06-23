@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameShop.Application.Helpers;
 using GameShop.Domain.Dtos;
 using GameShop.Domain.Model;
 
@@ -19,7 +20,7 @@ namespace GameShop.Application.Interfaces
          Task<Photo> GetPhoto(int photoId);
          Task<ICollection<Photo>> GetPhotosForProduct(int productId);
          Task<Photo> GetMainPhotoForProduct(int productId);
-         Task<IEnumerable<ProductForSearchingDto>> GetProductsForSearchingAsync();
+         Task<PagedList<ProductForSearchingDto>> GetProductsForSearchingAsync(ProductParams productParams);
          Task<IEnumerable<Category>> GetCategories();
          Task<IEnumerable<SubCategory>> GetSubCategories();
          Task<IEnumerable<Language>> GetLanguages();

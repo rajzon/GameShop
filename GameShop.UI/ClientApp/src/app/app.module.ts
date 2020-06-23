@@ -33,6 +33,8 @@ import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { JwtModule } from '@auth0/angular-jwt';
 import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 import { FileUploadModule } from 'ng2-file-upload';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -64,6 +66,7 @@ export function tokenGetter() {
       FormsModule,
       BrowserAnimationsModule,
       BsDropdownModule.forRoot(),
+      PaginationModule.forRoot(),
       TabsModule.forRoot(),
       RouterModule.forRoot(appRoutes),
       ModalModule.forRoot(),

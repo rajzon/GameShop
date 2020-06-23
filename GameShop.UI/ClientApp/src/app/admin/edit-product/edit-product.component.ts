@@ -164,25 +164,6 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-//   parsePhotosUrlToArray() {
-//     if (Array.isArray(this.model.photos)) {
-//       return;
-//     } else {
-//     let array = [];
-//     if (this.model.photos != null) {
-//     if (this.model.photos.includes(',')) {
-//     array = this.model.photos.split(',');
-//     this.model.photos = array;
-//     } else {
-//       array.push(this.model.photos);
-//       this.model.photos = array;
-//     }
-//   } else {
-//     this.model.photos = array;
-//   }
-// }
-// }
-
   cancelButton() {
     this.editMode.emit(false);
   }
