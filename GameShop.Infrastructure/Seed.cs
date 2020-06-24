@@ -57,7 +57,7 @@ namespace GameShop.Infrastructure
 
         public static void SeedProductsFKs(ApplicationDbContext ctx)
         {
-            if (!ctx.Products.Any())
+            if (ctx.Products.Select(p => p.Category).Any(l => l == null))
             {
 
 
