@@ -45,16 +45,20 @@ namespace GameShop.UI.Controllers
 
         var result = await _userManager.CreateAsync(userToCreate , userForRegisterDto.Password);
 
-        if(result.Succeeded) 
+        if(!result.Succeeded) 
         {
             //TO DO: Change that to CreateAtRoute / CreateAtAction instead of Status Code(201)
-            return StatusCode(201);
+            return BadRequest(result.Errors);
         }
 
-        //var createdUser = await _repo.Register(userToCreate, userForRegisterDto.Password);
-
+        result = await _userManager.AddToRoleAsync(userToCreate,"Customer");
         
-        return BadRequest(result.Errors);
+        if(!result.Succeeded) 
+        {
+            return BadRequest(result.Errors);
+        }
+        
+        return Ok(201);
     }
 
     [HttpPost("login")]

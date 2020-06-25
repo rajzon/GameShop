@@ -1,7 +1,10 @@
+import { ProductFromServer } from 'src/app/_models/ProductFromServer';
 import { Product } from './../_models/Product';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../_models/User';
+import { PaginatedResult } from '../_models/Pagination';
+import { map } from 'rxjs/operators';
 
 
 
@@ -36,8 +39,26 @@ export class AdminService {
   }
  
 
-  getProducts() {
-    return this.http.get(this.baseUrl + 'admin/prodcuts-for-moderation');
+  getProducts(page?, itemsPerPage?) {
+    const paginatedResult: PaginatedResult<Array<ProductFromServer>> = new PaginatedResult<Array<ProductFromServer>>();
+
+    let params = new HttpParams();
+
+    if (page != null && itemsPerPage != null) {
+        params =  params.append('pageNumber', page);
+        params = params.append('pageSize', itemsPerPage);
+    }
+
+    return this.http.get(this.baseUrl + 'admin/prodcuts-for-moderation', {observe: 'response', params})
+            .pipe(
+              map(response => {
+              paginatedResult.result = <Array<ProductFromServer>>response.body;
+              if (response.headers.get('Pagination') != null) {
+                  paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+              }
+              return paginatedResult;
+            })
+            );
   }
 
   getProductForEdit(id: Number) {

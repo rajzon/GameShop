@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { ProductFromServer } from './../../_models/ProductFromServer';
 import { AdminService } from './../../_services/admin.service';
 import { Component, OnInit, } from '@angular/core';
+import { PaginatedResult, Pagination } from 'src/app/_models/Pagination';
 
 
 @Component({
@@ -14,6 +15,7 @@ export class ProductManagementComponent implements OnInit {
   createButtonClicked: boolean;
   editButtonClicked: boolean;
   productIdToEdit: Number;
+  pagination: Pagination;
 
 
   constructor(private adminService: AdminService, private router: Router) { }
@@ -21,16 +23,26 @@ export class ProductManagementComponent implements OnInit {
   ngOnInit() {
     this.createButtonClicked = false;
     this.editButtonClicked = false;
-    this.getProducts();
+    const pageNumber = 1;
+    const pageSize = 5;
+    this.getProducts(pageNumber, pageSize);
   }
 
-  getProducts() {
-    this.adminService.getProducts().subscribe((products: ProductFromServer[]) => {
-      this.products = products;
+  pageChanged(event: any): void {
+    this.pagination.currentPage = event.page;
+    this.getProducts(this.pagination.currentPage, this.pagination.itemsPerPage);
+  }
+
+  getProducts(pageNumber: number, pageSize: number) {
+    this.adminService.getProducts(pageNumber, pageSize).subscribe((products: PaginatedResult<Array<ProductFromServer>>) => {
+      this.products = products.result;
+      this.pagination = products.pagination;
     }, error => {
       console.log(error);
     });
   }
+
+
 
   deleteProduct(id: Number) {
     this.adminService.deleteProduct(id).subscribe(() => {

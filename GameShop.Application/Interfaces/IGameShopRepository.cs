@@ -21,6 +21,7 @@ namespace GameShop.Application.Interfaces
          Task<ICollection<Photo>> GetPhotosForProduct(int productId);
          Task<Photo> GetMainPhotoForProduct(int productId);
          Task<PagedList<ProductForSearchingDto>> GetProductsForSearchingAsync(ProductParams productParams);
+         Task<PagedList<ProductForModerationDto>> GetProductsForModerationAsync(ProductParams productParams);
          Task<IEnumerable<Category>> GetCategories();
          Task<IEnumerable<SubCategory>> GetSubCategories();
          Task<IEnumerable<Language>> GetLanguages();

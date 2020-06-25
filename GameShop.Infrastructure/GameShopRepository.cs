@@ -106,6 +106,26 @@ namespace GameShop.Infrastructure
             return await PagedList<ProductForSearchingDto>.CreateAsync(products, productParams.PageNumber, productParams.PageSize);
         }
 
+        public async Task<PagedList<ProductForModerationDto>> GetProductsForModerationAsync(ProductParams productParams)
+        {
+            var products = _ctx.Products.OrderBy(x => x.Id)
+                .Select(product => new ProductForModerationDto
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Price = product.Price,
+                    ReleaseDate = product.ReleaseDate,
+                    SubCategories = (from productSubCategory in product.SubCategories
+                                     join subCategory in _ctx.SubCategories
+                                     on productSubCategory.SubCategoryId
+                                     equals subCategory.Id
+                                     select subCategory.Name).ToList(),
+                    CategoryName = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Name,
+                });
+
+            return await PagedList<ProductForModerationDto>.CreateAsync(products, productParams.PageNumber, productParams.PageSize);
+        }
+
         public async Task<Category> GetCategory(int categoryId)
         {
             var category = await _ctx.Categories.FirstOrDefaultAsync(x => x.Id == categoryId);

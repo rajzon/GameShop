@@ -94,27 +94,17 @@ namespace GameShop.UI.Controllers
 
         [Authorize(Policy = "ModerateProductRole")]
         [HttpGet("prodcuts-for-moderation")]
-        public async Task<IActionResult> GetProductsForModeration()
+        public async Task<IActionResult> GetProductsForModeration([FromQuery]ProductParams productParams)
         {
 
             //var categoryId = (int)_ctx.Entry<Product>(await _ctx.Products.FirstOrDefaultAsync()).Property("CategoryId").CurrentValue;
-            var productList = await _ctx.Products.OrderBy(x => x.Id)
-                .Select(product => new
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Price = product.Price,
-                    ReleaseDate = product.ReleaseDate,
-                    SubCategories = (from productSubCategory in product.SubCategories
-                                     join subCategory in _ctx.SubCategories
-                                     on productSubCategory.SubCategoryId
-                                     equals subCategory.Id
-                                     select subCategory.Name).ToList(),
-                    CategoryName = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(product, "CategoryId")).Name,
-                }).ToListAsync();
+            var products = await _repo.GetProductsForModerationAsync(productParams);
 
+            var productsToReturn = _mapper.Map<IEnumerable<ProductForModerationDto>>(products);
+            
+            Response.AddPagination(products.CurrentPage, products.PageSize, products.TotalCount, products.TotalPages);
 
-            return Ok(productList);
+            return Ok(productsToReturn);
         }
 
         [Authorize(Policy = "ModerateProductRole")]
