@@ -15,6 +15,7 @@ namespace GameShop.Application.Interfaces
          Task<User> GetUser(int id);
          Task<Category> GetCategory(int categoryId);
          Task<Product> GetProductWithPhotos(int productId);
+         Task<Product> GetProductForCard(int productId);
          Task<Product> GetProductForDelete(int productId);
          Task<Product> GetProductForEdit(int productId);
          Task<Photo> GetPhoto(int photoId);

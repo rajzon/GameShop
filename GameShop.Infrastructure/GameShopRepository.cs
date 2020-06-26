@@ -40,6 +40,18 @@ namespace GameShop.Infrastructure
             return product;
         }
 
+        public async Task<Product> GetProductForCard(int productId)
+        {
+            var product = await _ctx.Products
+                    .Include(p => p.Photos)
+                    .Include(sc => sc.SubCategories)
+                    .Include(c => c.Category)
+                    .Include(l => l.Languages)
+                    .FirstOrDefaultAsync(x => x.Id == productId);
+
+            return product;
+        }
+
         public async Task<Product> GetProductForDelete(int productId)
         {
             var selectedProduct = await _ctx.Products
@@ -92,6 +104,7 @@ namespace GameShop.Infrastructure
         {
             var products =  _ctx.Products.Select(product => new ProductForSearchingDto
             {
+                Id =  product.Id,
                 Name = product.Name,
                 Price = product.Price,
                 Photo = product.Photos.Where(p => p.ProductId == product.Id).Select(p => new Photo {

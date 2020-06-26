@@ -35,4 +35,8 @@ constructor(private http: HttpClient) { }
         );
   }
 
+  getProductForCard(id: number) {
+    return this.http.get(this.baseUrl + 'products/' + id);
+  }
+
 }

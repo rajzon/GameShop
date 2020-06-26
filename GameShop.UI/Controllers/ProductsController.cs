@@ -40,5 +40,14 @@ namespace GameShop.UI.Controllers
             return Ok(productToReturn);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProduct(int id) 
+        {
+            var product = await _repo.GetProductForCard(id);
+
+
+            return Ok(product);
+        }
+
     }
 }

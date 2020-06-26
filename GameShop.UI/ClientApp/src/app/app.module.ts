@@ -34,6 +34,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ProductCardComponent } from './home/product-card/product-card.component';
 
 
 export function tokenGetter() {
@@ -58,10 +59,11 @@ export function tokenGetter() {
       RolesModalComponent,
       CreateProductComponent,
       EditProductComponent,
-      RequirementsModalComponent
+      RequirementsModalComponent,
+      ProductCardComponent
    ],
    imports: [
-      BrowserModule.withServerTransition({ appId: 'ng-cli-universal'}),
+      BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
       HttpClientModule,
       FormsModule,
       BrowserAnimationsModule,
