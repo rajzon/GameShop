@@ -27,7 +27,7 @@ npm install
 Use the command on {workspace}/GameShop/GameShop.UI
 
 ```bash
-dotnet run
+dotnet restore
 ```
 
 ## Running appliaction
