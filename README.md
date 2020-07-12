@@ -37,3 +37,11 @@ Use the command on {workspace}/GameShop/GameShop.UI
 ```bash
 dotnet run
 ```
+
+
+## Technology Stack
+
+- ASP.NET Core
+- EntityFramework Core
+- Angular
+- Bootstrap 4
