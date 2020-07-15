@@ -2,7 +2,7 @@
 
 ## GameShop
 
-GameShop app will allow user and anonymous to buy product and admin will be able to edit products, track orders, etc.
+GameShop app will allow user and anonymous to buy product and admin will be able to: edit products, track orders, etc.
 Store will have the following functions:
 - product purchase
 - administrator panel
