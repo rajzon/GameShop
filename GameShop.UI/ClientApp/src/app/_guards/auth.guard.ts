@@ -21,7 +21,6 @@ export class AuthGuard implements CanActivate {
         console.log('You do not have privlage to access that page');
         this.router.navigate(['home']);
       }
-
     }
 
     console.log(this.loggedIn);

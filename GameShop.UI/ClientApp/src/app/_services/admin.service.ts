@@ -5,41 +5,40 @@ import { Injectable } from '@angular/core';
 import { User } from '../_models/User';
 import { PaginatedResult } from '../_models/Pagination';
 import { map } from 'rxjs/operators';
-
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  baseUrl = 'api/';
+  baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) { }
 
-  createProduct(product: Product) {
+  createProduct(product: Product): Observable<any>  {
     return this.http.post(this.baseUrl + 'admin/create-product', product);
   }
 
-  deletePhoto(productId: Number, id: Number) {
+  deletePhoto(productId: Number, id: Number): Observable<any>  {
     return this.http.delete(this.baseUrl + 'admin/product/' + productId + '/photos/' + id);
   }
 
-  deleteProduct(id: Number) {
-    const httpOpitons = {
-      headers: new HttpHeaders({responseType: 'application/octet-stream'})};
+  deleteProduct(id: Number): Observable<any>  {
     return this.http.delete(this.baseUrl + 'admin/delete-product/' + id);
   }
 
-  editProduct(product: Product, id: Number) {
+  editProduct(product: Product, id: Number): Observable<any>  {
     return this.http.post(this.baseUrl + 'admin/edit-product/' + id, product);
   }
 
-  setMainPhoto(productId: Number, id: Number) {
+  setMainPhoto(productId: Number, id: Number): Observable<any> {
     return this.http.post(this.baseUrl + 'admin/product/' + productId + '/photos/' + id + '/setMain', {});
   }
  
 
-  getProducts(page?, itemsPerPage?) {
+  getProducts(page?, itemsPerPage?): Observable<PaginatedResult<Array<ProductFromServer>>>  {
     const paginatedResult: PaginatedResult<Array<ProductFromServer>> = new PaginatedResult<Array<ProductFromServer>>();
 
     let params = new HttpParams();
@@ -61,28 +60,28 @@ export class AdminService {
             );
   }
 
-  getProductForEdit(id: Number) {
+  getProductForEdit(id: Number): Observable<any>  {
     return this.http.get(this.baseUrl + 'admin/product-for-edit/' + id);
   }
 
-  getCategories() {
+  getCategories(): Observable<any>  {
     return this.http.get(this.baseUrl + 'admin/available-categories');
   }
 
-  getSubCategories() {
+  getSubCategories(): Observable<any>  {
     return this.http.get(this.baseUrl + 'admin/available-subCategories');
   }
 
-  getLanguages() {
+  getLanguages(): Observable<any>  {
     return this.http.get(this.baseUrl + 'admin/available-languages');
   }
 
-  getUsersWithRoles() {
+  getUsersWithRoles(): Observable<any>  {
      return this.http.get(this.baseUrl + 'admin/users-with-roles');
 
   }
 
-  updateUserRoles(user: User, roles: {}) {
+  updateUserRoles(user: User, roles: {}): Observable<any>  {
     return this.http.post(this.baseUrl + 'admin/edit-roles/' + user.userName, roles);
   }
 

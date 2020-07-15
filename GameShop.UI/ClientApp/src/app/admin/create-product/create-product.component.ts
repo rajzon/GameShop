@@ -22,7 +22,6 @@ export class CreateProductComponent implements OnInit {
   bsModalRef: BsModalRef;
   subCategories: SubCategory[];
   languages: Languague[];
-  productIdFromServer: number;
 
 
   uploader: FileUploader;
@@ -48,7 +47,7 @@ export class CreateProductComponent implements OnInit {
     this.hasBaseDropZoneOver = e;
   }
 
-  initializeUploader() {
+  initializeUploader(): void {
     this.uploader = new FileUploader({
       authToken: 'Bearer ' + localStorage.getItem('token'),
       isHTML5: true,
@@ -59,25 +58,13 @@ export class CreateProductComponent implements OnInit {
     });
   }
 
-  createProduct() {
-    console.log(this.model.subCategoriesId);
-    console.log(this.model.requirements);
+  createProduct(): void {
     this.adminService.createProduct(this.model).subscribe(
       (next: ProductFromServer) => {
         console.log('Product Created');
-        this.productIdFromServer = next.id;
-        console.log(this.productIdFromServer);
-        if (this.uploader.queue.length > 0) {
-          this.uploader.onBeforeUploadItem  = (file) => {
-            file.url = this.baseUrl + 'admin/product/' + this.productIdFromServer + '/photos'};
-          console.log(this.uploader.options.url);
-          this.uploader.uploadAll();
-          this.uploader.onCompleteAll = () => {
-            this.creationMode.emit(false);
-          };
-      } else {
-        this.creationMode.emit(false);
-      }
+        const productIdFromServer = next.id;
+        console.log(productIdFromServer);
+        this.uploadPhotos(productIdFromServer);
       },
       error => {
         console.log(error);
@@ -85,8 +72,22 @@ export class CreateProductComponent implements OnInit {
     );
   }
 
+  private uploadPhotos(productIdFromServer: number): void {
+      if (this.uploader.queue.length > 0) {
+        this.uploader.onBeforeUploadItem  = (file) => {
+          file.url = this.baseUrl + 'admin/product/' + productIdFromServer + '/photos'};
+        console.log(this.uploader.options.url);
+        this.uploader.uploadAll();
+        this.uploader.onCompleteAll = () => {
+          this.creationMode.emit(false);
+        };
+      } else {
+      this.creationMode.emit(false);
+    }
+  }
 
-  createRequirementsModal() {
+
+  createRequirementsModal(): void {
     if (this.model.requirements != null) {
       const initialState = {
         requirements: this.model.requirements
@@ -106,7 +107,7 @@ export class CreateProductComponent implements OnInit {
     );
   }
 
-  getLanguages() {
+  getLanguages(): void {
     this.adminService.getLanguages().subscribe(
       (next: Languague[]) => {
         this.languages = next;
@@ -117,7 +118,7 @@ export class CreateProductComponent implements OnInit {
     );
   }
 
-  getSubCategories() {
+  getSubCategories(): void {
     this.adminService.getSubCategories().subscribe(
       (next: SubCategory[]) => {
         this.subCategories = next;
@@ -129,7 +130,7 @@ export class CreateProductComponent implements OnInit {
     );
   }
 
-  getCategories() {
+  getCategories(): void {
     this.adminService.getCategories().subscribe(
       (next: Category[]) => {
         this.categories = next;
@@ -141,7 +142,7 @@ export class CreateProductComponent implements OnInit {
     );
   }
 
-  cancelButton() {
+  cancelButton(): void {
     this.creationMode.emit(false);
   }
 

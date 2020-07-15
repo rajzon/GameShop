@@ -16,7 +16,6 @@ namespace GameShop.Infrastructure
         base(options)
         { }
         public DbSet<Value> Values { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Requirements> Requirements { get; set; }

@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
     this.getProductsForSearching(this.pagination.currentPage, this.pagination.itemsPerPage);
   }
 
-  getProductsForSearching(currentPageNumber: number, pageSize: number) {
+  getProductsForSearching(currentPageNumber: number, pageSize: number): void {
     this.shopSearchingService.getProductsForSearching(currentPageNumber, pageSize).subscribe(
         (next: PaginatedResult<Array<ProductForSearching>>) => {
       this.pagination = next.pagination;
@@ -42,11 +42,11 @@ export class HomeComponent implements OnInit {
 
   }
 
-  initPhotoIfItsNull() {
+  private initPhotoIfItsNull(): void {
     this.products.forEach(element => {
       if (!element.photo) {
         element.photo = <Photo>{ };
       }
     });
   }
-} 
+}

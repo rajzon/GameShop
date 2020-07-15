@@ -47,7 +47,7 @@ export class EditProductComponent implements OnInit {
     this.hasBaseDropZoneOver = e;
   }
 
-  initializeUploader() {
+  initializeUploader(): void {
     this.uploader = new FileUploader({
       url: this.baseUrl + 'admin/product/' + this.productIdFromProductsPanel + '/photos',
       authToken: 'Bearer ' + localStorage.getItem('token'),
@@ -72,7 +72,7 @@ export class EditProductComponent implements OnInit {
     };
   }
 
-  setMainPhoto(photo: Photo) {
+  setMainPhoto(photo: Photo): void {
     this.adminService.setMainPhoto(this.productIdFromProductsPanel, photo.id).subscribe(() => {
       console.log('Successfully set to main');
       this.currentMainPhoto = this.model.photos.filter(p => p.isMain === true)[0];
@@ -83,18 +83,17 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-  deletePhoto(id: number) {
+  deletePhoto(id: number): void {
     this.adminService.deletePhoto(this.productIdFromProductsPanel, id).subscribe(() => {
       this.model.photos.splice(this.model.photos.findIndex(p => p.id === id), 1);
-      console.log('Photo has been deleted')
+      console.log('Photo has been deleted');
     }, error => {
       console.log(error);
     });
   }
 
-  createRequirementsModal() {
-
-    if( this.model.requirements != null ) {
+  createRequirementsModal(): void {
+    if (this.model.requirements != null ) {
       const initialState = {
         requirements: this.model.requirements
       }
@@ -110,7 +109,7 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-  getCategories() {
+  getCategories(): void {
     this.adminService.getCategories().subscribe((next: Category[]) => {
       this.categories = next;
     }, error => {
@@ -118,7 +117,7 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-  getLanguages() {
+  getLanguages(): void {
     this.adminService.getLanguages().subscribe((next: Languague[]) => {
       this.languages = next;
     }, error => {
@@ -126,7 +125,7 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-  getSubCategories() {
+  getSubCategories(): void {
     this.adminService.getSubCategories().subscribe((next: SubCategory[]) => {
       this.subCategories = next;
       console.log(this.subCategories);
@@ -135,27 +134,28 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-
-
-  editProduct() {
+  editProduct(): void {
     console.log(this.model);
-    //this.parsePhotosUrlToArray();
     this.adminService.editProduct(this.model, this.productIdFromProductsPanel).subscribe(() => {
       console.log('Product edited successfully');
-      if (this.uploader.queue.length > 0) {
-        this.uploader.uploadAll();
-        this.uploader.onCompleteAll = () => {
-        this.editMode.emit(false);
-      };
-      } else {
-        this.editMode.emit(false);
-      }
+      this.uploadPhotos();
     }, error => {
       console.log(error);
     });
   }
 
-  getProductForEdit(id: Number) {
+  private uploadPhotos(): void {
+    if (this.uploader.queue.length > 0) {
+      this.uploader.uploadAll();
+      this.uploader.onCompleteAll = () => {
+      this.editMode.emit(false);
+    };
+    } else {
+      this.editMode.emit(false);
+    }
+  }
+
+  getProductForEdit(id: Number): void {
     this.adminService.getProductForEdit(id).subscribe((next: Product) => {
       this.model = next;
       console.log(this.model);
@@ -164,7 +164,10 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-  cancelButton() {
+  cancelButton(): void {
+    if (this.uploader.queue.length > 0) {
+      this.uploader.clearQueue();
+    }
     this.editMode.emit(false);
   }
 

@@ -1,4 +1,3 @@
-import { LoggedInInfoService } from './../_services/loggedInInfo.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { Router } from '@angular/router';
@@ -10,21 +9,12 @@ import { Router } from '@angular/router';
 })
 export class SignInComponent implements OnInit {
   model: any = {};
-  // @Output() loggedInStatus = new EventEmitter();
-
-  // private loggedInStatus: boolean;
 
   constructor(private authService: AuthService , private router: Router) { }
 
-  ngOnInit() {
-    // this.loggedInInfoService.loggedInStatusSet$.subscribe((loggedInStatus) => {
-    //   console.log(loggedInStatus);
-    // });
+  ngOnInit() {}
 
-    // this.loggedInStatus = this.loggedInInfoService.loggedInInfo;
-  }
-
-  login() {
+  login(): void {
     this.authService.login(this.model).subscribe(next => {
       console.log('Logged in successfully');
     } , error => {
@@ -42,7 +32,7 @@ export class SignInComponent implements OnInit {
   }
 
 
-  cancel() {
+  cancel(): void {
     console.log('canceled');
     this.router.navigate(['/home']);
   }

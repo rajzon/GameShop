@@ -22,7 +22,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { ValueComponent } from './value/value.component';
 import { NavComponent } from './nav/nav.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { BasketComponent } from './basket/basket.component';
@@ -45,7 +44,6 @@ export function tokenGetter() {
    declarations: [
       AppComponent,
       HomeComponent,
-      ValueComponent,
       NavComponent,
       MyAccountComponent,
       BasketComponent,

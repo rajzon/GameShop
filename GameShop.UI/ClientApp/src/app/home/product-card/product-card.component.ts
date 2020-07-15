@@ -16,7 +16,7 @@ export class ProductCardComponent implements OnInit {
     this.getProduct();
   }
 
-  getProduct() {
+  getProduct(): void {
     this.shopSearchingService.getProductForCard(+this.route.snapshot.params['id'])
         .subscribe(response => {
          this.product = response;

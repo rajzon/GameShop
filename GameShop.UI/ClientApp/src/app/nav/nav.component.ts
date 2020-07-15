@@ -1,5 +1,4 @@
 import { AuthService } from './../_services/auth.service';
-import { LoggedInInfoService } from './../_services/loggedInInfo.service';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -15,35 +14,24 @@ export class NavComponent implements OnInit {
   loggedIn: boolean;
   subscription: Subscription;
 
-  constructor(private loggedInInfoService: LoggedInInfoService , private authService: AuthService , private router: Router) {}
+  constructor(private authService: AuthService , private router: Router) {}
 
   ngOnInit() {
-    // this.subscription = this.authService.getDecodedToken().subscribe(x => {
-    //   this.authService.decodedToken = x;
-    //   console.log('DecodedToken From nav bar passed by sign-in component' + this.authService.decodedToken);
-    // });
-
-    // this.authService.sendDecodedToken(this.authService.decodedToken);
-
-
     this.subscription = this.authService.getLoggedInStatus().subscribe(x => {
       this.loggedIn = x;
       console.log('LoggedInStatus From nav bar passed by sign-in component' + this.loggedIn);
     });
 
     this.authService.sendLoggedInStatus(this.authService.loggedIn());
-     //this.authService.sendDecodedToken(this.authService.decodedToken);
-     //this.authService.activateHasRoleDiractive();
-     
 
   }
 
 
-  setAnonymousMode() {
+  setAnonymousMode(): void {
     this.anonymousMode = true;
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('token');
     console.log(this.loggedIn);
     this.authService.sendLoggedInStatus(this.authService.loggedIn());

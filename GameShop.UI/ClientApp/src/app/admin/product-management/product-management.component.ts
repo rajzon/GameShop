@@ -4,7 +4,6 @@ import { AdminService } from './../../_services/admin.service';
 import { Component, OnInit, } from '@angular/core';
 import { PaginatedResult, Pagination } from 'src/app/_models/Pagination';
 
-
 @Component({
   selector: 'app-product-management',
   templateUrl: './product-management.component.html',
@@ -33,7 +32,7 @@ export class ProductManagementComponent implements OnInit {
     this.getProducts(this.pagination.currentPage, this.pagination.itemsPerPage);
   }
 
-  getProducts(pageNumber: number, pageSize: number) {
+  getProducts(pageNumber: number, pageSize: number): void {
     this.adminService.getProducts(pageNumber, pageSize).subscribe((products: PaginatedResult<Array<ProductFromServer>>) => {
       this.products = products.result;
       this.pagination = products.pagination;
@@ -42,39 +41,35 @@ export class ProductManagementComponent implements OnInit {
     });
   }
 
-
-
-  deleteProduct(id: Number) {
+  deleteProduct(id: Number): void {
     this.adminService.deleteProduct(id).subscribe(() => {
       console.log('Porduct of Id:' + id + 'has been deleted');
-      this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/admin']);
-       });
+      this.refreshComponent();
     }, error => {
       console.log(error);
     });
-    
   }
 
-  editProductButtonSelected(id: Number) {
+  editProductButtonSelected(id: Number): void {
     this.editButtonClicked = true;
-    // this.productIdToEdit = id;
     this.productIdToEdit = id;
   }
 
-  createProductButtonSelected() {
+  createProductButtonSelected(): void {
     this.createButtonClicked = true;
   }
 
-  canceledOrSuccesfullCreation(creationMode: boolean) {
+  canceledOrSuccesfullCreation(creationMode: boolean): void {
     this.createButtonClicked = creationMode;
-    this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-      this.router.navigate(['/admin']);
-     });
+    this.refreshComponent();
   }
 
-  canceledOrSuccesfullEdit(creationMode: boolean) {
+  canceledOrSuccesfullEdit(creationMode: boolean): void {
     this.editButtonClicked = creationMode;
+    this.refreshComponent();
+  }
+
+  private refreshComponent(): void {
     this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/admin']);
      });

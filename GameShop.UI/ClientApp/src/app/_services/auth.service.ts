@@ -3,22 +3,23 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl = 'api/auth/';
+  baseUrl = environment.baseUrl + 'auth/';
   jwtHelper = new JwtHelperService();
   decodedToken: any;
 
 
-  private subject = new Subject<any>();
+  private loggedInStatus = new Subject<any>();
   private tokenSubject = new Subject<any>();
 
   constructor(private http: HttpClient) { }
 
-  login(model: any) {
+  login(model: any): Observable<any> {
     return this.http.post(this.baseUrl + 'login', model)
       .pipe(
         map((response: any) => {
@@ -31,11 +32,11 @@ export class AuthService {
       );
   }
 
-  register(model: any) {
+  register(model: any): Observable<any> {
     return this.http.post(this.baseUrl + 'register', model);
   }
 
-  loggedIn() {
+  loggedIn(): boolean {
     const token = localStorage.getItem('token');
     return !this.jwtHelper.isTokenExpired(token);
   }
@@ -53,18 +54,18 @@ export class AuthService {
     return isMatch;
   }
 
-  public sendLoggedInStatus(loggedInStatus: boolean) {
-    this.subject.next(loggedInStatus);
+  public sendLoggedInStatus(loggedInStatus: boolean): void {
+    this.loggedInStatus.next(loggedInStatus);
   }
   public getLoggedInStatus(): Observable<any> {
-    return this.subject.asObservable();
+    return this.loggedInStatus.asObservable();
   }
 
-  public sendDecodedToken(decodedToken: any) {
+  public sendDecodedToken(decodedToken: any): void {
     this.tokenSubject.next(decodedToken);
   }
 
-  public activateHasRoleDiractive(): Observable<any> {
+  public activateHasRoleDirective(): Observable<any> {
     return this.tokenSubject.asObservable();
   }
 

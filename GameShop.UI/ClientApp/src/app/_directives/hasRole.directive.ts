@@ -17,83 +17,58 @@ export class HasRoleDirective implements OnInit {
                private authService: AuthService ) { }
 
   ngOnInit() {
-    this.subscription = this.authService.activateHasRoleDiractive().subscribe(x => {
+    this.subscription = this.authService.activateHasRoleDirective().subscribe(x => {
       console.log('DecodedToken From hasRoleDirective  passed by sign-in component or nav-bar component' + this.authService.decodedToken);
       console.log(localStorage.getItem('token'));
-      if (!this.authService.decodedToken) {
-        this.isVisible = false;
-        this.viewContainerRef.clear();
-        return;
-      }
-      // if (!localStorage.getItem('token')) {
-      //   this.isVisible = false;
-      //   this.viewContainerRef.clear();
-      //   return;
-      // } else {
-      console.log(this.authService.decodedToken);
-      const userRoles = this.authService.decodedToken.role as Array<string>;
-      console.log(userRoles);
-      if (!userRoles) {
-        this.viewContainerRef.clear();
-      }
-      console.log(this.isVisible);
-      if (this.authService.roleMatch(this.appHasRole)) {
-        if (!this.isVisible) {
-          this.isVisible = true;
-          this.viewContainerRef.createEmbeddedView(this.templateRef);
-        } else {
-          this.isVisible = false;
-          this.viewContainerRef.clear();
-        }
 
-    }
+      if (!this.isUserAuthenticated()) { return; }
+      this.userAuthorization();
 
     });
     console.log('TEST2');
+    // it guard the DOM from unauthorised users during refreshing and navigating
     if (this.authService.loggedIn()) {
-      console.log('DecodedToken From hasRoleDirective when refresing page' + this.authService.decodedToken);
+      console.log('DecodedToken From hasRoleDirective during refresing page or navigating to protected elements'
+                     + this.authService.decodedToken);
       console.log(localStorage.getItem('token'));
-      if (!this.authService.decodedToken) {
-        this.isVisible = false;
-        this.viewContainerRef.clear();
-        return;
-      }
-      // if (!localStorage.getItem('token')) {
-      //   this.isVisible = false;
-      //   this.viewContainerRef.clear();
-      //   return;
-      // } else {
-      console.log(this.authService.decodedToken);
-      const userRoles = this.authService.decodedToken.role as Array<string>;
-      console.log(userRoles);
-      if (!userRoles) {
-        this.viewContainerRef.clear();
-      }
-      console.log(this.isVisible);
-      if (this.authService.roleMatch(this.appHasRole)) {
-        if (!this.isVisible) {
-          this.isVisible = true;
-          this.viewContainerRef.createEmbeddedView(this.templateRef);
-        } else {
-          this.isVisible = false;
-          this.viewContainerRef.clear();
-        }
+      if (!this.isUserAuthenticated()) { return; }
+      this.userAuthorization();
 
     }
-
-    }
-
-    // console.log(this.authService.loggedIn());
-    // if(this.authService.loggedIn()) {
-    //   console.log(this.authService.decodedToken);
-    //   if(!this.authService.decodedToken) {
-    //     this.isVisible = false;
-    //     this.viewContainerRef.clear();
-    //   }
-    // }
 
 
   }
 
+  isUserAuthenticated(): boolean {
+    if (!this.authService.decodedToken) {
+      this.isVisible = false;
+      this.viewContainerRef.clear();
+      return false;
+    }
+
+    return true;
+  }
+
+  userAuthorization(): void {
+
+      console.log(this.authService.decodedToken);
+      const userRoles = this.authService.decodedToken.role as Array<string>;
+      console.log(userRoles);
+      if (!userRoles) {
+        this.viewContainerRef.clear();
+      }
+      console.log(this.isVisible);
+      if (this.authService.roleMatch(this.appHasRole)) {
+        if (!this.isVisible) {
+          this.isVisible = true;
+          this.viewContainerRef.createEmbeddedView(this.templateRef);
+        } else {
+          this.isVisible = false;
+          this.viewContainerRef.clear();
+        }
+
+    }
+
+  }
 
 }

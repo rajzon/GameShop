@@ -19,7 +19,7 @@ export class UserManagementComponent implements OnInit {
     this.getUsersWithRoles();
   }
 
-  getUsersWithRoles() {
+  getUsersWithRoles(): void {
     this.adminService.getUsersWithRoles().subscribe((users: User[]) => {
       this.users = users;
     }, error => {
@@ -27,7 +27,7 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  editRolesModal(user: User) {
+  editRolesModal(user: User): void {
     const initialState = {
       user,
       roles: this.getRolesArray(user)
@@ -47,7 +47,7 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  private getRolesArray(user) {
+  private getRolesArray(user: User): any[] {
     const roles = [];
     const userRoles = user.roles;
     const availableRoles: any[] = [
