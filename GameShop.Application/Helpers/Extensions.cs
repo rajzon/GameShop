@@ -1,6 +1,11 @@
+using GameShop.Domain.Dtos;
+using GameShop.Domain.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Linq;
+
 
 namespace GameShop.Application.Helpers
 {

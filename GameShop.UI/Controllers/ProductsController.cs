@@ -43,7 +43,7 @@ namespace GameShop.UI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProduct(int id) 
         {
-            var product = await _repo.GetProductForCard(id);
+            var product = await _repo.GetProduct(id);
 
 
             return Ok(product);

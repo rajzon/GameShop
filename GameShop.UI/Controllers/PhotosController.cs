@@ -21,11 +21,13 @@ namespace GameShop.UI.Controllers
         private readonly IGameShopRepository _repo;
         private readonly IMapper _mapper;
         private readonly IOptions<CloudinarySettings> _cloudinaryConfig;
+        private readonly IUnitOfWork _unitOfWork;
         private Cloudinary _cloudinary;
 
         public PhotosController(IGameShopRepository repo, IMapper mapper,
-            IOptions<CloudinarySettings> cloudinaryConfig)
+            IOptions<CloudinarySettings> cloudinaryConfig, IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
             _cloudinaryConfig = cloudinaryConfig;
             _mapper = mapper;
             _repo = repo;
@@ -44,7 +46,7 @@ namespace GameShop.UI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetPhoto(int id)
         {
-            var photoFromRepo = await _repo.GetPhoto(id);
+            var photoFromRepo = await _unitOfWork.Photo.GetAsync(id);
 
             var photo = _mapper.Map<PhotoForReturnDto>(photoFromRepo);
 
@@ -113,14 +115,14 @@ namespace GameShop.UI.Controllers
                 return Unauthorized();
             }
 
-            var photoFromRepo = await _repo.GetPhoto(id);
+            var photoFromRepo = await _unitOfWork.Photo.GetAsync(id);
 
             if (photoFromRepo.isMain)
             {
                 return BadRequest("This is already main photo");
             }
 
-            var currrentMainPhoto = await _repo.GetMainPhotoForProduct(productId);
+            var currrentMainPhoto = await _unitOfWork.Photo.FindAsync(p => p.ProductId == productId);
 
             if (currrentMainPhoto != null)
             {
@@ -148,7 +150,7 @@ namespace GameShop.UI.Controllers
                 return Unauthorized();
             }      
 
-            var photoFromRepo = await _repo.GetPhoto(id);        
+            var photoFromRepo = await _unitOfWork.Photo.GetAsync(id);        
 
             if (photoFromRepo.PublicId !=null) 
             {

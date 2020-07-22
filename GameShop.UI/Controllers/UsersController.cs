@@ -14,9 +14,11 @@ namespace GameShop.UI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IGameShopRepository _repo;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public UsersController(IGameShopRepository repo, IMapper mapper)
+        public UsersController(IGameShopRepository repo, IMapper mapper, IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _repo = repo;
         }
@@ -25,7 +27,7 @@ namespace GameShop.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _repo.GetUsers();
+            var users = await _unitOfWork.User.GetAllOrderedByAsync(u => u.Id);
 
           
             return Ok(users);
@@ -34,9 +36,7 @@ namespace GameShop.UI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _repo.GetUser(id);
-
-            
+            var user = await _unitOfWork.User.GetAsync(id);
 
             return Ok(user);
         }

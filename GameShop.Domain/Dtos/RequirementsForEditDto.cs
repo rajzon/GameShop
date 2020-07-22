@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace GameShop.Domain.Dtos
 {
     public class RequirementsForEditDto
@@ -8,5 +10,6 @@ namespace GameShop.Domain.Dtos
         public string GraphicsCard { get; set; }
         public ushort HDD { get; set; }
         public bool IsNetworkConnectionRequire { get; set; }
+
     }
 }

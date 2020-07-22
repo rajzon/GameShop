@@ -47,7 +47,7 @@ namespace GameShop.UI.Controllers
 
         if(!result.Succeeded) 
         {
-            //TO DO: Change that to CreateAtRoute / CreateAtAction instead of Status Code(201)
+ 
             return BadRequest(result.Errors);
         }
 
@@ -57,7 +57,8 @@ namespace GameShop.UI.Controllers
         {
             return BadRequest(result.Errors);
         }
-        
+
+         //TO DO: Change that to CreateAtRoute / CreateAtAction instead of Status Code(201)
         return Ok(201);
     }
 

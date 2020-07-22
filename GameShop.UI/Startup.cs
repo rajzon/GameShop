@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using AutoMapper;
 using GameShop.Application.Mappings;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using GameShop.Infrastructure.Extensions;
 
 namespace GameShop.UI
 {
@@ -69,6 +70,7 @@ namespace GameShop.UI
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddScoped<IGameShopRepository , GameShopRepository>();
+            services.ConfigureUnitOfWork();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters 
