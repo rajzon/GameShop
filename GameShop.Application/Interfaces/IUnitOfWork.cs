@@ -10,6 +10,7 @@ namespace GameShop.Application.Interfaces
         IPhotoRepository Photo { get; } 
         IUserRepository User { get; } 
         IProductRepository Product { get; } 
-        Task Save();
+        IRequirementsRepository Requirements { get; } 
+        Task<bool> SaveAsync();
     }
 }

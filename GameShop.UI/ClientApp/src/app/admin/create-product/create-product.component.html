@@ -66,13 +66,13 @@
       <div class="form-group">
           <div class="form-check">
           <input type="checkbox" 
-            name="isNetworkConnetctionRequire"
+            name="isDigitalMedia"
             class="form-check-input"
             (change)="model.isDigitalMedia = $event.target.checked ? true : false"
             [checked]="model.isDigitalMedia === true"
             [(ngModel)]="model.isDigitalMedia"      
             >
-            <label>Is network connection require?</label>
+            <label>Is this digital media ?</label>
           </div>
         </div>
 

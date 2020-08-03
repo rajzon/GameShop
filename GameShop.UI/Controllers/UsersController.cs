@@ -13,14 +13,13 @@ namespace GameShop.UI.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IGameShopRepository _repo;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public UsersController(IGameShopRepository repo, IMapper mapper, IUnitOfWork unitOfWork)
+        public UsersController(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _repo = repo;
+
         }
 
 

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using GameShop.Domain.Model;
 using GameShop.Extensions.Infrastructure;
 using GameShop.Infrastructure.Configurations;
@@ -15,6 +17,8 @@ namespace GameShop.Infrastructure
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
         base(options)
         { }
+
+
         public DbSet<Value> Values { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Product> Products { get; set; }

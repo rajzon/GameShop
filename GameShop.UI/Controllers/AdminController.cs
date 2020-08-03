@@ -24,25 +24,22 @@ namespace GameShop.UI.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly ApplicationDbContext _ctx;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
-        private readonly IGameShopRepository _repo;
         private readonly IOptions<CloudinarySettings> _cloudinaryConfig;
         private Cloudinary _cloudinary;
         private readonly IUnitOfWork _unitOfWork;
 
-    public AdminController(ApplicationDbContext ctx, UserManager<User> userManager, IMapper mapper,
-            IGameShopRepository repo, IOptions<CloudinarySettings> cloudinaryConfig, IUnitOfWork unitOfWork)
+    public AdminController(UserManager<User> userManager, IMapper mapper,
+             IOptions<CloudinarySettings> cloudinaryConfig, IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
         _cloudinaryConfig = cloudinaryConfig;
-        _repo = repo;
         _mapper = mapper;
         _userManager = userManager;
-        _ctx = ctx;
+        
 
-            Account acc = new Account(_cloudinaryConfig.Value.CloudName,
+        Account acc = new Account(_cloudinaryConfig.Value.CloudName,
             _cloudinaryConfig.Value.ApiKey,
             _cloudinaryConfig.Value.ApiSecret
         );
@@ -55,17 +52,7 @@ namespace GameShop.UI.Controllers
     [HttpGet("users-with-roles")]
     public async Task<IActionResult> GetUsersWithRoles()
     {
-        var userList = await _ctx.Users.OrderBy(x => x.UserName)
-            .Select(user => new
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Roles = (from userRole in user.UserRoles
-                         join role in _ctx.Roles
-                         on userRole.RoleId
-                         equals role.Id
-                         select role.Name).ToList()
-            }).ToListAsync();
+        var userList = await _unitOfWork.User.GetAllWithRolesAsync();
 
         return Ok(userList);
     }
@@ -103,7 +90,7 @@ namespace GameShop.UI.Controllers
     {
 
         //var categoryId = (int)_ctx.Entry<Product>(await _ctx.Products.FirstOrDefaultAsync()).Property("CategoryId").CurrentValue;
-        var products = await _repo.GetProductsForModerationAsync(productParams);
+        var products = await _unitOfWork.Product.GetProductsForModerationAsync(productParams);
 
         var productsToReturn = _mapper.Map<IEnumerable<ProductForModerationDto>>(products);
 
@@ -116,7 +103,7 @@ namespace GameShop.UI.Controllers
     [HttpGet("product-for-edit/{id}")]
     public async Task<IActionResult> GetProductForEdit(int id)
     {
-        var requirements = await _ctx.Requirements.GetRequirementsForProduct(id).FirstOrDefaultAsync();
+        var requirements = await _unitOfWork.Requirements.GetRequirementsForProductAsync(id);
 
         if (requirements == null)
         {
@@ -130,15 +117,15 @@ namespace GameShop.UI.Controllers
             return BadRequest("Error occured during retrieving photos for selected product");
         }
 
-        var product = await _ctx.Products.GetProductForEdit(_ctx, requirements, photosFromRepo, id).FirstOrDefaultAsync();
+        var productToEdit = await _unitOfWork.Product.GetProductToEditAsync(requirements, photosFromRepo, id);
 
-        if (product == null)
+        if (productToEdit == null)
         {
             return BadRequest("Error occured during retrieving product");
         }
 
 
-        return Ok(product);
+        return Ok(productToEdit);
     }
 
     [Authorize(Policy = "ModerateProductRole")]
@@ -153,11 +140,14 @@ namespace GameShop.UI.Controllers
 
         var selectedCategory = await _unitOfWork.Category.GetAsync(productForCreationDto.CategoryId);
 
-        var requirementsToUpdate = _mapper.Map<Requirements>(productForCreationDto.Requirements);
+        var requirementsForProduct = _mapper.Map<Requirements>(productForCreationDto.Requirements);
 
-        var prodcuts = await _repo.CreateProduct(productForCreationDto, requirementsToUpdate, selectedCategory);
+        var productToCreate = await _unitOfWork.Product.CreateAsync(productForCreationDto, requirementsForProduct, selectedCategory);
 
-        return Ok(await _ctx.Products.OrderByDescending(p => p.Id).FirstOrDefaultAsync());
+        _unitOfWork.Product.Add(productToCreate);
+        await _unitOfWork.SaveAsync();
+
+        return CreatedAtRoute("GetProduct", new {id = productToCreate.Id}, productToCreate);
     }
 
 
@@ -165,15 +155,19 @@ namespace GameShop.UI.Controllers
     [HttpPost("edit-product/{id}")]
     public async Task<IActionResult> EditProduct(int id, ProductToEditDto productToEditDto)
     {
+        if (productToEditDto == null)
+        {
+            return BadRequest("Sended blank product descirption");
+        }
 
-        var productFromDb = await _repo.GetProduct(id);
+        var productFromDb = await _unitOfWork.Product.GetAsync(id);
 
-        var selectedCategory = await _ctx.Categories.FirstOrDefaultAsync(c => c.Id == productToEditDto.CategoryId);
+        var selectedCategory = await _unitOfWork.Category.FindAsync(c => c.Id == productToEditDto.CategoryId);
 
 
         var requirementsToUpdate = _mapper.Map<Requirements>(productToEditDto.Requirements);
 
-        var updatedProduct = await _repo.EditProduct(id, productToEditDto, requirementsToUpdate, selectedCategory, productFromDb);
+        var updatedProduct = await _unitOfWork.Product.EditAsync(id, productToEditDto, requirementsToUpdate, selectedCategory, productFromDb);
 
         productFromDb.Id = updatedProduct.Id;
         productFromDb.Name = updatedProduct.Name;
@@ -204,9 +198,10 @@ namespace GameShop.UI.Controllers
         //_ctx.Entry(productFromDb).State = EntityState.Modified;
         // _ctx.Update(productFromDb);
         //  _ctx.Entry(productFromDb).CurrentValues.SetValues(productToUpdate);            
-        if (await _repo.SaveAll())
+        if (await _unitOfWork.SaveAsync())
         {
-            return Ok(await _ctx.Products.FindAsync(id));
+            var editedProduct =  await _unitOfWork.Product.GetAsync(id);
+            return CreatedAtRoute("GetProduct", new {id = id}, editedProduct);
         }
 
         return BadRequest("Fail occured during editing Product");
@@ -217,7 +212,7 @@ namespace GameShop.UI.Controllers
     public async Task<IActionResult> DeleteProduct(int id)
     {
 
-        var selectedProduct = await _repo.GetProduct(id);
+        var selectedProduct = await _unitOfWork.Product.GetAsync(id);
 
         if (selectedProduct == null)
         {
@@ -239,25 +234,25 @@ namespace GameShop.UI.Controllers
 
                     if (result.Result == "ok")
                     {
-                        _repo.Delete(photo);
+                        _unitOfWork.Photo.Delete(photo);
                     }
                 }
                 else
                 {
-                    _repo.Delete(photo);
+                    _unitOfWork.Photo.Delete(photo);
                 }
             }
 
         }
-        _repo.Delete(selectedProduct);
+        _unitOfWork.Product.Delete(selectedProduct);
 
 
-        if (!await _repo.SaveAll())
+        if (!await _unitOfWork.SaveAsync())
         {
             return BadRequest("Something went wrong during deleting product");
         }
         //"Product deleted successfully" problem with parsing , ui try parse this to JSON instead of keep this as text
-        return Ok();
+        return NoContent();
     }
 
 

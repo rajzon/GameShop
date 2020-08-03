@@ -23,9 +23,9 @@ namespace GameShop.Infrastructure
             await _ctx.Set<T>().AddAsync(entity);
         }
 
-        public async void Delete(int id)
+        public void Delete(T entity)
         {
-          var entity =  await _ctx.Set<T>().FindAsync(id);
+            _ctx.Set<T>().Remove(entity);
         }
 
         public async Task<T> FindAsync(Expression<Func<T, bool>> expression)
@@ -33,7 +33,7 @@ namespace GameShop.Infrastructure
            return  await _ctx.Set<T>().Where(expression).FirstOrDefaultAsync();
         }
 
-        public async Task<T> GetAsync(int id)
+        public virtual async Task<T> GetAsync(int id)
         {
             return await _ctx.Set<T>().FindAsync(id);
         }
@@ -55,6 +55,13 @@ namespace GameShop.Infrastructure
         public async Task<IEnumerable<T>> GetAllOrderedByDescAsync<TKey>(Expression<Func<T,TKey>> expression)
         {
             return await _ctx.Set<T>().OrderByDescending(expression).ToListAsync();
+        }
+
+        public async Task<T> GetLatestAsync()
+        {
+            var records = await _ctx.Set<T>().ToListAsync();
+
+            return records.LastOrDefault();
         }
 
     }

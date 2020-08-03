@@ -25,6 +25,7 @@ using AutoMapper;
 using GameShop.Application.Mappings;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using GameShop.Infrastructure.Extensions;
+using GameShop.UI.Extensions;
 
 namespace GameShop.UI
 {
@@ -54,51 +55,22 @@ namespace GameShop.UI
             builder.AddRoleManager<RoleManager<Role>>();
             builder.AddSignInManager<SignInManager<User>>();
 
-            services.AddDbContext<Infrastructure.ApplicationDbContext>(x => 
-            {
-                //x.UseLazyLoadingProxies();
-                x.UseSqlite(Configuration.GetConnectionString("DefaultConnection") , b => b.MigrationsAssembly("GameShop.Infrastructure"));
-            }); 
+            services.ConfigureDbContext(Configuration);
 
-            services.AddControllersWithViews()
-                .AddNewtonsoftJson(opt =>
-                {
-                    opt.SerializerSettings.ReferenceLoopHandling =
-                    Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                });
+            ////
+            // REFERENCE LOOP HANDLING WAS HERE //
+            ////
+
+
             // services.AddScoped<IAuthRepository , AuthRepository>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
-            services.AddScoped<IGameShopRepository , GameShopRepository>();
             services.ConfigureUnitOfWork();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => {
-                    options.TokenValidationParameters = new TokenValidationParameters 
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-                            .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
+            services.ConfigureAuthentication(Configuration);
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("ModerateProductRole", policy => policy.RequireRole("Admin", 
-                "Moderator"));                
-            });
+            services.ConfigureAuthorization();
 
-            services.AddControllers(options => 
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-                //automaticaly converts string(plain text) response as json  
-                //options.OutputFormatters.RemoveType<StringOutputFormatter>();
-            });        
+            services.ConfigureControllers();      
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

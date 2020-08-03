@@ -11,11 +11,12 @@ namespace GameShop.Application.Interfaces
         Task<T> FindAsync(Expression<Func<T,bool>> expression);
         
         Task<T> GetAsync(int id);
+        Task<T> GetLatestAsync();
         Task<IEnumerable<T>> GetAllOrderedByAsync<TKey>(Expression<Func<T,TKey>> expression);
         Task<IEnumerable<T>> GetAllOrderedByDescAsync<TKey>(Expression<Func<T,TKey>> expression);
         void Add(T entity);
         void Update(T entity);
-        void Delete(int id);
+        void Delete(T entity);
          
     }
 }

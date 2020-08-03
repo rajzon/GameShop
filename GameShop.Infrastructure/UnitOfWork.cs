@@ -15,6 +15,19 @@ namespace GameShop.Infrastructure
             _ctx = ctx;
         }
 
+        private IRequirementsRepository _requirements;
+        public IRequirementsRepository Requirements
+        {
+            get { 
+                if (_requirements == null)
+                {
+                    _requirements = new RequirementsRepository(_ctx);
+                }
+                return _requirements; 
+            }
+        }
+        
+
         private IProductRepository _product;
         public IProductRepository Product
         {
@@ -31,8 +44,14 @@ namespace GameShop.Infrastructure
         private IUserRepository _user;
         public IUserRepository User
         {
-            get { return _user; }
-            set { _user = value; }
+            get { 
+                if (_user == null)
+                {
+                    _user = new UserRepository(_ctx);
+                }
+                return _user; 
+            }
+            
         }
         
 
@@ -90,9 +109,9 @@ namespace GameShop.Infrastructure
         }
         
 
-        public async Task Save()
+        public async Task<bool> SaveAsync()
         {
-           await _ctx.SaveChangesAsync();
+            return  await _ctx.SaveChangesAsync() > 0;
         }
     }
 }

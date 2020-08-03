@@ -15,13 +15,13 @@ namespace GameShop.UI.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly IGameShopRepository _repo;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ProductsController(IGameShopRepository repo, IMapper mapper)
+        public ProductsController(IMapper mapper, IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _repo = repo;
 
         }
 
@@ -29,7 +29,7 @@ namespace GameShop.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProductsForSearching([FromQuery]ProductParams productParams) 
         {
-            var products = await _repo.GetProductsForSearchingAsync(productParams);
+            var products = await _unitOfWork.Product.GetProductsForSearchingAsync(productParams);
 
             var productToReturn = _mapper.Map<IEnumerable<ProductForSearchingDto>>(products);
 
@@ -40,10 +40,10 @@ namespace GameShop.UI.Controllers
             return Ok(productToReturn);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetProduct")]
         public async Task<IActionResult> GetProduct(int id) 
         {
-            var product = await _repo.GetProduct(id);
+            var product = await _unitOfWork.Product.GetAsync(id);
 
 
             return Ok(product);
