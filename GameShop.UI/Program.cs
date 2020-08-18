@@ -4,6 +4,7 @@ using GameShop.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -23,8 +24,9 @@ namespace GameShop.UI
                     var ctx = services.GetRequiredService<ApplicationDbContext>();        
                     var userManager = services.GetRequiredService<UserManager<User>>();
                     var roleManager = services.GetRequiredService<RoleManager<Role>>();
+                    var config = services.GetRequiredService<IConfiguration>();
                     ctx.Database.Migrate();
-                    Seed.SeedUsers(userManager, roleManager);     
+                    Seed.SeedUsers(userManager, roleManager, config);     
                     Seed.SeedProductsFKs(ctx);                
                 }
                 catch (Exception ex)

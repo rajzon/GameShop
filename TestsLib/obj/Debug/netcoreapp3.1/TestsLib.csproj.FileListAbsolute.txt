@@ -178,3 +178,8 @@ c:\Users\Dawid\Documents\GameShop\TestsLib\obj\Debug\netcoreapp3.1\TestsLib.genr
 c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\xunit.runner.visualstudio.dotnetcore.testadapter.dll
 c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\xunit.runner.reporters.netcoreapp10.dll
 c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\xunit.runner.utility.netcoreapp10.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.InMemory.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\FluentAssertions.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll

@@ -29,7 +29,21 @@ namespace GameShop.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProductsForSearching([FromQuery]ProductParams productParams) 
         {
+            if (productParams.PageNumber < 1 || productParams.PageSize < 1)
+            {
+                return BadRequest();
+            }
+
             var products = await _unitOfWork.Product.GetProductsForSearchingAsync(productParams);
+
+            if (products == null)
+            {
+                return NotFound();
+            } 
+            else if (products.PageSize < 0 || products.TotalCount < 0 || products.TotalPages < 1 || products.CurrentPage < 1)
+            {
+                return BadRequest("Pagination parameters wasn't set properly");
+            }
 
             var productToReturn = _mapper.Map<IEnumerable<ProductForSearchingDto>>(products);
 
@@ -44,6 +58,11 @@ namespace GameShop.UI.Controllers
         public async Task<IActionResult> GetProduct(int id) 
         {
             var product = await _unitOfWork.Product.GetAsync(id);
+
+            if(product == null)
+            {
+                return NotFound();
+            }
 
 
             return Ok(product);

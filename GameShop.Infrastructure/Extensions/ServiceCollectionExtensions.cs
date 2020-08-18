@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GameShop.Infrastructure.Extensions
 {
-    public static class ServiceExtensions
+    public static class ServiceCollectionExtensions
     {
         public static void ConfigureUnitOfWork(this IServiceCollection services)
         {

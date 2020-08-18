@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace GameShop.UI.Extensions
 {
-    public static class ServiceExtensions
+    public static class ServiceCollectionExtensions
     {
         public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {

@@ -3,18 +3,41 @@ using System.Linq;
 using Newtonsoft.Json;
 using GameShop.Domain.Model;
 using Microsoft.AspNetCore.Identity;
+using System.IO;
+using Microsoft.Extensions.Configuration;
+using GameShop.Application.Helpers;
 
 namespace GameShop.Infrastructure
 {
     public class Seed
     {
 
-        public static void SeedUsers(UserManager<User> userManager, RoleManager<Role> roleManager)
+        public static void SeedUsers(UserManager<User> userManager, RoleManager<Role> roleManager, IConfiguration appSettings)
         {
             if (!userManager.Users.Any())
             {
-                var userData = System.IO.File.ReadAllText("../GameShop.Infrastructure/SeedDataSource/UserSeedData.json");
-                var users = JsonConvert.DeserializeObject<List<User>>(userData);
+                var seedDataLocationOptions = appSettings.GetSection(SeedDataLocationOptions.SeedDataLocation).Get<SeedDataLocationOptions>();
+                var currDirectory = Directory.GetCurrentDirectory();
+
+                string userData;
+                var users = new List<User>();
+                if (!currDirectory.Contains("GameShop.UI"))
+                {
+                    var userSeedDataLocation = seedDataLocationOptions.UserSeedData;
+
+                    var testProjectDirectory = Directory.GetParent(currDirectory).Parent.Parent.Parent.FullName;
+
+                    var combined = Path.GetFullPath(Path.Combine(testProjectDirectory,userSeedDataLocation));
+
+                    userData = System.IO.File.ReadAllText(combined);
+                    users = JsonConvert.DeserializeObject<List<User>>(userData);   
+                }
+                else 
+                {
+                    userData = System.IO.File.ReadAllText("../GameShop.Infrastructure/SeedDataSource/UserSeedData.json");
+                    users = JsonConvert.DeserializeObject<List<User>>(userData);
+                }
+                
 
                 var roles = new List<Role>
                 {
@@ -76,14 +99,6 @@ namespace GameShop.Infrastructure
             }
 
 
-        }
-        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using GameShop.Application.Helpers;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
+using GameShop.Domain.Dtos.ProductDtos;
 using GameShop.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -105,7 +106,7 @@ namespace GameShop.Infrastructure.Repositories
                             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-         public async Task<Product> EditAsync(int id, ProductToEditDto productToEditDto, Requirements requirements, Category selectedCategory, Product productFromDb)
+         public async Task<Product> EditAsync(int id, ProductEditDto productToEditDto, Requirements requirements, Category selectedCategory, Product productFromDb)
         {
 
             var updatedProduct = new Product
@@ -145,7 +146,6 @@ namespace GameShop.Infrastructure.Repositories
                 {
                     updatedProduct.SubCategories.Add(psc);
                 }
-                updatedProduct.SubCategories.Add(psc);
             }
 
             return updatedProduct;

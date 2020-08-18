@@ -9,7 +9,6 @@ namespace GameShop.Application.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> FindAsync(Expression<Func<T,bool>> expression);
-        
         Task<T> GetAsync(int id);
         Task<T> GetLatestAsync();
         Task<IEnumerable<T>> GetAllOrderedByAsync<TKey>(Expression<Func<T,TKey>> expression);

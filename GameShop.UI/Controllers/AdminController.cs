@@ -8,6 +8,7 @@ using CloudinaryDotNet.Actions;
 using GameShop.Application.Helpers;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
+using GameShop.Domain.Dtos.ProductDtos;
 using GameShop.Domain.Model;
 using GameShop.Infrastructure;
 using GameShop.Infrastructure.Extensions;
@@ -88,9 +89,22 @@ namespace GameShop.UI.Controllers
     [HttpGet("prodcuts-for-moderation")]
     public async Task<IActionResult> GetProductsForModeration([FromQuery]ProductParams productParams)
     {
+        if (productParams.PageNumber < 1 || productParams.PageSize < 1)
+        {
+            return BadRequest();
+        }
 
         //var categoryId = (int)_ctx.Entry<Product>(await _ctx.Products.FirstOrDefaultAsync()).Property("CategoryId").CurrentValue;
         var products = await _unitOfWork.Product.GetProductsForModerationAsync(productParams);
+
+        if (products == null)
+        {
+            return NotFound();
+        } 
+        else if (products.PageSize < 0 || products.TotalCount < 0 || products.TotalPages < 1 || products.CurrentPage < 1)
+        {
+            return BadRequest("Pagination parameters wasn't set properly");
+        }
 
         var productsToReturn = _mapper.Map<IEnumerable<ProductForModerationDto>>(products);
 
@@ -137,11 +151,11 @@ namespace GameShop.UI.Controllers
         {
             return BadRequest("Sended blank product description");
         }
-
-        var selectedCategory = await _unitOfWork.Category.GetAsync(productForCreationDto.CategoryId);
-
-        var requirementsForProduct = _mapper.Map<Requirements>(productForCreationDto.Requirements);
-
+        
+        var selectedCategory = await _unitOfWork.Category.GetAsync(productForCreationDto.CategoryId);   
+        
+        var requirementsForProduct = _mapper.Map<Requirements>(productForCreationDto.Requirements);    
+        
         var productToCreate = await _unitOfWork.Product.CreateAsync(productForCreationDto, requirementsForProduct, selectedCategory);
 
         _unitOfWork.Product.Add(productToCreate);
@@ -153,7 +167,7 @@ namespace GameShop.UI.Controllers
 
     [Authorize(Policy = "ModerateProductRole")]
     [HttpPost("edit-product/{id}")]
-    public async Task<IActionResult> EditProduct(int id, ProductToEditDto productToEditDto)
+    public async Task<IActionResult> EditProduct(int id, ProductEditDto productToEditDto)
     {
         if (productToEditDto == null)
         {
@@ -268,9 +282,9 @@ namespace GameShop.UI.Controllers
             return BadRequest("There is no categories in Database");
         }
 
-        var categoryToRetrun = _mapper.Map<IEnumerable<CategoryToReturnDto>>(categoriesList);
+        var categoriesToRetrun = _mapper.Map<IEnumerable<CategoryToReturnDto>>(categoriesList);
 
-        return Ok(categoryToRetrun);
+        return Ok(categoriesToRetrun);
     }
 
     [Authorize(Policy = "ModerateProductRole")]
@@ -302,7 +316,7 @@ namespace GameShop.UI.Controllers
             return BadRequest("There is no languages in Database");
         }
 
-        var languagesListToReturn = _mapper.Map<IEnumerable<LanguagesToReturnDto>>(languagesList);
+        var languagesListToReturn = _mapper.Map<IEnumerable<LanguageToReturnDto>>(languagesList);
 
         return Ok(languagesListToReturn);
     }
@@ -317,7 +331,9 @@ namespace GameShop.UI.Controllers
             return BadRequest("That Category doesn't exist");
         }
 
-        return Ok(category);
+        var categoryToReturn = _mapper.Map<CategoryToReturnDto>(category);
+
+        return Ok(categoryToReturn);
 
     }
 

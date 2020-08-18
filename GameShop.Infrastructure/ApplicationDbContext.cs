@@ -1,25 +1,29 @@
 using System;
 using System.Collections.Generic;
+using GameShop.Application.Helpers;
 using GameShop.Domain.Model;
 using GameShop.Extensions.Infrastructure;
 using GameShop.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
-
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace GameShop.Infrastructure
 {
     public class ApplicationDbContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>,
         UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
+
+        private readonly IConfiguration _seedDataOptions;
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration seedDataOptions) :
         base(options)
-        { }
+        {
+            _seedDataOptions = seedDataOptions;
+         }
 
 
-        public DbSet<Value> Values { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Requirements> Requirements { get; set; }
@@ -34,7 +38,7 @@ namespace GameShop.Infrastructure
         {
 
 
-            builder.SeedProducts();
+            builder.SeedProducts(_seedDataOptions);
 
             base.OnModelCreating(builder);
 
