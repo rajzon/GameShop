@@ -8,6 +8,7 @@ using GameShop.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -18,13 +19,18 @@ namespace TestsLib
 {
     public abstract class TestBase : IDisposable
     {
-        protected readonly Mock<IConfiguration> _config;
-        protected readonly Mock<UserManager<User>> _userManager;
-        protected readonly Mock<SignInManager<User>> _signInManager;
-        protected readonly Mock<RoleManager<Role>> _roleManager;
+        protected readonly Mock<IConfiguration> _mockedConfig;
+        protected readonly Mock<UserManager<User>> _mockedUserManager;
+        protected readonly Mock<SignInManager<User>> _mockedSignInManager;
+        protected readonly Mock<RoleManager<Role>> _mockedRoleManager;
+
+
         protected readonly ApplicationDbContext _context;
         protected readonly IMapper _mapper;
         protected readonly UnitOfWork _unitOfWork;
+        protected readonly UserManager<User> _userManager;
+        protected readonly SignInManager<User> _signInManager;
+        protected readonly RoleManager<Role> _roleManager;
         protected readonly IOptions<CloudinarySettings> _cloudinaryConfig;
 
         public TestBase()
@@ -54,8 +60,8 @@ namespace TestsLib
 
 
             // ASP Identity Configuration
-            _config = new Mock<IConfiguration>();
-            _userManager = new Mock<UserManager<User>>(
+            _mockedConfig = new Mock<IConfiguration>();
+            _mockedUserManager = new Mock<UserManager<User>>(
                     new Mock<IUserStore<User>>().Object,
                     new Mock<IOptions<IdentityOptions>>().Object,
                     new Mock<IPasswordHasher<User>>().Object,
@@ -67,8 +73,8 @@ namespace TestsLib
                     new Mock<ILogger<UserManager<User>>>().Object);
             
                     
-            _signInManager = new Mock<SignInManager<User>>(
-                    _userManager.Object,
+            _mockedSignInManager = new Mock<SignInManager<User>>(
+                    _mockedUserManager.Object,
                     new Mock<IHttpContextAccessor>().Object,
                     new Mock<IUserClaimsPrincipalFactory<User>>().Object,
                     new Mock<IOptions<IdentityOptions>>().Object,
@@ -76,6 +82,7 @@ namespace TestsLib
                     new Mock<IAuthenticationSchemeProvider>().Object,
                     new Mock<IUserConfirmation<User>>().Object   
             );
+
 
             _unitOfWork = new UnitOfWork(_context);
 
@@ -91,7 +98,7 @@ namespace TestsLib
             
             // TO DO , when I want to test Asp Identity
             var mockRoleStore = new Mock<IRoleStore<Role>>();
-            _roleManager = new Mock<RoleManager<Role>>(
+            _mockedRoleManager = new Mock<RoleManager<Role>>(
                  mockRoleStore.Object, null, null, null, null);
 
             // Seed.SeedUsers(_userManager.Object, _roleManager.Object, config);     

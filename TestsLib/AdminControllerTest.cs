@@ -48,7 +48,7 @@ namespace TestsLib
                 HttpContext = httpContext
             };
 
-            var sut = new AdminController(_userManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
             {
                 ControllerContext = controllerContext
             };
@@ -108,7 +108,7 @@ namespace TestsLib
                 HttpContext = httpContext
             };
 
-            var sut = new AdminController(_userManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
             {
                 ControllerContext = controllerContext
             };
@@ -161,7 +161,7 @@ namespace TestsLib
                 HttpContext = httpContext
             };
 
-            var sut = new AdminController(_userManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
             {
                 ControllerContext = controllerContext
             };
@@ -218,7 +218,7 @@ namespace TestsLib
                 HttpContext = httpContext
             };
 
-            var sut = new AdminController(_userManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
             {
                 ControllerContext = controllerContext
             };
@@ -298,7 +298,7 @@ namespace TestsLib
                 HttpContext = httpContext
             };
 
-            var sut = new AdminController(_userManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
             {
                 ControllerContext = controllerContext
             };
@@ -350,7 +350,7 @@ namespace TestsLib
                 HttpContext = httpContext
             };
 
-            var sut = new AdminController(_userManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
             {
                 ControllerContext = controllerContext
             };
@@ -379,7 +379,7 @@ namespace TestsLib
                 HttpContext = httpContext
             };
 
-            var sut = new AdminController(_userManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
             {
                 ControllerContext = controllerContext
             };
@@ -407,7 +407,7 @@ namespace TestsLib
                 HttpContext = httpContext
             };
 
-            var sut = new AdminController(_userManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
             {
                 ControllerContext = controllerContext
             };
@@ -436,7 +436,7 @@ namespace TestsLib
                 HttpContext = httpContext
             };
 
-            var sut = new AdminController(_userManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
             {
                 ControllerContext = controllerContext
             };
@@ -467,7 +467,7 @@ namespace TestsLib
                 HttpContext = httpContext
             };
 
-            var sut = new AdminController(_userManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
             {
                 ControllerContext = controllerContext
             };
@@ -480,7 +480,7 @@ namespace TestsLib
             result.Should().BeOfType(typeof(OkObjectResult));
             result.As<OkObjectResult>().Value.As<CategoryToReturnDto>()
                 .Should()
-                .BeEquivalentTo(expected.FirstOrDefault(c => c.Id == categoryId));    
+                .BeEquivalentTo(expected.First(c => c.Id == categoryId));    
         }
 
     }

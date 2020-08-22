@@ -36,147 +36,146 @@ namespace TestsLib
     {
       
 
-        [Theory]
-        [InlineData(true,false,1)] 
-        [InlineData(false,false,0)] 
-        public  void UnitTest_Given_User_When_Register_Then_Return_BadRequest(bool isCreated , bool isRoleAdded, int addRoleCount) 
-        {
+        // [Theory]
+        // [InlineData(true,false,1)] 
+        // [InlineData(false,false,0)] 
+        // public  void UnitTest_Given_User_When_Register_Then_Return_BadRequest(bool isCreated , bool isRoleAdded, int addRoleCount) 
+        // {
 
 
-            //Assert
-            var createResult = IdentityResult.Failed();
-            var addRoleResult = IdentityResult.Failed();
+        //     //Assert
+        //     var createResult = IdentityResult.Failed();
+        //     var addRoleResult = IdentityResult.Failed();
 
-            if (isCreated)
-            {
-                createResult = IdentityResult.Success;
-            }
+        //     if (isCreated)
+        //     {
+        //         createResult = IdentityResult.Success;
+        //     }
             
-            if (isRoleAdded)
-            {
-                addRoleResult = IdentityResult.Success;
-            }
+        //     if (isRoleAdded)
+        //     {
+        //         addRoleResult = IdentityResult.Success;
+        //     }
 
-            var userToCreate = new UserForRegisterDto 
-            {
-                Username = "Example",
-                Email = "takiTam@example.pl",
-                Password = "Aladad"
-            };
+        //     var userToCreate = new UserForRegisterDto 
+        //     {
+        //         Username = "Example",
+        //         Email = "takiTam@example.pl",
+        //         Password = "Aladad"
+        //     };
 
-            string emailPattern =  @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-                                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
+        //     string emailPattern =  @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+        //                         @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
 
-            _userManager.Setup(x=> x.CreateAsync(
-                            It.Is<User>(u => u.UserName.Contains(userToCreate.Username) && 
-                                        u.Email.Contains(userToCreate.Email) && u.UserName.Length > 0 && Regex.IsMatch(userToCreate.Email,emailPattern,RegexOptions.IgnoreCase)), 
-                            It.Is<string>(p => p.Contains(userToCreate.Password) && (p.Length > 4 && p.Length < 8) )))
-                            .Returns(Task.FromResult(createResult))
-                            .Verifiable();
-            _userManager.Setup(x => x.AddToRoleAsync(It.IsAny<User>(), It.Is<string>(x => x.Contains("Customer")))).Returns(Task.FromResult(addRoleResult)).Verifiable();
+        //     _userManager.Setup(x=> x.CreateAsync(
+        //                     It.Is<User>(u => u.UserName.Contains(userToCreate.Username) && 
+        //                                 u.Email.Contains(userToCreate.Email) && u.UserName.Length > 0 && Regex.IsMatch(userToCreate.Email,emailPattern,RegexOptions.IgnoreCase)), 
+        //                     It.Is<string>(p => p.Contains(userToCreate.Password) && (p.Length > 4 && p.Length < 8) )))
+        //                     .Returns(Task.FromResult(createResult))
+        //                     .Verifiable();
+        //     _userManager.Setup(x => x.AddToRoleAsync(It.IsAny<User>(), It.Is<string>(x => x.Contains("Customer")))).Returns(Task.FromResult(addRoleResult)).Verifiable();
 
-            //var testtsts = signInManager.Object;
+        //     //var testtsts = signInManager.Object;
             
-            var cut = new AuthController(_config.Object, _userManager.Object, _signInManager.Object);
+        //     var cut = new AuthController(_config.Object, _userManager.Object, _signInManager.Object);
 
 
            
             
-            //Act
-            var result = cut.Register(userToCreate);
+        //     //Act
+        //     var result = cut.Register(userToCreate);
 
 
-            //Assert
-            Assert.IsType<BadRequestObjectResult>(result.Result);
-            Assert.IsNotType<OkObjectResult>(result.Result);
+        //     //Assert
+        //     Assert.IsType<BadRequestObjectResult>(result.Result);
+        //     Assert.IsNotType<OkObjectResult>(result.Result);
 
-            _userManager.Verify(v => v.CreateAsync(It.Is<User>(x => x.UserName == userToCreate.Username), It.Is<string>(x => x == userToCreate.Password)), Times.Once());
-            _userManager.Verify(v => v.AddToRoleAsync(It.Is<User>(x => x.UserName == userToCreate.Username), It.Is<string>(x => x.Contains("Customer"))), Times.Exactly(addRoleCount));
+        //     _userManager.Verify(v => v.CreateAsync(It.Is<User>(x => x.UserName == userToCreate.Username), It.Is<string>(x => x == userToCreate.Password)), Times.Once());
+        //     _userManager.Verify(v => v.AddToRoleAsync(It.Is<User>(x => x.UserName == userToCreate.Username), It.Is<string>(x => x.Contains("Customer"))), Times.Exactly(addRoleCount));
 
 
             
             
 
-        }
+        // }
 
-        [Fact]
-        public void UnitTest_Given_User_When_Register_Then_Return_OK()
-        {
+        // [Fact]
+        // public void UnitTest_Given_User_When_Register_Then_Return_OK()
+        // {
 
-            //Assert
-            var userToCreate = new UserForRegisterDto 
-            {
-                Username = "Example",
-                Email = "takiTam@example.pl",
-                Password = "Aladad"
-            };
+        //     //Assert
+        //     var userToCreate = new UserForRegisterDto 
+        //     {
+        //         Username = "Example",
+        //         Email = "takiTam@example.pl",
+        //         Password = "Aladad"
+        //     };
 
-            string emailPattern =  @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-                                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
+        //     string emailPattern =  @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+        //                         @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
 
-            _userManager.Setup(x=> x.CreateAsync(
-                            It.Is<User>(u => u.UserName.Contains(userToCreate.Username) && 
-                                        u.Email.Contains(userToCreate.Email) && u.UserName.Length > 0 && Regex.IsMatch(userToCreate.Email,emailPattern,RegexOptions.IgnoreCase)), 
-                            It.Is<string>(p => p.Contains(userToCreate.Password) && (p.Length > 4 && p.Length < 8) )))
-                            .Returns(Task.FromResult(IdentityResult.Success))
-                            .Verifiable();
-            _userManager.Setup(x => x.AddToRoleAsync(It.IsAny<User>(), It.Is<string>(x => x.Contains("Customer")))).Returns(Task.FromResult(IdentityResult.Success)).Verifiable();
+        //     _userManager.Setup(x=> x.CreateAsync(
+        //                     It.Is<User>(u => u.UserName.Contains(userToCreate.Username) && 
+        //                                 u.Email.Contains(userToCreate.Email) && u.UserName.Length > 0 && Regex.IsMatch(userToCreate.Email,emailPattern,RegexOptions.IgnoreCase)), 
+        //                     It.Is<string>(p => p.Contains(userToCreate.Password) && (p.Length > 4 && p.Length < 8) )))
+        //                     .Returns(Task.FromResult(IdentityResult.Success))
+        //                     .Verifiable();
+        //     _userManager.Setup(x => x.AddToRoleAsync(It.IsAny<User>(), It.Is<string>(x => x.Contains("Customer")))).Returns(Task.FromResult(IdentityResult.Success)).Verifiable();
 
-            //var testtsts = signInManager.Object;
+        //     //var testtsts = signInManager.Object;
             
-            var cut = new AuthController(_config.Object, _userManager.Object, _signInManager.Object);
+        //     var cut = new AuthController(_config.Object, _userManager.Object, _signInManager.Object);
 
 
            
             
-            //Act
-            var result = cut.Register(userToCreate);
+        //     //Act
+        //     var result = cut.Register(userToCreate);
 
 
-            //Assert
-            Assert.IsNotType<BadRequestObjectResult>(result.Result);
-            Assert.IsType<OkObjectResult>(result.Result);
+        //     //Assert
+        //     Assert.IsNotType<BadRequestObjectResult>(result.Result);
+        //     Assert.IsType<OkObjectResult>(result.Result);
 
-            _userManager.Verify(v => v.CreateAsync(It.Is<User>(x => x.UserName == userToCreate.Username), It.Is<string>(x => x == userToCreate.Password)), Times.Once);
-           _userManager.Verify(v => v.AddToRoleAsync(It.Is<User>(x => x.UserName == userToCreate.Username), It.Is<string>(x => x.Contains("Customer"))), Times.Once);
+        //     _userManager.Verify(v => v.CreateAsync(It.Is<User>(x => x.UserName == userToCreate.Username), It.Is<string>(x => x == userToCreate.Password)), Times.Once);
+        //    _userManager.Verify(v => v.AddToRoleAsync(It.Is<User>(x => x.UserName == userToCreate.Username), It.Is<string>(x => x.Contains("Customer"))), Times.Once);
 
-        }
+        // }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(7)]
-        [InlineData(5)]
-        public void Given_ProductId_When_GetProduct_Then_Return_Ok(int productId)
-        {
-            // Arrange
-            var sut = new ProductsController(_mapper, _unitOfWork);
+        // [Theory]
+        // [InlineData(1)]
+        // [InlineData(7)]
+        // [InlineData(5)]
+        // public void IntegrationTest_Given_ProductId_When_GetProduct_Then_Return_Ok(int productId)
+        // {
+        //     // Arrange
+        //     var sut = new ProductsController(_mapper, _unitOfWork);
 
-            var data = Data.Product();
+        //     var data = Data.Product();
 
-            //act
-            var result = (OkObjectResult)(sut.GetProduct(productId).Result);
+        //     //act
+        //     var result = (OkObjectResult)(sut.GetProduct(productId).Result);
 
-            //Assert
-            result.Should().BeOfType(typeof(OkObjectResult));
+        //     //Assert
+        //     result.Should().BeOfType(typeof(OkObjectResult));
 
-            result.Value.Should().BeOfType(typeof(Product));
+        //     result.Value.Should().BeOfType(typeof(Product));
 
-            result.Value.Should().BeEquivalentTo(data.FirstOrDefault(d => d.Id == productId));
+        //     result.Value.Should().BeEquivalentTo(data.FirstOrDefault(d => d.Id == productId));
 
-
-        }
+        // }
 
         [Theory]
         [InlineData(100)]
         [InlineData(15)]
         [InlineData(8)]
-        public void Given_ProductId_When_GetProduct_Then_Return_NotFound(int productId)
+        public void IntegrationTest_Given_ProductId_When_GetProduct_Then_Return_NotFound(int productId)
         {
             // Arrange
-            var cut = new ProductsController(_mapper, _unitOfWork);
+            var sut = new ProductsController(_mapper, _unitOfWork);
 
             //act
-            var result = cut.GetProduct(productId).Result;
+            var result = sut.GetProduct(productId).Result;
 
             //Assert
             Assert.IsType<NotFoundResult>(result);

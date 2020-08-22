@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/HvIM/Xb9Eg/As4Xt/mjcdaieLfpTTEIAABX7BYthcKjxTW3ve1KfsRX1ctDHBoliQ6+B574Ej0v2SGTUaYZgw==",
+  "dgSpecHash": "jsyUfP/06hR5scdEzVrN4hViCMNvoVYocu7vgF7P88hgdGr9pH7VBc1PTpOgJPJTXFiWBngh2G/RvVPjMLaebQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Application\\GameShop.Application.csproj",
+  "projectFilePath": "c:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Application\\GameShop.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dawid\\.nuget\\packages\\automapper\\9.0.0\\automapper.9.0.0.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\7.0.0\\automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",

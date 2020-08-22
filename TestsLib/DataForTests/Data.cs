@@ -7,7 +7,7 @@ using Xunit.Sdk;
 
 namespace TestsLib.DataForTests
 {
-    public  class Data : IEnumerable<object[]>
+    public class Data : IEnumerable<object[]>
     {
         public IEnumerator<object[]> GetEnumerator()
         {
@@ -116,7 +116,7 @@ namespace TestsLib.DataForTests
 
         public static IEnumerable<ProductForSearchingDto> ProductForSearchingDto()
         {
-            return new List<ProductForSearchingDto>() 
+            return new List<ProductForSearchingDto>()
             {
                 new ProductForSearchingDto()
                 {
@@ -221,7 +221,7 @@ namespace TestsLib.DataForTests
 
         public static IEnumerable<ProductForModerationDto> ProductForModerationDto()
         {
-            return new List<ProductForModerationDto>() 
+            return new List<ProductForModerationDto>()
             {
                 new ProductForModerationDto()
                 {
@@ -313,7 +313,7 @@ namespace TestsLib.DataForTests
 
         public static IEnumerable<Product> Product()
         {
-            return new List<Product>() 
+            return new List<Product>()
             {
                 new Product()
                 {
@@ -337,7 +337,7 @@ namespace TestsLib.DataForTests
                         GraphicsCard = "NVIDIA GeForce RTX 2080Ti 11GB / AMD Radeon RX 5700XT 8GB",
                         HDD = 50,
                         IsNetworkConnectionRequire = true,
-                        ProductId = 1  
+                        ProductId = 1
                     },
                     Photos = new List<Photo>
                     {
@@ -381,7 +381,7 @@ namespace TestsLib.DataForTests
                         GraphicsCard = "None",
                         HDD = 30,
                         IsNetworkConnectionRequire = true,
-                        ProductId = 2  
+                        ProductId = 2
                     },
                     Photos = new List<Photo>
                     {
@@ -425,7 +425,7 @@ namespace TestsLib.DataForTests
                         GraphicsCard = "None",
                         HDD = 10,
                         IsNetworkConnectionRequire = true,
-                        ProductId = 3   
+                        ProductId = 3
                     },
                     Photos = new List<Photo>
                     {
@@ -469,7 +469,7 @@ namespace TestsLib.DataForTests
                         GraphicsCard = "NVIDIA GeForce GTX 780 3GB / AMD Radeon R9 290X 4GB",
                         HDD = 10,
                         IsNetworkConnectionRequire =  true,
-                        ProductId = 4 
+                        ProductId = 4
                     },
                     Photos = new List<Photo>
                     {
@@ -513,7 +513,7 @@ namespace TestsLib.DataForTests
                         GraphicsCard = "None",
                         HDD = 30,
                         IsNetworkConnectionRequire = true,
-                        ProductId = 5  
+                        ProductId = 5
                     },
                     Photos = new List<Photo>
                     {
@@ -523,7 +523,7 @@ namespace TestsLib.DataForTests
                             Url = "http://placehold.it/200x300.jpg",
                             isMain = true,
                             DateAdded = DateTime.Parse("2020-07-01"),
-                            ProductId = 5 
+                            ProductId = 5
                         }
                     },
                     SubCategories = new List<ProductSubCategory>
@@ -562,7 +562,7 @@ namespace TestsLib.DataForTests
                         GraphicsCard = "None",
                         HDD = 30,
                         IsNetworkConnectionRequire = true,
-                        ProductId = 6  
+                        ProductId = 6
                     },
                     Photos = new List<Photo>
                     {
@@ -633,7 +633,7 @@ namespace TestsLib.DataForTests
 
         public static IEnumerable<UserForListDto> UserForListDto()
         {
-            return new List<UserForListDto>() 
+            return new List<UserForListDto>()
             {
                 new UserForListDto()
                 {
@@ -740,7 +740,7 @@ namespace TestsLib.DataForTests
 
         public static IEnumerable<ProductToEditDto> ProductToEditDto()
         {
-            return new List<ProductToEditDto>() 
+            return new List<ProductToEditDto>()
             {
                 new ProductToEditDto()
                 {
@@ -1010,7 +1010,7 @@ namespace TestsLib.DataForTests
             {
                 new CategoryToReturnDto {Id=1, Name="PC", Description="PC Description"},
                 new CategoryToReturnDto {Id=2, Name="PS4", Description="PS4 Description"},
-                new CategoryToReturnDto {Id=3, Name="XONE", Description="XBOX One Description"}   
+                new CategoryToReturnDto {Id=3, Name="XONE", Description="XBOX One Description"}
             };
         }
 
@@ -1020,10 +1020,10 @@ namespace TestsLib.DataForTests
             {
                 new SubCategoryToReturnDto {Id=1, Name="RPG", Description="RPG Description"},
                 new SubCategoryToReturnDto {Id=2, Name="FPS", Description="FPS Description"},
-                new SubCategoryToReturnDto {Id=3, Name="Horror", Description="Horror Description"},   
-                new SubCategoryToReturnDto {Id=4, Name="MMO", Description="MMO Description"},   
-                new SubCategoryToReturnDto {Id=5, Name="RTS", Description="RTS Description"},   
-                new SubCategoryToReturnDto {Id=6, Name="Racing", Description="Racing Description"},   
+                new SubCategoryToReturnDto {Id=3, Name="Horror", Description="Horror Description"},
+                new SubCategoryToReturnDto {Id=4, Name="MMO", Description="MMO Description"},
+                new SubCategoryToReturnDto {Id=5, Name="RTS", Description="RTS Description"},
+                new SubCategoryToReturnDto {Id=6, Name="Racing", Description="Racing Description"},
                 new SubCategoryToReturnDto {Id=7, Name="Adventure", Description="Adventure Description"}
             };
         }
@@ -1038,6 +1038,211 @@ namespace TestsLib.DataForTests
                 new LanguageToReturnDto {Id=4, Name= "Russian"},
                 new LanguageToReturnDto {Id=5, Name= "French"},
                 new LanguageToReturnDto {Id=6, Name= "Italian"}
+            };
+        }
+
+        public static IEnumerable<PhotoForReturnDto> PhotoForReturnDto()
+        {
+            return new List<PhotoForReturnDto>()
+            {
+                new PhotoForReturnDto()
+                {
+                    Id = 1,
+                    Url = "http://placehold.it/200x300.jpg",
+                    isMain = true,
+                    DateAdded = DateTime.Parse("2020-04-07")
+                },
+                new PhotoForReturnDto()
+                {
+                    Id = 2,
+                    Url = "http://placehold.it/200x300.jpg",
+                    isMain = true,
+                    DateAdded = DateTime.Parse("2020-06-28")
+                },
+                new PhotoForReturnDto()
+                {
+                    Id = 3,
+                    Url = "http://placehold.it/200x300.jpg",
+                    isMain = true,
+                    DateAdded = DateTime.Parse("2020-03-31")
+                },
+                new PhotoForReturnDto()
+                {
+                    Id = 4,
+                    Url = "http://placehold.it/200x300.jpg",
+                    isMain = true,
+                    DateAdded = DateTime.Parse("2020-01-03")
+                },
+                new PhotoForReturnDto()
+                {
+                    Id = 5,
+                    Url = "http://placehold.it/200x300.jpg",
+                    isMain = true,
+                    DateAdded = DateTime.Parse("2020-07-01")
+                },
+                new PhotoForReturnDto()
+                {
+                    Id = 6,
+                    Url = "http://placehold.it/200x300.jpg",
+                    isMain = true,
+                    DateAdded = DateTime.Parse("2020-01-13")
+                },
+                new PhotoForReturnDto()
+                {
+                    Id = 7,
+                    Url = "http://placehold.it/200x300.jpg",
+                    isMain = true,
+                    DateAdded = DateTime.Parse("2020-07-17")
+                }
+
+            };
+        }
+
+        public static IEnumerable<User> Users()
+        {
+            return new List<User>()
+            {
+                new User()
+                {
+                    Id = 1,
+                    NormalizedUserName = "HOLLY",
+                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
+                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
+                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    LockoutEnabled = true,
+                    UserName = "Holly",
+                    Email = "hollyjones@isodrive.com",
+                    Created = DateTime.Parse("2017-06-22"),
+                    LastActive = DateTime.Parse("2017-06-22")
+                },
+                new User()
+                {
+                    Id = 1,
+                    NormalizedUserName = "HOLLY",
+                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
+                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
+                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    LockoutEnabled = true,
+                    UserName = "Michelle",
+                    Email = "michellejones@isodrive.com",
+                    Created = DateTime.Parse("2017-06-22"),
+                    LastActive = DateTime.Parse("2017-06-22")
+                },
+                new User()
+                {
+                    Id = 1,
+                    NormalizedUserName = "HOLLY",
+                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
+                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
+                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    LockoutEnabled = true,
+                    UserName = "Zelma",
+                    Email = "zelmajones@isodrive.com",
+                    Created = DateTime.Parse("2017-06-22"),
+                    LastActive = DateTime.Parse("2017-06-22")
+                },
+                new User()
+                {
+                    Id = 1,
+                    NormalizedUserName = "HOLLY",
+                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
+                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
+                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    LockoutEnabled = true,
+                    UserName = "Angelina",
+                    Email = "angelinajones@isodrive.com",
+                    Created = DateTime.Parse("2017-06-22"),
+                    LastActive = DateTime.Parse("2017-06-22")
+                },
+                new User()
+                {
+                    Id = 1,
+                    NormalizedUserName = "HOLLY",
+                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
+                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
+                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    LockoutEnabled = true,
+                    UserName = "Diana",
+                    Email = "dianajones@isodrive.com",
+                    Created = DateTime.Parse("2017-06-22"),
+                    LastActive = DateTime.Parse("2017-06-22")
+                },
+                new User()
+                {
+                    Id = 1,
+                    NormalizedUserName = "HOLLY",
+                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
+                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
+                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    LockoutEnabled = true,
+                    UserName = "Logan",
+                    Email = "loganjones@isodrive.com",
+                    Created = DateTime.Parse("2017-06-22"),
+                    LastActive = DateTime.Parse("2017-06-22")
+                },
+                new User()
+                {
+                    Id = 1,
+                    NormalizedUserName = "HOLLY",
+                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
+                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
+                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    LockoutEnabled = true,
+                    UserName = "Wilkins",
+                    Email = "wilkinsjones@isodrive.com",
+                    Created = DateTime.Parse("2017-06-22"),
+                    LastActive = DateTime.Parse("2017-06-22")
+                },
+                new User()
+                {
+                    Id = 1,
+                    NormalizedUserName = "HOLLY",
+                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
+                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
+                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    LockoutEnabled = true,
+                    UserName = "Hahn",
+                    Email = "hahnjones@isodrive.com",
+                    Created = DateTime.Parse("2017-06-22"),
+                    LastActive = DateTime.Parse("2017-06-22")
+                },
+                new User()
+                {
+                    Id = 1,
+                    NormalizedUserName = "HOLLY",
+                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
+                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
+                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    LockoutEnabled = true,
+                    UserName = "Miller",
+                    Email = "millerjones@isodrive.com",
+                    Created = DateTime.Parse("2017-06-22"),
+                    LastActive = DateTime.Parse("2017-06-22")
+                },
+                new User()
+                {
+                    Id = 1,
+                    NormalizedUserName = "HOLLY",
+                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
+                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
+                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    LockoutEnabled = true,
+                    UserName = "Morales",
+                    Email = "moralesjones@isodrive.com",
+                    Created = DateTime.Parse("2017-06-22"),
+                    LastActive = DateTime.Parse("2017-06-22")
+                },
+                new User()
+                {
+                    Id = 1,
+                    NormalizedUserName = "HOLLY",
+                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
+                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
+                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    LockoutEnabled = true,
+                    UserName = "Admin",
+                    Email = "admin@shop.eu"
+                },
             };
         }
 

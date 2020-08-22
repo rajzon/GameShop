@@ -47,6 +47,11 @@ namespace GameShop.UI.Controllers
         {
             var photoFromRepo = await _unitOfWork.Photo.GetAsync(id);
 
+            if (photoFromRepo == null)
+            {
+                return NotFound();
+            }
+
             var photo = _mapper.Map<PhotoForReturnDto>(photoFromRepo);
 
             return Ok(photo);
