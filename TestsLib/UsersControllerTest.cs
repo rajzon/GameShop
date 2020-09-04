@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using FluentAssertions;
@@ -10,28 +9,27 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using TestsLib.DataForTests;
 using Xunit;
 
 namespace TestsLib
 {
     public class UsersControllerTest : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
+        private readonly CustomWebApplicationFactory<Startup> _factory;
         private readonly HttpClient _client;
-
 
         public UsersControllerTest(CustomWebApplicationFactory<Startup> factory)
         {
-            _client = factory.WithWebHostBuilder(builder => 
+            _factory = factory;
+            _client = _factory.WithWebHostBuilder(builder =>
             {
-                    builder.ConfigureTestServices(services => 
-                    {
-                        services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
-                    });
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
+                });
             }).CreateClient();
 
-            using (var scope = factory.Services.CreateScope())
+            using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
@@ -43,6 +41,21 @@ namespace TestsLib
 
                 Seed.SeedUsers(userManager, roleManager, config);
             }
+        }
+
+        [Fact]
+        public void Given_None_When_GetUsers_ThenReturn_OkStatusWithUsers()
+        {
+            //Arrange
+
+            //Act
+            var httpRespone = _client.GetAsync("/api/users").Result;
+
+
+            //Assert
+            httpRespone.StatusCode.Should().Be(HttpStatusCode.OK);
+            httpRespone.Content.Should().NotBeNull();
+
         }
     }
 }

@@ -55,6 +55,11 @@ namespace GameShop.UI.Controllers
     {
         var userList = await _unitOfWork.User.GetAllWithRolesAsync();
 
+        if (userList == null)
+        {
+            return NotFound();
+        }
+
         return Ok(userList);
     }
 
@@ -63,6 +68,11 @@ namespace GameShop.UI.Controllers
     public async Task<IActionResult> EditRoles(string userName, RoleEditDto roleEditDto)
     {
         var user = await _userManager.FindByNameAsync(userName);
+
+        if (user == null)
+        {
+            return BadRequest("User not found");
+        }
 
         var userRoles = await _userManager.GetRolesAsync(user);
 
@@ -91,7 +101,7 @@ namespace GameShop.UI.Controllers
     {
         if (productParams.PageNumber < 1 || productParams.PageSize < 1)
         {
-            return BadRequest();
+            return BadRequest("PageNumber or PageSize is less then 1");
         }
 
         //var categoryId = (int)_ctx.Entry<Product>(await _ctx.Products.FirstOrDefaultAsync()).Property("CategoryId").CurrentValue;
@@ -101,7 +111,7 @@ namespace GameShop.UI.Controllers
         {
             return NotFound();
         } 
-        else if (products.PageSize < 0 || products.TotalCount < 0 || products.TotalPages < 1 || products.CurrentPage < 1)
+        else if (products.PageSize < 1 || products.TotalCount < 0 || products.TotalPages < 1 || products.CurrentPage < 1)
         {
             return BadRequest("Pagination parameters wasn't set properly");
         }
@@ -149,7 +159,7 @@ namespace GameShop.UI.Controllers
 
         if (productForCreationDto == null)
         {
-            return BadRequest("Sended blank product description");
+            return BadRequest("Sended null product");
         }
         
         var selectedCategory = await _unitOfWork.Category.GetAsync(productForCreationDto.CategoryId);   
@@ -158,10 +168,21 @@ namespace GameShop.UI.Controllers
         
         var productToCreate = await _unitOfWork.Product.CreateAsync(productForCreationDto, requirementsForProduct, selectedCategory);
 
-        _unitOfWork.Product.Add(productToCreate);
-        await _unitOfWork.SaveAsync();
+        if (productToCreate == null)
+        {
+            return BadRequest("Something went wrong during creating Product");
+        }
 
-        return CreatedAtRoute("GetProduct", new {id = productToCreate.Id}, productToCreate);
+        _unitOfWork.Product.Add(productToCreate);
+
+        if(await _unitOfWork.SaveAsync())
+        {
+            return CreatedAtRoute("GetProduct", new {id = productToCreate.Id}, productToCreate);
+
+        }
+
+        return BadRequest("Error occured during Saving Product");
+
     }
 
 
@@ -171,10 +192,15 @@ namespace GameShop.UI.Controllers
     {
         if (productToEditDto == null)
         {
-            return BadRequest("Sended blank product descirption");
+            return BadRequest("Sended null product");
         }
 
         var productFromDb = await _unitOfWork.Product.GetAsync(id);
+
+        if (productFromDb == null)
+        {
+            return BadRequest($"Product with Id:{id} not found");
+        }
 
         var selectedCategory = await _unitOfWork.Category.FindAsync(c => c.Id == productToEditDto.CategoryId);
 
@@ -233,9 +259,9 @@ namespace GameShop.UI.Controllers
             return BadRequest("Product for that Id doesn't exist");
         }
 
-        var photos = selectedProduct.Photos.ToList();
+        var photos = selectedProduct.Photos?.ToList();
 
-        if (photos.Select(p => p.PublicId).Any())
+        if (photos != null && photos.Select(p => p.PublicId).Any())
         {
 
             foreach (var photo in photos)
@@ -279,7 +305,7 @@ namespace GameShop.UI.Controllers
 
         if (categoriesList == null || !categoriesList.Any())
         {
-            return BadRequest("There is no categories in Database");
+            return NotFound();
         }
 
         var categoriesToRetrun = _mapper.Map<IEnumerable<CategoryToReturnDto>>(categoriesList);
@@ -296,7 +322,7 @@ namespace GameShop.UI.Controllers
 
         if (subCategoriesList == null || !subCategoriesList.Any())
         {
-            return BadRequest("There is no subCategories in Database");
+            return NotFound();
         }
 
         var subCategoryToRetrun = _mapper.Map<IEnumerable<SubCategoryToReturnDto>>(subCategoriesList);
@@ -313,7 +339,7 @@ namespace GameShop.UI.Controllers
 
         if (languagesList == null || !languagesList.Any())
         {
-            return BadRequest("There is no languages in Database");
+            return NotFound();
         }
 
         var languagesListToReturn = _mapper.Map<IEnumerable<LanguageToReturnDto>>(languagesList);
@@ -328,7 +354,7 @@ namespace GameShop.UI.Controllers
         var category = await _unitOfWork.Category.GetAsync(id);
         if (category == null)
         {
-            return BadRequest("That Category doesn't exist");
+            return NotFound();
         }
 
         var categoryToReturn = _mapper.Map<CategoryToReturnDto>(category);

@@ -32,6 +32,9 @@ using System.Linq;
 
 namespace TestsLib
 {
+
+    //To DO:
+    //1. Create Dto for GetProduct() in order to return dto instead of concrete model
     public class ProductsControllerTest : TestBase, IDisposable
     {
       
@@ -211,18 +214,6 @@ namespace TestsLib
             result.Should().BeOfType(typeof(OkObjectResult));
 
             result.As<OkObjectResult>().Value.Should().BeEquivalentTo(expected);
-
-            result.As<OkObjectResult>().Value.As<List<ProductForSearchingDto>>().FirstOrDefault()
-                    .Should()
-                    .BeEquivalentTo(expected.FirstOrDefault());
-
-            result.As<OkObjectResult>().Value.As<List<ProductForSearchingDto>>().LastOrDefault()
-                    .Should()
-                    .BeEquivalentTo(expected.LastOrDefault());
-                    
-            result.As<OkObjectResult>().Value.As<List<ProductForSearchingDto>>().Take(4).ToList()
-                    .Should()
-                    .BeEquivalentTo(expected.Take(4).ToList());
 
         }
 

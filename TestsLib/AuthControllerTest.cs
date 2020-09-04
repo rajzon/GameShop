@@ -26,7 +26,6 @@ namespace TestsLib
 {
     //TO DO: 
     // 1.On Login Method I have to delete returning user , in order to secure user info
-    // 2.Retrun CretedAtRoute on Register Method
     // 3.Move GenerateJwtToken Method to Another Class
     // 4.Test Expires time for token 
     // 5. GenerateJwtTokenTest should be in unit test library
@@ -395,6 +394,7 @@ namespace TestsLib
             ClaimsPrincipal principal = jwtHandler.ValidateToken(result, tokenValidationParameters, out securityToken);
             principal.Identity.IsAuthenticated
                     .Should().BeTrue();  
+                    
             principal.Identity.Name.Should().Be(expected.UserName);
             principal.IsInRole(role)
                     .Should().BeTrue();

@@ -21,7 +21,8 @@ namespace GameShop.Infrastructure.Repositories
                         Id = p.Id,
                         Url = p.Url,
                         DateAdded = p.DateAdded,
-                        isMain = p.isMain
+                        isMain = p.isMain,
+                        ProductId = p.ProductId
                     }).ToListAsync();
 
             return photo;

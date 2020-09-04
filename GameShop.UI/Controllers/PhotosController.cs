@@ -67,6 +67,11 @@ namespace GameShop.UI.Controllers
 
            var file = photoForCreationDto.File;
 
+           if (file == null)
+           {
+               return BadRequest("Photo file wasn't sent");
+           }
+
            var uploadResult = new ImageUploadResult();
 
            if (file.Length > 0) 
@@ -84,7 +89,7 @@ namespace GameShop.UI.Controllers
                }
            }
 
-           photoForCreationDto.Url = uploadResult.Url.ToString();
+           photoForCreationDto.Url = uploadResult.Url?.ToString();
            photoForCreationDto.PublicId = uploadResult.PublicId;
 
             var photo = _mapper.Map<Photo>(photoForCreationDto);

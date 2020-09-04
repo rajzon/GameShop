@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,6 +61,28 @@ namespace GameShop.Infrastructure.Repositories
 
         public async Task<Product> CreateAsync(ProductForCreationDto productForCreationDto, Requirements requirements, Category selectedCategory)
         {
+            if (productForCreationDto == null && requirements == null && selectedCategory == null)
+            {
+                throw new ArgumentException("Product, requirements and category that was passed to CreateAsync method are null");
+            } 
+            else if (productForCreationDto == null)
+            {
+                throw new ArgumentException("Product that was passed to CreateAsync method is null");
+            }
+            else if (requirements == null)
+            {
+                throw new ArgumentException("Requirements that was passed to CreateAsync method is null");
+            }
+            else if (selectedCategory == null)
+            {
+                throw new ArgumentException("Category that was passed to CreateAsync method is null");
+            }
+            else if (productForCreationDto?.LanguagesId.Count() < 1)
+            {
+                throw new ArgumentException("LanguagesId that was passed to CreateAsync method is null");
+            }
+            
+
             var product = new Product
             {
                 Name = productForCreationDto.Name,
@@ -160,9 +183,9 @@ namespace GameShop.Infrastructure.Repositories
             return product;
         }
 
-        public async Task<ProductToEditDto> GetProductToEditAsync(RequirementsForEditDto requirements, IEnumerable<Photo> photosFromRepo, int id)
+        public async Task<ProductToEditDto> GetProductToEditAsync(RequirementsForEditDto requirements, IEnumerable<Photo> photosFromRepo, int productId)
         {
-            var result = await _ctx.Products.Where(x => x.Id == id)
+            var result = await _ctx.Products.Where(x => x.Id == productId)
                 .Select(product => new ProductToEditDto
                 {
                     Name = product.Name,

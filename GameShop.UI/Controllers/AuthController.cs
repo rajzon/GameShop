@@ -58,7 +58,6 @@ namespace GameShop.UI.Controllers
             return BadRequest(result.Errors);
         }
 
-         //TO DO: Change that to CreateAtRoute / CreateAtAction instead of Status Code(201)
         return Ok(201);
     }
 

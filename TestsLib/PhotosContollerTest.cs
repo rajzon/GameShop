@@ -16,7 +16,7 @@ using TestsLib.DataForTests;
 using Xunit;
 
 namespace TestsLib
-{
+{    //To do: add tests for SetMainPhoto() and for DeletePhoto()
     public class PhotosContollerTest : TestBase, IDisposable
     {
 

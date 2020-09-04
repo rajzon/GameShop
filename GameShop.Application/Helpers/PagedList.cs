@@ -26,6 +26,17 @@ namespace GameShop.Application.Helpers
         public static async Task<PagedList<T>> CreateAsync(IQueryable<T> source, 
             int pageNumber, int pageSize) 
         {
+            if (pageNumber < 1 && pageSize < 1)
+            {
+                throw new ArgumentException("PageNumber and PageSize are less then one");
+            } else if (pageNumber < 1)
+            {
+                throw new ArgumentException("PageNumber is less then one");
+            } else if (pageSize < 1)
+            {
+                throw new ArgumentException("PageSize is less then one");
+            }
+
             var count = await source.CountAsync();
             var items = await source.Skip((pageNumber - 1) * pageSize)
                                 .Take(pageSize)

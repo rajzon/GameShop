@@ -31,7 +31,7 @@ namespace GameShop.UI.Controllers
         {
             if (productParams.PageNumber < 1 || productParams.PageSize < 1)
             {
-                return BadRequest();
+                return BadRequest("PageNumber or PageSize is less then 1");
             }
 
             var products = await _unitOfWork.Product.GetProductsForSearchingAsync(productParams);
@@ -40,7 +40,7 @@ namespace GameShop.UI.Controllers
             {
                 return NotFound();
             } 
-            else if (products.PageSize < 0 || products.TotalCount < 0 || products.TotalPages < 1 || products.CurrentPage < 1)
+            else if (products.PageSize < 1 || products.TotalCount < 0 || products.TotalPages < 1 || products.CurrentPage < 1)
             {
                 return BadRequest("Pagination parameters wasn't set properly");
             }
