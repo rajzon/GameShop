@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using GameShop.Application.Interfaces;
@@ -28,6 +29,11 @@ namespace GameShop.UI.Controllers
         {
             var users = await _unitOfWork.User.GetAllOrderedByAsync(u => u.Id);
 
+            if (users.Count() < 1)
+            {
+                return NotFound();
+            } 
+
           
             return Ok(users);
         }
@@ -36,6 +42,11 @@ namespace GameShop.UI.Controllers
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await _unitOfWork.User.GetAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
 
             return Ok(user);
         }

@@ -12,6 +12,8 @@ using GameShop.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+using GameShop.Infrastructure.Identity;
+using GameShop.Infrastructure.Interfaces;
 
 namespace GameShop.UI.Controllers
 {
@@ -21,14 +23,16 @@ namespace GameShop.UI.Controllers
     public class AuthController : ControllerBase
     {      
         private readonly IConfiguration _config;
+        private readonly IJwtTokenHelper _jwtTokenHelper;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         public AuthController(IConfiguration config,  
-            UserManager<User> userManager, SignInManager<User> signInManager)
+            UserManager<User> userManager, SignInManager<User> signInManager, IJwtTokenHelper jwtTokenHelper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
+            _jwtTokenHelper = jwtTokenHelper;
             
         }
 
@@ -74,20 +78,11 @@ namespace GameShop.UI.Controllers
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, userForLoginDto.Password, false);
 
-        var userToReturn = new User() 
-        {
-            UserName = user.UserName,
-            UserRoles = user.UserRoles,
-            Email = user.Email      
-        };
-
         if (result.Succeeded)
         {
-            
             return Ok(new
             {
-                token = await GenerateJwtToken(user),
-                userToReturn               
+                token = await _jwtTokenHelper.GenerateJwtToken(user, _userManager, _config)                        
             });
         }
 
@@ -96,38 +91,6 @@ namespace GameShop.UI.Controllers
         
     }
 
-    private async Task<string> GenerateJwtToken(User user)
-    {
-        var claims = new List<Claim>
-        {
-                new Claim( ClaimTypes.NameIdentifier , user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName)
-        };
-
-        var roles = await _userManager.GetRolesAsync(user);
-
-        foreach (var role in roles)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, role));
-        }
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8
-            .GetBytes(_config.GetSection("AppSettings:Token").Value));
-
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddDays(1),
-            SigningCredentials = creds
-        };
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-
-        return tokenHandler.WriteToken(token);
-    }
+    
 }
 }

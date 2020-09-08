@@ -13,6 +13,7 @@ using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
 using GameShop.Domain.Model;
 using GameShop.Infrastructure;
+using GameShop.Infrastructure.Interfaces;
 using GameShop.UI;
 using GameShop.UI.Controllers;
 using Microsoft.AspNetCore.Identity;
@@ -24,11 +25,6 @@ using Xunit;
 
 namespace TestsLib
 {
-    //TO DO: 
-    // 1.On Login Method I have to delete returning user , in order to secure user info
-    // 3.Move GenerateJwtToken Method to Another Class
-    // 4.Test Expires time for token 
-    // 5. GenerateJwtTokenTest should be in unit test library
     public class AuthControllerTest : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private readonly HttpClient _client;
@@ -304,11 +300,11 @@ namespace TestsLib
             //Act
             var httpRespone = _client.PostAsync("/api/auth/login", content).Result;
 
-            var responseContnent = httpRespone.Content.ReadAsStringAsync().Result;
+            var responseContent = httpRespone.Content.ReadAsStringAsync().Result;
 
             //Assert
             httpRespone.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-            responseContnent.Should().NotContain("token");
+            responseContent.Should().NotContain("token");
 
         }
 
@@ -335,80 +331,6 @@ namespace TestsLib
             httpRespone.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
             responseContnent.Should().NotContain("token");
 
-        }
-
-
-        [Theory]
-        [InlineData(1, "Holly","Customer")]
-        [InlineData(6, "Logan","Customer")]
-        [InlineData(10, "Morales", "Customer")]
-        [InlineData(11, "Admin", "Admin")]
-        public void IntegrationTest_Given_CustomerUser_When_GenerateJwtToken_Then_Return_StringWithToken(int userId, string userName, string role)
-        {
-            //Arrange
-
-            var expected = new User()
-            {
-                Id = userId,
-                UserName = userName
-                
-            };
-            var jwtHandler = new JwtSecurityTokenHandler();
-
-            //Act
-            string result;
-            TokenValidationParameters tokenValidationParameters;
-            using (var scope = _factory.Services.CreateScope())
-            {
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-                var signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<User>>();
-                var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-
-                var sut = new AuthController(config, userManager, signInManager);
-
-                var generateJwtToken = sut.GetType()
-                        .GetMethod("GenerateJwtToken", BindingFlags.NonPublic | BindingFlags.Instance);
-
-                var task = (Task<string>)generateJwtToken.Invoke(sut, new object[] { expected });
-
-                result = task.Result;
-
-
-                tokenValidationParameters = new TokenValidationParameters 
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-                        .GetBytes(config.GetSection("AppSettings:Token").Value)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            }
-
-        
-
-            SecurityToken securityToken;
-            //Assert
-            result.Should().NotBeEmpty();
-            jwtHandler.CanReadToken(result).Should().BeTrue();
-
-            ClaimsPrincipal principal = jwtHandler.ValidateToken(result, tokenValidationParameters, out securityToken);
-            principal.Identity.IsAuthenticated
-                    .Should().BeTrue();  
-                    
-            principal.Identity.Name.Should().Be(expected.UserName);
-            principal.IsInRole(role)
-                    .Should().BeTrue();
-
-            string nameIdentifierClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
-            var userIdIdentifier = principal.Claims
-                    .Where(c => c.Type == nameIdentifierClaimType).FirstOrDefault().Value;
-            userIdIdentifier.Should().Be(userId.ToString());
-
-            string nameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"; 
-            var username = principal.Claims
-                    .Where(c => c.Type == nameClaimType).FirstOrDefault().Value;
-            username.Should().Be(userName);
-                     
         }
     }
 }

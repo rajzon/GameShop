@@ -26,14 +26,9 @@ using Xunit;
 
 namespace TestsLib
 {
-    //TO DO:
-    // 1. On AdminController.CreateProduct() - add if statements that will check if Category are passed, My Db internal logic  
-    // allows Product to DO NOT HAVE Category , add logic for checking if Requirements/Category/SubCategory/Languages are passed in ProductRepository
-    // 2. Integration Test For AdminController.CreateProduct() for case when Category/Language/SubCategory wasn't passed
 
     public class AdminControllerTest : TestBase, IDisposable
     {
-
 
         [Fact]
         public void IntegrationTest_Given_DefaultProductParams_When_GetProductsForModeration_Then_Return_PagedProducts_WithOkStatus_And_AddDefaultPaginationHeader()
@@ -250,6 +245,61 @@ namespace TestsLib
                     .ToList()
                     .Should()
                     .BeEquivalentTo(expected.SubCategoriesId);
+
+            result.As<CreatedAtRouteResult>().RouteValues.Values.FirstOrDefault().Should().Be(numberOfProductsBeforeAct + 1);
+            result.As<CreatedAtRouteResult>().RouteName.Should().Be("GetProduct");   
+            
+        }
+
+        [Fact]
+        public void IntegrationTest_Given_ProductForCreationDtoWithoutLanguageSubCategoryRequirements_When_CreateProduct_Then_Return_RouteToCreatedProduct_WithCreatedStatus()
+        {
+            //Arrange 
+            int numberOfProductsBeforeAct = 7;
+
+            var httpContext = new DefaultHttpContext();
+
+            var expected =  new ProductForCreationDto()
+                {
+                    Name = "TEST GAME",
+                    Description = "Nulla amet commodo minim esse adipisicing commodo sint esse laboris adipisicing. Officia Lorem laboris ipsum labore mollit ipsum est enim elit exercitation quis deserunt. Nostrud dolore ut sint est ut officia voluptate consequat mollit. Nulla cupidatat mollit dolore non consequat amet Lorem. Magna dolor veniam anim aliquip aliquip esse consequat velit veniam tempor in.\r\n",
+                    Pegi = 18,
+                    Price = 50.82M,
+                    IsDigitalMedia = false,
+                    CategoryId = 1,
+                    ReleaseDate = DateTime.Parse("2020-03-31"),
+                };
+
+            var controllerContext = new ControllerContext() {
+                HttpContext = httpContext
+            };
+
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            {
+                ControllerContext = controllerContext
+            };
+
+            //Act
+            var result = sut.CreateProduct(expected).Result;
+      
+
+            //Assert
+            result.Should().BeOfType(typeof(CreatedAtRouteResult));
+
+            result.As<CreatedAtRouteResult>().Value.Should().BeOfType(typeof(Product));
+
+            result.As<CreatedAtRouteResult>().Value.As<Product>()
+                    .Should()
+                    .BeEquivalentTo(expected, options => options.ExcludingMissingMembers());
+
+            result.As<CreatedAtRouteResult>().Value.As<Product>()
+                    .Category.Should().NotBeNull();
+
+            result.As<CreatedAtRouteResult>().Value.As<Product>()
+                    .Languages.Should().BeEmpty();
+
+            result.As<CreatedAtRouteResult>().Value.As<Product>()
+                    .SubCategories.Should().BeEmpty();
 
             result.As<CreatedAtRouteResult>().RouteValues.Values.FirstOrDefault().Should().Be(numberOfProductsBeforeAct + 1);
             result.As<CreatedAtRouteResult>().RouteName.Should().Be("GetProduct");   

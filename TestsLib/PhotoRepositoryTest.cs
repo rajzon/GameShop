@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FluentAssertions;
 using GameShop.Domain.Model;
 using GameShop.Infrastructure.Repositories;
@@ -8,35 +10,42 @@ using Xunit;
 
 namespace TestsLib
 {
-    //Info: Added productId value for Photo returning by GetPhotosForProduct
 
     // TO DO: 
     //1.Add more photos on SeedData for concrete product to be able to test funcionality of getting multiple photos for that product 
     public class PhotoRepositoryTest : TestBase
     {
+        private readonly PhotoRepository _sut;
+
+        public PhotoRepositoryTest()
+        {
+            _sut = new PhotoRepository(_context);
+
+        }
+
         [Theory]
         [InlineData(1)]
         [InlineData(5)]
         [InlineData(7)]
-        public void IntegrationTest_Given_ProductId_When_GetPhotosForProduct_ThenReturn_PhotoList(int productId)
+        public void IntegrationTest_Given_ProductId_When_GetPhotosForProduct_ThenReturn_OneElementPhotoList(int productId)
         {
             //Arrange
             var expected = Data.Photo().Where(p => p.ProductId == productId).ToList();
             
 
-            var sut = new PhotoRepository(_context);
-
             //Act
-            var result = sut.GetPhotosForProduct(productId).Result;
+            var result = _sut.GetPhotosForProduct(productId).Result;
 
             //Assert
             result.Should().NotBeEmpty();
             result.Should().BeOfType<List<Photo>>();
             result.Should().BeEquivalentTo(expected);
+            result.Count().Should().Be(1);
             
 
             
         }
+
 
         [Theory]
         [InlineData(10)]
@@ -44,11 +53,10 @@ namespace TestsLib
         [InlineData(50)]
         public void IntegrationTest_Given_ProductIdThatDoesntExistInDb_When_GetPhotosForProduct_ThenReturn_Null(int productId)
         {
-            //Arrange       
-            var sut = new PhotoRepository(_context);
+            //Arrange
 
             //Act
-            var result = sut.GetPhotosForProduct(productId).Result;
+            var result = _sut.GetPhotosForProduct(productId).Result;
 
             //Assert
             result.Should().BeEmpty();

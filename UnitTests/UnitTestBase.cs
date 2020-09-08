@@ -8,6 +8,7 @@ using GameShop.Application.Interfaces;
 using GameShop.Application.Mappings;
 using GameShop.Domain.Model;
 using GameShop.Infrastructure;
+using GameShop.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -29,6 +30,7 @@ namespace UnitTests
 
         protected readonly ApplicationDbContext _context;
         protected readonly IMapper _mapper;
+        protected readonly Mock<IJwtTokenHelper> _mockedJwtTokenHelper;
         protected readonly UnitOfWork _unitOfWork;
         protected readonly Mock<IUnitOfWork> _mockedUnitOfWork;
         protected readonly IOptions<CloudinarySettings> _cloudinaryConfig;
@@ -58,7 +60,8 @@ namespace UnitTests
             var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile(mapperProfile));
             _mapper = new Mapper(mapperConfig);
 
-
+            //Jwt Token Helper mocking 
+            _mockedJwtTokenHelper = new Mock<IJwtTokenHelper>();
 
             // ASP Identity Configuration
             _mockedConfig = new Mock<IConfiguration>();

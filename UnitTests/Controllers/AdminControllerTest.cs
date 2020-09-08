@@ -22,12 +22,10 @@ using Xunit;
 namespace UnitTests.Controllers
 {
     //Info: unable to test DeleteProduct() - case when photo have PublicId from cloudinary
-    //Add integration test for GetUsersWithRoles() method , for case when any roles are passed , user do not have any roles, user that have less roles then roles that was passed to method etc.
-    // GetProductForEdit() - 1 cases to delete: photosFromRepo == null
-    // Rename ProductRepository.CreateAsync() To ScaffoldProductForCreation
-    // Rename ProductRepository.EditAsync() To ScaffoldProductForEdit
+    // EditRoles() - not tested case when passed role that Doesnt exists
 
-    //Check If statements for IEnumerable<T> in Controllers/Repository and add checking for empty list
+   //Check If statements for IEnumerable<T> in Controllers/Repository and add checking for empty list
+    
     public class AdminControllerTest: UnitTestsBase , IDisposable
     {
         private readonly AdminController _cut;
@@ -123,6 +121,100 @@ namespace UnitTests.Controllers
             _mockedUserManager.Verify(v => v.AddToRolesAsync(It.IsAny<User>(), listOfRolesToAdd), Times.Once);
 
             _mockedUserManager.Verify(v => v.RemoveFromRolesAsync(It.IsAny<User>(), emptyRoleList), Times.Once);
+        }
+
+        [Fact]
+        public void Given_UserNameAndEmptyRoleEditDto_When_EditRoles_ThenReturn_OkStatusWithEmptyUserRoles()
+        {
+            //Arrange
+            var userName = "TestUser";
+            var emptyRoleEditDto = new RoleEditDto() 
+            {
+                RoleNames = new string[0]
+            };
+
+            var rolesThatUserAlreadyHave = new string[]{"Customer", "Moderator"};
+
+            var expectedEmptyRoles = new List<string>();
+            expectedEmptyRoles.AddRange(emptyRoleEditDto.RoleNames);
+
+            var listOfRolesToAdd = emptyRoleEditDto.RoleNames.Except(rolesThatUserAlreadyHave);
+
+            _mockedUserManager.Setup(s => s.FindByNameAsync(userName))
+                        .Returns(Task.FromResult(new User(){ UserName = userName}));
+
+            _mockedUserManager.SetupSequence(s => s.GetRolesAsync(It.IsAny<User>()))
+                        .Returns(Task.FromResult<IList<string>>(rolesThatUserAlreadyHave))
+                        .Returns(Task.FromResult<IList<string>>(expectedEmptyRoles));
+
+            _mockedUserManager.Setup(s => s.AddToRolesAsync(It.IsAny<User>(), listOfRolesToAdd))
+                        .Returns(Task.FromResult(IdentityResult.Success));
+
+            _mockedUserManager.Setup(s => s.RemoveFromRolesAsync(It.IsAny<User>(), rolesThatUserAlreadyHave))
+                        .Returns(Task.FromResult(IdentityResult.Success));
+
+            //Act
+            var result = _cut.EditRoles(userName, emptyRoleEditDto).Result;
+
+            //Assert
+            result.Should().BeOfType<OkObjectResult>();
+            result.As<OkObjectResult>().Value.As<List<string>>().Should().BeEmpty();
+
+            _mockedUserManager.Verify(v => v.FindByNameAsync(userName), Times.Once);
+
+            _mockedUserManager.Verify(v => v.GetRolesAsync(It.IsAny<User>()), Times.Exactly(2));
+
+            _mockedUserManager.Verify(v => v.AddToRolesAsync(It.IsAny<User>(), listOfRolesToAdd), Times.Once);
+
+            _mockedUserManager.Verify(v => v.RemoveFromRolesAsync(It.IsAny<User>(), rolesThatUserAlreadyHave), Times.Once);
+        }
+
+        [Fact]
+        public void Given_UserNameAndRoleEditDtoThatHaveOneMoreRoleThenUserAlreadyHave_When_EditRoles_ThenReturn_OkStatusWithUserRoleWithOneMoreRole()
+        {
+            //Arrange
+            var userName = "TestUser";
+            var roleEditDto = new RoleEditDto() 
+            {
+                RoleNames = new string[] {"Customer", "Moderator", "Admin"}
+            };
+
+            var rolesThatUserAlreadyHave = new string[]{"Customer", "Moderator"};
+
+            var expectedRoles = new List<string>();
+            expectedRoles.AddRange(roleEditDto.RoleNames);
+
+            var listOfRolesToAdd = roleEditDto.RoleNames.Except(rolesThatUserAlreadyHave);
+
+            var listOFRoleToRemove = rolesThatUserAlreadyHave.Except(roleEditDto.RoleNames);
+
+            _mockedUserManager.Setup(s => s.FindByNameAsync(userName))
+                        .Returns(Task.FromResult(new User(){ UserName = userName}));
+
+            _mockedUserManager.SetupSequence(s => s.GetRolesAsync(It.IsAny<User>()))
+                        .Returns(Task.FromResult<IList<string>>(rolesThatUserAlreadyHave))
+                        .Returns(Task.FromResult<IList<string>>(expectedRoles));
+
+            _mockedUserManager.Setup(s => s.AddToRolesAsync(It.IsAny<User>(), listOfRolesToAdd))
+                        .Returns(Task.FromResult(IdentityResult.Success));
+
+            _mockedUserManager.Setup(s => s.RemoveFromRolesAsync(It.IsAny<User>(), listOFRoleToRemove))
+                        .Returns(Task.FromResult(IdentityResult.Success));
+
+            //Act
+            var result = _cut.EditRoles(userName, roleEditDto).Result;
+
+            //Assert
+            result.Should().BeOfType<OkObjectResult>();
+            result.As<OkObjectResult>().Value.As<List<string>>().Should().BeEquivalentTo(expectedRoles);
+
+            _mockedUserManager.Verify(v => v.FindByNameAsync(userName), Times.Once);
+
+            _mockedUserManager.Verify(v => v.GetRolesAsync(It.IsAny<User>()), Times.Exactly(2));
+
+            _mockedUserManager.Verify(v => v.AddToRolesAsync(It.IsAny<User>(), listOfRolesToAdd), Times.Once);
+
+            _mockedUserManager.Verify(v => v.RemoveFromRolesAsync(It.IsAny<User>(), listOFRoleToRemove), Times.Once);
         }
 
         [Fact]
@@ -525,7 +617,7 @@ namespace UnitTests.Controllers
             _mockedUnitOfWork.Setup(s => s.Category.GetAsync(It.IsAny<int>()))
                                 .ReturnsAsync(new Category());
 
-            _mockedUnitOfWork.Setup(s => s.Product.CreateAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()))
+            _mockedUnitOfWork.Setup(s => s.Product.ScaffoldProductForCreationAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()))
                                 .ReturnsAsync(new Product());
 
             _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(true);
@@ -540,7 +632,7 @@ namespace UnitTests.Controllers
 
             _mockedUnitOfWork.Verify(v => v.Category.GetAsync(It.IsAny<int>()), Times.Once);
 
-            _mockedUnitOfWork.Verify(v => v.Product.CreateAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Product.ScaffoldProductForCreationAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()), Times.Once);
 
             _mockedUnitOfWork.Verify(v => v.Product.Add(It.IsAny<Product>()), Times.Once);
 
@@ -563,6 +655,22 @@ namespace UnitTests.Controllers
 
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void Given_ProductForCreationDtoThatCategoryIdIsLessThen1_When_CreateProduct_ThenReturn_BadRequestWithMessage(int categoryId)
+        {
+            //Arrange
+            var productForCreationDto = new ProductForCreationDto(){CategoryId = categoryId};
+            //Act
+            var result = _cut.CreateProduct(productForCreationDto).Result;
+
+            //Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+            result.As<BadRequestObjectResult>().Value.Should().Be("Category wasn't passed or passed bad CategoryId");
+
+        }
+
         [Fact]
         public void Given_ProductForCreationDto_When_CreateProduct_ThenReturn_BadRequestWithMessage_BecauseProductWasntScaffoldedProperly()
         {
@@ -572,7 +680,7 @@ namespace UnitTests.Controllers
             _mockedUnitOfWork.Setup(s => s.Category.GetAsync(It.IsAny<int>()))
                                 .ReturnsAsync(new Category());
 
-            _mockedUnitOfWork.Setup(s => s.Product.CreateAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()))
+            _mockedUnitOfWork.Setup(s => s.Product.ScaffoldProductForCreationAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()))
                                 .ReturnsAsync((Product)null);
 
 
@@ -585,7 +693,7 @@ namespace UnitTests.Controllers
 
             _mockedUnitOfWork.Verify(v => v.Category.GetAsync(It.IsAny<int>()), Times.Once);
 
-            _mockedUnitOfWork.Verify(v => v.Product.CreateAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Product.ScaffoldProductForCreationAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()), Times.Once);
 
             _mockedUnitOfWork.Verify(v => v.Product.Add(It.IsAny<Product>()), Times.Never);
 
@@ -603,7 +711,7 @@ namespace UnitTests.Controllers
             _mockedUnitOfWork.Setup(s => s.Category.GetAsync(It.IsAny<int>()))
                                 .ReturnsAsync(new Category());
 
-            _mockedUnitOfWork.Setup(s => s.Product.CreateAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()))
+            _mockedUnitOfWork.Setup(s => s.Product.ScaffoldProductForCreationAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()))
                                 .ReturnsAsync(new Product());
 
             _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(false);
@@ -618,7 +726,7 @@ namespace UnitTests.Controllers
 
             _mockedUnitOfWork.Verify(v => v.Category.GetAsync(It.IsAny<int>()), Times.Once);
 
-            _mockedUnitOfWork.Verify(v => v.Product.CreateAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Product.ScaffoldProductForCreationAsync(productForCreationDto, It.IsAny<Requirements>(), It.IsAny<Category>()), Times.Once);
 
             _mockedUnitOfWork.Verify(v => v.Product.Add(It.IsAny<Product>()), Times.Once);
 
@@ -640,7 +748,7 @@ namespace UnitTests.Controllers
             _mockedUnitOfWork.Setup(s => s.Category.FindAsync(It.IsAny<Expression<Func<Category,bool>>>()))
                         .ReturnsAsync(new Category());
 
-            _mockedUnitOfWork.Setup(s => s.Product.EditAsync(productId, productEditDto,It.IsAny<Requirements>(),
+            _mockedUnitOfWork.Setup(s => s.Product.ScaffoldProductForEditAsync(productId, productEditDto,It.IsAny<Requirements>(),
                              It.IsAny<Category>(), It.IsAny<Product>()))
                         .ReturnsAsync(new Product());
 
@@ -656,7 +764,7 @@ namespace UnitTests.Controllers
 
             _mockedUnitOfWork.Verify(v => v.Category.FindAsync(It.IsAny<Expression<Func<Category,bool>>>()), Times.Once);
 
-            _mockedUnitOfWork.Verify(v => v.Product.EditAsync(productId, productEditDto,It.IsAny<Requirements>(),
+            _mockedUnitOfWork.Verify(v => v.Product.ScaffoldProductForEditAsync(productId, productEditDto,It.IsAny<Requirements>(),
                              It.IsAny<Category>(), It.IsAny<Product>()), Times.Once);
 
             _mockedUnitOfWork.Verify(v => v.SaveAsync(), Times.Once);
@@ -709,7 +817,7 @@ namespace UnitTests.Controllers
             _mockedUnitOfWork.Setup(s => s.Category.FindAsync(It.IsAny<Expression<Func<Category,bool>>>()))
                         .ReturnsAsync(new Category());
 
-            _mockedUnitOfWork.Setup(s => s.Product.EditAsync(productId, productEditDto,It.IsAny<Requirements>(),
+            _mockedUnitOfWork.Setup(s => s.Product.ScaffoldProductForEditAsync(productId, productEditDto,It.IsAny<Requirements>(),
                              It.IsAny<Category>(), It.IsAny<Product>()))
                         .ReturnsAsync(new Product());
 
@@ -726,7 +834,7 @@ namespace UnitTests.Controllers
 
             _mockedUnitOfWork.Verify(v => v.Category.FindAsync(It.IsAny<Expression<Func<Category,bool>>>()), Times.Once);
 
-            _mockedUnitOfWork.Verify(v => v.Product.EditAsync(productId, productEditDto,It.IsAny<Requirements>(),
+            _mockedUnitOfWork.Verify(v => v.Product.ScaffoldProductForEditAsync(productId, productEditDto,It.IsAny<Requirements>(),
                              It.IsAny<Category>(), It.IsAny<Product>()), Times.Once);
 
             _mockedUnitOfWork.Verify(v => v.SaveAsync(), Times.Once);

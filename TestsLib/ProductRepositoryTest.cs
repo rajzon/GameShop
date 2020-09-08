@@ -345,7 +345,7 @@ namespace TestsLib
 
 
         [Fact]
-        public void IntegrationTest_Given_ProductForCreationDtoRequirementsAndCategory_When_CreateAsync_ThenReturn_Product()
+        public void IntegrationTest_Given_ProductForCreationDtoRequirementsAndCategory_When_ScaffoldProductForCreationAsync_ThenReturn_Product()
         {   
             //Arrange
             var productForCreationDto = new ProductForCreationDto()
@@ -381,7 +381,7 @@ namespace TestsLib
 
 
             //Act
-            var result = sut.CreateAsync(productForCreationDto, requirements, selectedCategory).Result;
+            var result = sut.ScaffoldProductForCreationAsync(productForCreationDto, requirements, selectedCategory).Result;
 
             //Assert
             result.Should().NotBeNull();
@@ -391,7 +391,58 @@ namespace TestsLib
         }
 
         [Fact]
-        public void IntegrationTest_Given_ProductId_ProductEditDto_Requirements_Category_AndProductThatIsAlreadyInDbToEdit_When_EditAsync_ThenReturn_Product()
+        public void IntegrationTest_Given_ProductForCreationDtoWithoutCategoryLanguageSubCategoryRequirements_When_ScaffoldProductForCreationAsync_ThenReturn_Product()
+        {   
+            //Arrange
+            var productForCreationDto = new ProductForCreationDto()
+            {
+                Name = "Test Name",
+                Description = "Test Description",
+                Pegi = 12,
+                Price = 55.02M,
+                IsDigitalMedia = true,
+                ReleaseDate = DateTime.Parse("2020-07-20"),
+            };
+
+            var requirements = _mapper.Map<Requirements>(productForCreationDto.Requirements);
+
+            var selectedCategory = _context.Categories.Where(c => c.Id == productForCreationDto.CategoryId).FirstOrDefault();
+
+            var expected = new Product()
+            {
+                Name = productForCreationDto.Name,
+                Description = productForCreationDto.Description,
+                Pegi = productForCreationDto.Pegi,
+                Price = productForCreationDto.Price,
+                IsDigitalMedia = productForCreationDto.IsDigitalMedia,
+                ReleaseDate = productForCreationDto.ReleaseDate,
+                Languages = new List<ProductLanguage>(),
+                SubCategories = new List<ProductSubCategory>()
+            };
+
+
+            var sut = new ProductRepository(_context);
+
+
+            //Act
+            var result = sut.ScaffoldProductForCreationAsync(productForCreationDto, requirements, selectedCategory).Result;
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType<Product>();
+            
+            result.As<Product>().Category.Should().BeNull();
+
+            result.As<Product>().SubCategories.Should().BeEmpty();
+
+            result.As<Product>().Languages.Should().BeEmpty();
+
+            result.Should().BeEquivalentTo(expected, option => option.IgnoringCyclicReferences());
+
+        }
+
+        [Fact]
+        public void IntegrationTest_Given_ProductId_ProductEditDto_Requirements_Category_AndProductThatIsAlreadyInDbToEdit_When_ScaffoldProductForEditAsync_ThenReturn_Product()
         {   
             //Arrange
             var productId = 2;
@@ -431,7 +482,7 @@ namespace TestsLib
 
 
             //Act
-            var result = sut.EditAsync(productId, productEditDto, requirements, selectedCategory, productFromDbToUpdate).Result;
+            var result = sut.ScaffoldProductForEditAsync(productId, productEditDto, requirements, selectedCategory, productFromDbToUpdate).Result;
 
             //Assert
             result.Should().NotBeNull();

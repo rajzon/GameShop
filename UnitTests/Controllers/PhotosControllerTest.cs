@@ -14,8 +14,7 @@ using Xunit;
 namespace UnitTests.Controllers
 {
 
-    //Info: AddPhotoForProduct() not tested uploading image to cloud,
-    // SetMainPhoto() unable test: if photo is set as Main Photo and if currentMainPhoto (different then photo that was passed to method) is set as NotMain Photo
+    //Info: AddPhotoForProduct() not tested uploading image to cloud
     // DeletePhoto() not tested deleting image from cloud
     public class PhotosControllerTest : UnitTestsBase, IDisposable
     {

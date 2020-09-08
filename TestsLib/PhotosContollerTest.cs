@@ -1,82 +1,24 @@
 using System;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using FluentAssertions;
-using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
-using GameShop.UI;
+using GameShop.Domain.Model;
 using GameShop.UI.Controllers;
-using Microsoft.AspNetCore.Authorization.Policy;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
 using TestsLib.DataForTests;
 using Xunit;
 
 namespace TestsLib
-{    //To do: add tests for SetMainPhoto() and for DeletePhoto()
+{    //Info: Not tested AddPhotoForProduct()
     public class PhotosContollerTest : TestBase, IDisposable
     {
 
+        private readonly PhotosController _sut;
          public PhotosContollerTest()
          {
-             
+             _sut = new PhotosController(_mapper, _cloudinaryConfig, _unitOfWork);
          }
 
-        // [Theory]
-        // [InlineData(1,1)]
-        //  public void IntegrationTest_Given_ProductIdAndPhotoId_When_DeletePhoto_Then_Return_PhotoForReturnDtoWithOkStatus(int productId,int photoId)
-        //  {
-        //      //Arrange
-        //       var photoBeforeRunningAct = _unitOfWork.Photo.GetAsync(photoId).Result;
-
-        //      //Act
-        //      var httpRespone = _client.DeleteAsync($"/api/admin/product/{productId}/photos/{photoId}").Result;
-
-        //      var photoAfterRunningAct = _unitOfWork.Photo.GetAsync(photoId).Result;
-           
-
-        //     //Assert
-        //       httpRespone.StatusCode.Should().Be(HttpStatusCode.NoContent);
-        //       photoBeforeRunningAct.Should().NotBeNull();
-        //       photoAfterRunningAct.Should().BeNull();
-
-             
-        //  }
-
-        [Theory]
-        [InlineData(1,1)]
-        [InlineData(2,2)]
-        [InlineData(7,7)]
-        public void IntegrationTest_Given_ProductIdAndPhotoId_When_DeletePhoto_Then_Return_NoContentStatus(int productId,int photoId)
-        {
-            //Arrange 
-            var httpContext = new DefaultHttpContext();
-
-            var photoBeforeRunningAct = _unitOfWork.Photo.GetAsync(photoId).Result;
-
-            var controllerContext = new ControllerContext() {
-                HttpContext = httpContext
-            };
-
-            var sut = new PhotosController(_mapper, _cloudinaryConfig, _unitOfWork) 
-            {
-                ControllerContext = controllerContext
-            };
-
-            //Act
-            var result = sut.DeletePhoto(productId, photoId).Result;
-
-            var photoAfterRunningAct = _unitOfWork.Photo.GetAsync(photoId).Result;
-      
-
-            //Assert
-            result.Should().BeOfType(typeof(NoContentResult));
-            photoBeforeRunningAct.Should().NotBeNull();
-            photoAfterRunningAct.Should().BeNull();    
-        }
 
         [Theory]
         [InlineData(1)]
@@ -84,24 +26,11 @@ namespace TestsLib
         [InlineData(7)]
         public void IntegrationTest_Given_PhotoId_When_GetPhoto_Then_Return_PhotoForReturnDtoWithOkStatus(int photoId)
         {
-            //Arrange 
-            var httpContext = new DefaultHttpContext();
-
+            //Arrange
             var expected = Data.PhotoForReturnDto();
 
-            var controllerContext = new ControllerContext() {
-                HttpContext = httpContext
-            };
-
-            var sut = new PhotosController(_mapper, _cloudinaryConfig, _unitOfWork) 
-            {
-                ControllerContext = controllerContext
-            };
-
             //Act
-            var result = sut.GetPhoto(photoId).Result;
-
-      
+            var result = _sut.GetPhoto(photoId).Result;
 
             //Assert
             result.Should().BeOfType(typeof(OkObjectResult));
@@ -116,22 +45,9 @@ namespace TestsLib
         [InlineData(1050)]
         public void IntegrationTest_Given_PhotoId_When_GetPhoto_Then_Return_NotFound(int photoId)
         {
-            //Arrange 
-            var httpContext = new DefaultHttpContext();
-
-            var controllerContext = new ControllerContext() {
-                HttpContext = httpContext
-            };
-
-            var sut = new PhotosController(_mapper, _cloudinaryConfig, _unitOfWork) 
-            {
-                ControllerContext = controllerContext
-            };
 
             //Act
-            var result = sut.GetPhoto(photoId).Result;
-
-      
+            var result = _sut.GetPhoto(photoId).Result;
 
             //Assert
             result.Should().BeOfType(typeof(NotFoundResult));
@@ -145,20 +61,8 @@ namespace TestsLib
         [InlineData(7,6)]
         public void IntegrationTest_Given_ProductIdAndPhotoIdThatAreNotRelated_When_SetMainPhoto_Then_Return_Unauthorized(int productId, int photoId)
         {
-            //Arrange 
-            var httpContext = new DefaultHttpContext();
-
-            var controllerContext = new ControllerContext() {
-                HttpContext = httpContext
-            };
-
-            var sut = new PhotosController(_mapper, _cloudinaryConfig, _unitOfWork) 
-            {
-                ControllerContext = controllerContext
-            };
-
             //Act
-            var result = sut.SetMainPhoto(productId, photoId).Result;
+            var result = _sut.SetMainPhoto(productId, photoId).Result;
   
 
             //Assert
@@ -173,25 +77,71 @@ namespace TestsLib
         [InlineData(7,7)]
         public void IntegrationTest_Given_ProductIdAndPhotoIdThatIsAlreadyMainPhoto_When_SetMainPhoto_Then_Return_BadRequest(int productId, int photoId)
         {
-            //Arrange 
-            var httpContext = new DefaultHttpContext();
-
-            var controllerContext = new ControllerContext() {
-                HttpContext = httpContext
-            };
-
-            var sut = new PhotosController(_mapper, _cloudinaryConfig, _unitOfWork) 
-            {
-                ControllerContext = controllerContext
-            };
 
             //Act
-            var result = sut.SetMainPhoto(productId, photoId).Result;
+            var result = _sut.SetMainPhoto(productId, photoId).Result;
   
 
             //Assert
             result.Should().BeOfType(typeof(BadRequestObjectResult));
             result.As<BadRequestObjectResult>().Value.Should().Be("This is already main photo");
+        }
+
+        [Fact]
+        public void IntegrationTest_Given_ProductIdAndPhotoId_When_SetMainPhoto_Then_Return_NoContent_CheckedIfPreviousMainPhotoIsMainPropertyIsSetToFalse_And_CurrentMainPhotoIsMainPropertyIsSetToTrue()
+        {
+            //Arrange
+            int productId = 2;
+            int photoId = 8; 
+
+            var additionalPhotoForTesting = new Photo()
+            {
+                 Id = photoId,
+                 Url = "http://placehold.it/200x300.jpg",
+                 isMain = false,
+                 DateAdded = DateTime.Parse("2020-07-17"),
+                 ProductId = productId
+            };
+
+            _unitOfWork.Photo.Add(additionalPhotoForTesting);
+
+
+            //Act
+            var result = _sut.SetMainPhoto(productId, photoId).Result;
+
+            var previousMainPhoto = _context.Photos.Where(p => p.ProductId == productId && p.Id != photoId)
+                        .FirstOrDefault();     
+            var currentMainPhoto = _context.Photos.Where(p => p.Id == photoId).FirstOrDefault();
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+
+            currentMainPhoto.isMain.Should().BeTrue();
+
+            previousMainPhoto.isMain.Should().BeFalse();
+
+            
+        }
+
+        [Theory]
+        [InlineData(1,1)]
+        [InlineData(2,2)]
+        [InlineData(7,7)]
+        public void IntegrationTest_Given_ProductIdAndPhotoId_When_DeletePhoto_Then_Return_NoContentStatus(int productId,int photoId)
+        {
+            //Arrange
+            var photoBeforeRunningAct = _unitOfWork.Photo.GetAsync(photoId).Result;
+
+            //Act
+            var result = _sut.DeletePhoto(productId, photoId).Result;
+
+            var photoAfterRunningAct = _unitOfWork.Photo.GetAsync(photoId).Result;
+      
+
+            //Assert
+            result.Should().BeOfType(typeof(NoContentResult));
+            photoBeforeRunningAct.Should().NotBeNull();
+            photoAfterRunningAct.Should().BeNull();    
         }
 
     }

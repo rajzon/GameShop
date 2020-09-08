@@ -26,6 +26,8 @@ using GameShop.Application.Mappings;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using GameShop.Infrastructure.Extensions;
 using GameShop.UI.Extensions;
+using GameShop.Infrastructure.Interfaces;
+using GameShop.Infrastructure.Identity;
 
 namespace GameShop.UI
 {
@@ -61,7 +63,7 @@ namespace GameShop.UI
             // REFERENCE LOOP HANDLING WAS HERE //
             ////
 
-
+            services.AddScoped<IJwtTokenHelper, JwtTokenHelper>();
             // services.AddScoped<IAuthRepository , AuthRepository>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);

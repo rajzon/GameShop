@@ -59,27 +59,11 @@ namespace GameShop.Infrastructure.Repositories
         }
 
 
-        public async Task<Product> CreateAsync(ProductForCreationDto productForCreationDto, Requirements requirements, Category selectedCategory)
+        public async Task<Product> ScaffoldProductForCreationAsync(ProductForCreationDto productForCreationDto, Requirements requirements, Category selectedCategory)
         {
-            if (productForCreationDto == null && requirements == null && selectedCategory == null)
-            {
-                throw new ArgumentException("Product, requirements and category that was passed to CreateAsync method are null");
-            } 
-            else if (productForCreationDto == null)
+            if (productForCreationDto == null)
             {
                 throw new ArgumentException("Product that was passed to CreateAsync method is null");
-            }
-            else if (requirements == null)
-            {
-                throw new ArgumentException("Requirements that was passed to CreateAsync method is null");
-            }
-            else if (selectedCategory == null)
-            {
-                throw new ArgumentException("Category that was passed to CreateAsync method is null");
-            }
-            else if (productForCreationDto?.LanguagesId.Count() < 1)
-            {
-                throw new ArgumentException("LanguagesId that was passed to CreateAsync method is null");
             }
             
 
@@ -97,20 +81,26 @@ namespace GameShop.Infrastructure.Repositories
                 SubCategories = new List<ProductSubCategory>()
             };
 
-            foreach (var languageId in productForCreationDto.LanguagesId)
+            if (productForCreationDto.LanguagesId != null)
             {
+                foreach (var languageId in productForCreationDto.LanguagesId)
+                {
 
-                var selectedLanguages = await _ctx.Languages.FirstOrDefaultAsync(l => l.Id == languageId);
-                var pl = new ProductLanguage { Product = product, Language = selectedLanguages };
-                product.Languages.Add(pl);
+                    var selectedLanguages = await _ctx.Languages.FirstOrDefaultAsync(l => l.Id == languageId);
+                    var pl = new ProductLanguage { Product = product, Language = selectedLanguages };
+                    product.Languages.Add(pl);
 
+                }
             }
-
-            foreach (var subCategoryId in productForCreationDto.SubCategoriesId)
+            
+            if (productForCreationDto.SubCategoriesId != null)
             {
-                var selectedSubCategory = await _ctx.SubCategories.FirstOrDefaultAsync(sc => sc.Id == subCategoryId);
-                var psc = new ProductSubCategory { Product = product, SubCategory = selectedSubCategory };
-                product.SubCategories.Add(psc);
+                foreach (var subCategoryId in productForCreationDto.SubCategoriesId)
+                {
+                    var selectedSubCategory = await _ctx.SubCategories.FirstOrDefaultAsync(sc => sc.Id == subCategoryId);
+                    var psc = new ProductSubCategory { Product = product, SubCategory = selectedSubCategory };
+                    product.SubCategories.Add(psc);
+                }
             }
 
             return product;
@@ -129,7 +119,7 @@ namespace GameShop.Infrastructure.Repositories
                             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-         public async Task<Product> EditAsync(int id, ProductEditDto productToEditDto, Requirements requirements, Category selectedCategory, Product productFromDb)
+         public async Task<Product> ScaffoldProductForEditAsync(int id, ProductEditDto productToEditDto, Requirements requirements, Category selectedCategory, Product productFromDb)
         {
 
             var updatedProduct = new Product

@@ -76,7 +76,7 @@ namespace GameShop.UI.Controllers
 
         var userRoles = await _userManager.GetRolesAsync(user);
 
-        var selectedRoles = roleEditDto.RoleNames;
+        var selectedRoles = roleEditDto?.RoleNames;
 
         selectedRoles = selectedRoles ?? new string[] { };
 
@@ -161,12 +161,17 @@ namespace GameShop.UI.Controllers
         {
             return BadRequest("Sended null product");
         }
+
+        if (productForCreationDto.CategoryId < 1)
+        {
+            return BadRequest("Category wasn't passed or passed bad CategoryId");
+        }
         
         var selectedCategory = await _unitOfWork.Category.GetAsync(productForCreationDto.CategoryId);   
         
         var requirementsForProduct = _mapper.Map<Requirements>(productForCreationDto.Requirements);    
         
-        var productToCreate = await _unitOfWork.Product.CreateAsync(productForCreationDto, requirementsForProduct, selectedCategory);
+        var productToCreate = await _unitOfWork.Product.ScaffoldProductForCreationAsync(productForCreationDto, requirementsForProduct, selectedCategory);
 
         if (productToCreate == null)
         {
@@ -207,7 +212,7 @@ namespace GameShop.UI.Controllers
 
         var requirementsToUpdate = _mapper.Map<Requirements>(productToEditDto.Requirements);
 
-        var updatedProduct = await _unitOfWork.Product.EditAsync(id, productToEditDto, requirementsToUpdate, selectedCategory, productFromDb);
+        var updatedProduct = await _unitOfWork.Product.ScaffoldProductForEditAsync(id, productToEditDto, requirementsToUpdate, selectedCategory, productFromDb);
 
         productFromDb.Id = updatedProduct.Id;
         productFromDb.Name = updatedProduct.Name;

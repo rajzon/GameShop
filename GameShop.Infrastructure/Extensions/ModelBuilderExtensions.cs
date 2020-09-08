@@ -22,25 +22,8 @@ namespace GameShop.Extensions.Infrastructure
 
             var currDirectory = Directory.GetCurrentDirectory();
 
-            string productsData;
-            List<Product> products = new List<Product>();
-            if (!currDirectory.Contains("GameShop.UI"))
-            {
-                var testProjectDirectory = Directory.GetParent(currDirectory).Parent.Parent.Parent.FullName;
-                var combined = Path.GetFullPath(Path.Combine(testProjectDirectory,productSeedDataLocation));
-                productsData = System.IO.File.ReadAllText(combined);
-                products = JsonConvert.DeserializeObject<List<Product>>(productsData);
-            } 
-            else 
-            {
-                productsData = System.IO.File.ReadAllText("../"+productSeedDataLocation);
-                products = JsonConvert.DeserializeObject<List<Product>>(productsData);
-            }
-            
-
-            
-
-            
+            List<Product> products = ModelBuilderExtensions.GetSeedDataOf<Product>(currDirectory, productSeedDataLocation);      
+        
 
             modelBuilder.Entity<Category>().HasData(
                 new Category {Id=1, Name="PC", Description="PC Description"},
@@ -92,20 +75,7 @@ namespace GameShop.Extensions.Infrastructure
             );
 
             string subCategorySeedDataLocation = seedDataLocationOptions.SubCategorySeedData;
-            string subCategoriesData;
-            List<SubCategory> subCategories = new List<SubCategory>();
-            if (!currDirectory.Contains("GameShop.UI"))
-            {
-                var testProjectDirectory = Directory.GetParent(currDirectory).Parent.Parent.Parent.FullName;
-                var combined = Path.GetFullPath(Path.Combine(testProjectDirectory,subCategorySeedDataLocation));
-                subCategoriesData = System.IO.File.ReadAllText(combined);
-                subCategories = JsonConvert.DeserializeObject<List<SubCategory>>(subCategoriesData);
-            } 
-            else 
-            {
-                subCategoriesData = System.IO.File.ReadAllText("../"+subCategorySeedDataLocation);
-                subCategories = JsonConvert.DeserializeObject<List<SubCategory>>(subCategoriesData);
-            }
+            List<SubCategory> subCategories = ModelBuilderExtensions.GetSeedDataOf<SubCategory>(currDirectory, subCategorySeedDataLocation);
 
             modelBuilder.Entity<SubCategory>().HasData(subCategories);
 
@@ -131,49 +101,40 @@ namespace GameShop.Extensions.Infrastructure
 
 
             string requirementsSeedDataLocation = seedDataLocationOptions.RequirementsSeedData;
-            string requirementsData;
-            List<Requirements> requirements = new List<Requirements>();
-            if (!currDirectory.Contains("GameShop.UI"))
-            {
-                var testProjectDirectory = Directory.GetParent(currDirectory).Parent.Parent.Parent.FullName;
-                var combined = Path.GetFullPath(Path.Combine(testProjectDirectory,requirementsSeedDataLocation));
-                requirementsData = System.IO.File.ReadAllText(combined);
-                requirements = JsonConvert.DeserializeObject<List<Requirements>>(requirementsData);
-            } 
-            else 
-            {
-                requirementsData = System.IO.File.ReadAllText("../"+requirementsSeedDataLocation);
-                requirements = JsonConvert.DeserializeObject<List<Requirements>>(requirementsData);
-            }
+            List<Requirements> requirements = ModelBuilderExtensions.GetSeedDataOf<Requirements>(currDirectory, requirementsSeedDataLocation);
+
             modelBuilder.Entity<Requirements>().HasData(requirements);
 
 
 
 
             string photoSeedDataLocation = seedDataLocationOptions.PhotoSeedData;
-            string photosData;
-            List<Photo> photos = new List<Photo>();
-            if (!currDirectory.Contains("GameShop.UI"))
-            {
-                var testProjectDirectory = Directory.GetParent(currDirectory).Parent.Parent.Parent.FullName;
-                var combined = Path.GetFullPath(Path.Combine(testProjectDirectory,photoSeedDataLocation));
-                photosData = System.IO.File.ReadAllText(combined);
-                photos = JsonConvert.DeserializeObject<List<Photo>>(photosData);
-            } 
-            else 
-            {
-                photosData = System.IO.File.ReadAllText("../"+photoSeedDataLocation);
-                photos = JsonConvert.DeserializeObject<List<Photo>>(photosData);
-            }
+            List<Photo> photos = ModelBuilderExtensions.GetSeedDataOf<Photo>(currDirectory, photoSeedDataLocation);
+
             modelBuilder.Entity<Photo>().HasData(photos);
         }
 
 
 
         //TO DO
-        public static List<T> GetSeedDataOf<T>()
+        public static List<T> GetSeedDataOf<T>(string currDirectory,string seedDataLocationSource)
         {
-            return new List<T>();
+            string seedDataAsJson;
+            List<T> seedToReturn = new List<T>();
+            if (!currDirectory.Contains("GameShop.UI"))
+            {
+                var testProjectDirectory = Directory.GetParent(currDirectory).Parent.Parent.Parent.FullName;
+                var combined = Path.GetFullPath(Path.Combine(testProjectDirectory,seedDataLocationSource));
+
+                seedDataAsJson = System.IO.File.ReadAllText(combined);
+                seedToReturn = JsonConvert.DeserializeObject<List<T>>(seedDataAsJson);
+            } 
+            else 
+            {
+                seedDataAsJson = System.IO.File.ReadAllText("../"+seedDataLocationSource);
+                seedToReturn = JsonConvert.DeserializeObject<List<T>>(seedDataAsJson);
+            }
+            return seedToReturn;
         }
     }
 }

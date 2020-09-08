@@ -315,7 +315,7 @@ namespace TestsLib.DataForTests
             };
         }
 
-        public static IEnumerable<Product> Product(ApplicationDbContext context)
+        public static IEnumerable<Product> Product()
         {
             return new List<Product>()
             {
@@ -1110,7 +1110,7 @@ namespace TestsLib.DataForTests
             };
         }
 
-        public static IEnumerable<User> Users()
+        public static IEnumerable<User> OrderedUsers()
         {
             return new List<User>()
             {
@@ -1118,139 +1118,86 @@ namespace TestsLib.DataForTests
                 {
                     Id = 1,
                     NormalizedUserName = "HOLLY",
-                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
-                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
-                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
                     LockoutEnabled = true,
                     UserName = "Holly",
-                    Email = "hollyjones@isodrive.com",
-                    Created = DateTime.Parse("2017-06-22"),
-                    LastActive = DateTime.Parse("2017-06-22")
+                    Email = "hollyjones@isodrive.com"
                 },
                 new User()
                 {
-                    Id = 1,
-                    NormalizedUserName = "HOLLY",
-                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
-                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
-                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    Id = 2,
+                    NormalizedUserName = "MICHELLE",
                     LockoutEnabled = true,
                     UserName = "Michelle",
-                    Email = "michellejones@isodrive.com",
-                    Created = DateTime.Parse("2017-06-22"),
-                    LastActive = DateTime.Parse("2017-06-22")
+                    Email = "michellejones@isodrive.com"
                 },
                 new User()
                 {
-                    Id = 1,
-                    NormalizedUserName = "HOLLY",
-                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
-                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
-                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    Id = 3,
+                    NormalizedUserName = "ZELMA",
                     LockoutEnabled = true,
                     UserName = "Zelma",
-                    Email = "zelmajones@isodrive.com",
-                    Created = DateTime.Parse("2017-06-22"),
-                    LastActive = DateTime.Parse("2017-06-22")
+                    Email = "zelmajones@isodrive.com"
                 },
                 new User()
                 {
-                    Id = 1,
-                    NormalizedUserName = "HOLLY",
-                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
-                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
-                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    Id = 4,
+                    NormalizedUserName = "ANGELINA",
                     LockoutEnabled = true,
                     UserName = "Angelina",
-                    Email = "angelinajones@isodrive.com",
-                    Created = DateTime.Parse("2017-06-22"),
-                    LastActive = DateTime.Parse("2017-06-22")
+                    Email = "angelinajones@isodrive.com"
                 },
                 new User()
                 {
-                    Id = 1,
-                    NormalizedUserName = "HOLLY",
-                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
-                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
-                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    Id = 5,
+                    NormalizedUserName = "DIANA",
                     LockoutEnabled = true,
                     UserName = "Diana",
-                    Email = "dianajones@isodrive.com",
-                    Created = DateTime.Parse("2017-06-22"),
-                    LastActive = DateTime.Parse("2017-06-22")
+                    Email = "dianajones@isodrive.com"
                 },
                 new User()
                 {
-                    Id = 1,
-                    NormalizedUserName = "HOLLY",
-                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
-                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
-                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    Id = 6,
+                    NormalizedUserName = "LOGAN",
                     LockoutEnabled = true,
                     UserName = "Logan",
-                    Email = "loganjones@isodrive.com",
-                    Created = DateTime.Parse("2017-06-22"),
-                    LastActive = DateTime.Parse("2017-06-22")
+                    Email = "loganjones@isodrive.com"
                 },
                 new User()
                 {
-                    Id = 1,
-                    NormalizedUserName = "HOLLY",
-                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
-                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
-                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    Id = 7,
+                    NormalizedUserName = "WILKINS",
                     LockoutEnabled = true,
                     UserName = "Wilkins",
-                    Email = "wilkinsjones@isodrive.com",
-                    Created = DateTime.Parse("2017-06-22"),
-                    LastActive = DateTime.Parse("2017-06-22")
+                    Email = "wilkinsjones@isodrive.com"
                 },
                 new User()
                 {
-                    Id = 1,
-                    NormalizedUserName = "HOLLY",
-                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
-                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
-                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    Id = 8,
+                    NormalizedUserName = "HAHN",
                     LockoutEnabled = true,
                     UserName = "Hahn",
-                    Email = "hahnjones@isodrive.com",
-                    Created = DateTime.Parse("2017-06-22"),
-                    LastActive = DateTime.Parse("2017-06-22")
+                    Email = "hahnjones@isodrive.com"
                 },
                 new User()
                 {
-                    Id = 1,
-                    NormalizedUserName = "HOLLY",
-                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
-                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
-                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    Id = 9,
+                    NormalizedUserName = "MILLER",
                     LockoutEnabled = true,
                     UserName = "Miller",
-                    Email = "millerjones@isodrive.com",
-                    Created = DateTime.Parse("2017-06-22"),
-                    LastActive = DateTime.Parse("2017-06-22")
+                    Email = "millerjones@isodrive.com"
                 },
                 new User()
                 {
-                    Id = 1,
-                    NormalizedUserName = "HOLLY",
-                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
-                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
-                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    Id = 10,
+                    NormalizedUserName = "MORALES",
                     LockoutEnabled = true,
                     UserName = "Morales",
-                    Email = "moralesjones@isodrive.com",
-                    Created = DateTime.Parse("2017-06-22"),
-                    LastActive = DateTime.Parse("2017-06-22")
+                    Email = "moralesjones@isodrive.com"
                 },
                 new User()
                 {
-                    Id = 1,
-                    NormalizedUserName = "HOLLY",
-                    NormalizedEmail = "HOLLYJONES@ISODRIVE.COM",
-                    PasswordHash = "AQAAAAEAACcQAAAAEI+LO/SUfga+h6z1lp1C5zP+Wh0VCs69j/yFSm+FKyEpCyWjHHTrEkuswQbkqwt9vg==",
-                    SecurityStamp = "O5AYUVT3JQJHN2LC5NGWBYBSRMUBWUGI",
+                    Id = 11,
+                    NormalizedUserName = "ADMIN",
                     LockoutEnabled = true,
                     UserName = "Admin",
                     Email = "admin@shop.eu"

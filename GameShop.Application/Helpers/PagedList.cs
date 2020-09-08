@@ -29,10 +29,12 @@ namespace GameShop.Application.Helpers
             if (pageNumber < 1 && pageSize < 1)
             {
                 throw new ArgumentException("PageNumber and PageSize are less then one");
-            } else if (pageNumber < 1)
+            } 
+            else if (pageNumber < 1)
             {
                 throw new ArgumentException("PageNumber is less then one");
-            } else if (pageSize < 1)
+            } 
+            else if (pageSize < 1)
             {
                 throw new ArgumentException("PageSize is less then one");
             }
