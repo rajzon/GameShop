@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-
 namespace GameShop.Domain.Model
 {
     public class Language

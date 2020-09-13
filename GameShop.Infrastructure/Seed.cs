@@ -56,7 +56,7 @@ namespace GameShop.Infrastructure
                 foreach (var user in users)
                 {
                     userManager.CreateAsync(user, "password").Wait();
-                    userManager.AddToRoleAsync(user, "Customer");
+                    userManager.AddToRoleAsync(user, "Customer").Wait();
                 }
 
 

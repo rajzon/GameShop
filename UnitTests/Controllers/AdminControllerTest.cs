@@ -612,7 +612,7 @@ namespace UnitTests.Controllers
         public void Given_ProductForCreationDto_When_CreateProduct_ThenReturn_CreatedAtRoute()
         {
             //Arrange
-            var productForCreationDto = new ProductForCreationDto();
+            var productForCreationDto = new ProductForCreationDto() {CategoryId = 2};
 
             _mockedUnitOfWork.Setup(s => s.Category.GetAsync(It.IsAny<int>()))
                                 .ReturnsAsync(new Category());
@@ -675,7 +675,7 @@ namespace UnitTests.Controllers
         public void Given_ProductForCreationDto_When_CreateProduct_ThenReturn_BadRequestWithMessage_BecauseProductWasntScaffoldedProperly()
         {
             //Arrange
-            var productForCreationDto = new ProductForCreationDto();
+            var productForCreationDto = new ProductForCreationDto() {CategoryId = 2};
 
             _mockedUnitOfWork.Setup(s => s.Category.GetAsync(It.IsAny<int>()))
                                 .ReturnsAsync(new Category());
@@ -706,7 +706,7 @@ namespace UnitTests.Controllers
         public void Given_ProductForCreationDto_When_CreateProduct_ThenReturn_BadRequestWithMessage_BecauseProductWasntSavedInDb()
         {
             //Arrange
-            var productForCreationDto = new ProductForCreationDto();
+            var productForCreationDto = new ProductForCreationDto(){CategoryId = 2};
 
             _mockedUnitOfWork.Setup(s => s.Category.GetAsync(It.IsAny<int>()))
                                 .ReturnsAsync(new Category());

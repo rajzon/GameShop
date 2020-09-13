@@ -9,16 +9,16 @@ namespace GameShop.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Requirements> builder)
         {
             builder.Property(r => r.OS)
-                .HasMaxLength(20);
+                .HasMaxLength(30);
 
             builder.Property(r => r.Processor)
-                .HasMaxLength(30);
+                .HasMaxLength(100);
  
             builder.Property(r => r.HDD)
                 .IsRequired();       
 
             builder.Property(r => r.GraphicsCard)
-                .HasMaxLength(40);
+                .HasMaxLength(100);
 
             builder.Property(r => r.IsNetworkConnectionRequire)
                 .IsRequired();

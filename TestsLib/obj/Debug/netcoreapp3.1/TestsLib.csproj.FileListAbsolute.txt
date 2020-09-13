@@ -445,3 +445,14 @@ c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\Microsoft.Ext
 c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.EventLog.dll
 c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.EventSource.dll
 c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\System.IO.Pipelines.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.SqlServer.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\Microsoft.Identity.Client.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\sni.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\sni.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll

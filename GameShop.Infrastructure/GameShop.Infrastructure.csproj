@@ -7,11 +7,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.3"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3"/>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3"/>
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.3"/>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3"/>
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.5.1"/>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.1"/>
-    
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameShop.Application\GameShop.Application.csproj"/>

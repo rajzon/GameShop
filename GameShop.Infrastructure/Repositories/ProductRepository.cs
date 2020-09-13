@@ -108,7 +108,7 @@ namespace GameShop.Infrastructure.Repositories
 
         public override async Task<Product> GetAsync(int id) 
         {
-            return await _ctx.Products
+            return await _ctx.Products.Where(p => p.Id == id)
                                 .Include(l => l.Languages)
                                     .ThenInclude(productLanguage => productLanguage.Language)
                                 .Include(p => p.Photos)
@@ -116,7 +116,7 @@ namespace GameShop.Infrastructure.Repositories
                                 .Include(p => p.SubCategories)
                                     .ThenInclude(productSubCategory => productSubCategory.SubCategory)
                                 .Include(p => p.Requirements)
-                            .FirstOrDefaultAsync(p => p.Id == id);
+                            .FirstOrDefaultAsync();
         }
 
          public async Task<Product> ScaffoldProductForEditAsync(int id, ProductEditDto productToEditDto, Requirements requirements, Category selectedCategory, Product productFromDb)
