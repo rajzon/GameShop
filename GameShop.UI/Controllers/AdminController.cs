@@ -124,6 +124,33 @@ namespace GameShop.UI.Controllers
     }
 
     [Authorize(Policy = "ModerateProductRole")]
+    [HttpGet("prodcuts-for-stock-moderation")]
+    public async Task<IActionResult> GetProductsForStockModeration([FromQuery]ProductParams productParams)
+    {
+        if (productParams.PageNumber < 1 || productParams.PageSize < 1)
+        {
+            return BadRequest("PageNumber or PageSize is less then 1");
+        }
+
+        var products = await _unitOfWork.Product.GetProductsForStockModeration(productParams);
+
+        if (products == null)
+        {
+            return NotFound();
+        } 
+        else if (products.PageSize < 1 || products.TotalCount < 0 || products.TotalPages < 1 || products.CurrentPage < 1)
+        {
+            return BadRequest("Pagination parameters wasn't set properly");
+        }
+
+        var productsToReturn = _mapper.Map<IEnumerable<ProductForStockModerationDto>>(products);
+
+        Response.AddPagination(products.CurrentPage, products.PageSize, products.TotalCount, products.TotalPages);
+
+        return Ok(productsToReturn);
+    }
+
+    [Authorize(Policy = "ModerateProductRole")]
     [HttpGet("product-for-edit/{id}")]
     public async Task<IActionResult> GetProductForEdit(int id)
     {
@@ -298,6 +325,46 @@ namespace GameShop.UI.Controllers
         }
         //"Product deleted successfully" problem with parsing , ui try parse this to JSON instead of keep this as text
         return NoContent();
+    }
+
+    [Authorize(Policy = "ModerateProductRole")]
+    [HttpPost("edit-product/{id}/stock-quantity/{quantity}")]
+    public async Task<IActionResult> EditStockForProduct(int id, int quantity)
+    {
+
+        var product = await _unitOfWork.Product.GetWithStockOnly(id);
+
+        if (product == null)
+        {
+            return BadRequest("Product for That Id dont exist");
+        }
+
+        if (product.Stock?.Quantity == quantity)
+        {
+            return BadRequest("Passed same quantity as product already have");
+        }
+
+        if (product.Stock != null)
+        {
+            product.Stock.Quantity = quantity;
+        } 
+        else
+        {
+            product.Stock = new Stock()
+            {
+                Quantity = quantity,
+                ProductId = id
+            };
+        }
+
+       if(await _unitOfWork.SaveAsync())
+       {
+           //TO DO: replace OK with CreatedAtRoute Status
+            return Ok( await _unitOfWork.Stock.GetByProductId(id));
+       }
+
+       return BadRequest("Something went wrong during saving Stock for Product");
+
     }
 
 

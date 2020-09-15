@@ -26,7 +26,7 @@ using Xunit;
 
 namespace TestsLib
 {
-
+    // TO DO: add tests for GetProductsForStockModeration()
     public class AdminControllerTest : TestBase, IDisposable
     {
 
@@ -306,6 +306,45 @@ namespace TestsLib
             
         }
 
+        [Fact]
+        public void IntegrationTest_Given_ProductForCreationDtoWithoutLanguageSubCategoryRequirements_When_CreateProduct_CheckIfStockWithQuantity0WasCreated()
+        {
+            //Arrange 
+            var httpContext = new DefaultHttpContext();
+
+            var expected =  new ProductForCreationDto()
+                {
+                    Name = "TEST GAME",
+                    Description = "Nulla amet commodo minim esse adipisicing commodo sint esse laboris adipisicing. Officia Lorem laboris ipsum labore mollit ipsum est enim elit exercitation quis deserunt. Nostrud dolore ut sint est ut officia voluptate consequat mollit. Nulla cupidatat mollit dolore non consequat amet Lorem. Magna dolor veniam anim aliquip aliquip esse consequat velit veniam tempor in.\r\n",
+                    Pegi = 18,
+                    Price = 50.82M,
+                    IsDigitalMedia = false,
+                    CategoryId = 1,
+                    ReleaseDate = DateTime.Parse("2020-03-31"),
+                };
+
+            var controllerContext = new ControllerContext() {
+                HttpContext = httpContext
+            };
+
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            {
+                ControllerContext = controllerContext
+            };
+
+            //Act
+            var result = sut.CreateProduct(expected).Result;
+      
+
+            //Assert
+            result.Should().BeOfType(typeof(CreatedAtRouteResult));
+
+            result.As<CreatedAtRouteResult>().Value.As<Product>().Stock.Should().NotBeNull();
+
+            result.As<CreatedAtRouteResult>().Value.As<Product>().Stock.Quantity.Should().Be(0);
+            
+        }
+
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
@@ -531,6 +570,38 @@ namespace TestsLib
             result.As<OkObjectResult>().Value.As<CategoryToReturnDto>()
                 .Should()
                 .BeEquivalentTo(expected.First(c => c.Id == categoryId));    
+        }
+
+        [Theory]
+        [InlineData(1, 100)]
+        [InlineData(2, 10)]
+        [InlineData(7, 0)]
+        public void IntegrationTest_Given_ProductIdAndQuantity_When_EditStockForProduct_Then_Return_OkStatusWithStockThatWasEdited(int productId, int quantity)
+        {
+            //Arrange 
+            var httpContext = new DefaultHttpContext();
+
+            var controllerContext = new ControllerContext() {
+                HttpContext = httpContext
+            };
+
+            var sut = new AdminController(_mockedUserManager.Object, _mapper, _cloudinaryConfig, _unitOfWork) 
+            {
+                ControllerContext = controllerContext
+            };
+
+            //Act
+            var result = sut.EditStockForProduct(productId, quantity).Result;
+      
+
+            //Assert
+            result.Should().BeOfType(typeof(OkObjectResult));
+
+            result.As<OkObjectResult>().Value.As<Stock>().Product.Should().NotBeNull();
+
+            result.As<OkObjectResult>().Value.As<Stock>().ProductId.Should().Be(productId); 
+
+            result.As<OkObjectResult>().Value.As<Stock>().Quantity.Should().Be(quantity); 
         }
 
     }

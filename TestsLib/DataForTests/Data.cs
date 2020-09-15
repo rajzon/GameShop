@@ -1356,7 +1356,8 @@ namespace TestsLib.DataForTests
                 Category = selectedCategory,
                 Requirements = requirements,
                 Languages = new List<ProductLanguage>(),
-                SubCategories = new List<ProductSubCategory>()
+                SubCategories = new List<ProductSubCategory>(),
+                Stock = new Stock()
             };
 
             var productLanguages = new List<ProductLanguage>()

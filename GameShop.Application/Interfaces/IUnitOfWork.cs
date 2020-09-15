@@ -11,6 +11,7 @@ namespace GameShop.Application.Interfaces
         IUserRepository User { get; } 
         IProductRepository Product { get; } 
         IRequirementsRepository Requirements { get; } 
+        IStockRepository Stock { get; } 
         Task<bool> SaveAsync();
     }
 }

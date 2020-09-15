@@ -33,6 +33,8 @@ namespace GameShop.Infrastructure
         public DbSet<CategorySubCategory> CategoriesSubCategories { get; set; }
         public DbSet<ProductSubCategory> ProductsSubCategories { get; set; }
         public DbSet<ProductLanguage> ProductsLanaguages { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

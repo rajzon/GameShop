@@ -15,6 +15,8 @@ namespace GameShop.Application.Interfaces
         Task<Product> ScaffoldProductForEditAsync(int id, ProductEditDto productToEditDto, Requirements requirements, Category selectedCategory, Product productFromDb);
         Task<Product> GetWithPhotosOnly(int productId);
         Task<ProductToEditDto> GetProductToEditAsync(RequirementsForEditDto requirements, IEnumerable<Photo> photosFromRepo, int id);
+        Task<Product> GetWithStockOnly(int productId);
+        Task<PagedList<ProductForStockModerationDto>> GetProductsForStockModeration(ProductParams productParams);
         
     }
 }

@@ -8,8 +8,6 @@ namespace GameShop.Infrastructure
     {
         private readonly ApplicationDbContext _ctx;
         
-        
-
         public UnitOfWork(ApplicationDbContext ctx)
         {
             _ctx = ctx;
@@ -107,6 +105,19 @@ namespace GameShop.Infrastructure
                 return _category;
             }
         }
+
+        private IStockRepository _stock;
+        public IStockRepository Stock
+        {
+            get { 
+                if (_stock == null)
+                {
+                    _stock = new StockRepository(_ctx);
+                } 
+                return _stock; 
+            }
+        }
+        
         
 
         public async Task<bool> SaveAsync()

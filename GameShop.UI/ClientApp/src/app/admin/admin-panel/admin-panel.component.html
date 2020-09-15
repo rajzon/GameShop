@@ -10,6 +10,11 @@
           <app-user-management></app-user-management>
         </div>
       </tab>
+      <tab heading="Stock Management" *appHasRole="['Admin', 'Moderator']">
+        <div class="container">
+          <app-stock-managment></app-stock-managment>
+        </div>
+      </tab>
     </tabset>
   </div>
 </div>

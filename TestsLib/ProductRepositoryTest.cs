@@ -417,7 +417,8 @@ namespace TestsLib
                 IsDigitalMedia = productForCreationDto.IsDigitalMedia,
                 ReleaseDate = productForCreationDto.ReleaseDate,
                 Languages = new List<ProductLanguage>(),
-                SubCategories = new List<ProductSubCategory>()
+                SubCategories = new List<ProductSubCategory>(),
+                Stock = new Stock()
             };
 
 

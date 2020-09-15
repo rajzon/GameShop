@@ -66,7 +66,6 @@ namespace GameShop.Infrastructure.Repositories
                 throw new ArgumentException("Product that was passed to CreateAsync method is null");
             }
             
-
             var product = new Product
             {
                 Name = productForCreationDto.Name,
@@ -78,7 +77,8 @@ namespace GameShop.Infrastructure.Repositories
                 Category = selectedCategory,
                 Requirements = requirements,
                 Languages = new List<ProductLanguage>(),
-                SubCategories = new List<ProductSubCategory>()
+                SubCategories = new List<ProductSubCategory>(),
+                Stock = new Stock()
             };
 
             if (productForCreationDto.LanguagesId != null)
@@ -116,7 +116,28 @@ namespace GameShop.Infrastructure.Repositories
                                 .Include(p => p.SubCategories)
                                     .ThenInclude(productSubCategory => productSubCategory.SubCategory)
                                 .Include(p => p.Requirements)
+                                .Include(s => s.Stock)
                             .FirstOrDefaultAsync();
+        }
+
+        public async Task<Product> GetWithStockOnly(int productId)
+        {
+            return await _ctx.Products.Where(x => x.Id == productId)
+                                .Include(s => s.Stock)
+                            .FirstOrDefaultAsync();
+        }
+
+        public async Task<PagedList<ProductForStockModerationDto>> GetProductsForStockModeration(ProductParams productParams)
+        {
+            var products =  _ctx.Products.Include(s => s.Stock).Select(x => new ProductForStockModerationDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                CategoryName = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(x, "CategoryId")).Name,
+                StockQuantity = x.Stock.Quantity
+            });
+
+            return await PagedList<ProductForStockModerationDto>.CreateAsync(products, productParams.PageNumber, productParams.PageSize);
         }
 
          public async Task<Product> ScaffoldProductForEditAsync(int id, ProductEditDto productToEditDto, Requirements requirements, Category selectedCategory, Product productFromDb)

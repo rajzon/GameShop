@@ -1,3 +1,4 @@
+import { StockManagmentComponent } from './admin/stock-managment/stock-managment.component';
 import { ShopSearchingService } from './_services/shop-searching.service';
 import { EditProductComponent } from './admin/edit-product/edit-product.component';
 import { RequirementsModalComponent } from './admin/requirements-modal/requirements-modal.component';
@@ -58,7 +59,8 @@ export function tokenGetter() {
       CreateProductComponent,
       EditProductComponent,
       RequirementsModalComponent,
-      ProductCardComponent
+      ProductCardComponent,
+      StockManagmentComponent
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

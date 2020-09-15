@@ -2782,11 +2782,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Application\\GameShop.Application.csproj",
+      "projectUniqueName": "C:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Application\\GameShop.Application.csproj",
       "projectName": "GameShop.Application",
-      "projectPath": "c:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Application\\GameShop.Application.csproj",
+      "projectPath": "C:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Application\\GameShop.Application.csproj",
       "packagesPath": "C:\\Users\\Dawid\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Application\\obj\\",
+      "outputPath": "C:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -2807,8 +2807,8 @@
       "frameworks": {
         "netstandard2.1": {
           "projectReferences": {
-            "c:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Domain\\GameShop.Domain.csproj": {
-              "projectPath": "c:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Domain\\GameShop.Domain.csproj"
+            "C:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Domain\\GameShop.Domain.csproj": {
+              "projectPath": "C:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Domain\\GameShop.Domain.csproj"
             }
           }
         }

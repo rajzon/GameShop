@@ -7,6 +7,7 @@ import { PaginatedResult } from '../_models/Pagination';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ProductWithStockFromServer } from '../_models/ProductWithStockFromServer';
 
 
 @Injectable({
@@ -58,6 +59,32 @@ export class AdminService {
               return paginatedResult;
             })
             );
+  }
+
+  getProductsWithStock(page?, itemsPerPage?): Observable<PaginatedResult<Array<ProductWithStockFromServer>>>  {
+    const paginatedResult: PaginatedResult<Array<ProductWithStockFromServer>> = new PaginatedResult<Array<ProductWithStockFromServer>>();
+
+    let params = new HttpParams();
+
+    if (page != null && itemsPerPage != null) {
+        params =  params.append('pageNumber', page);
+        params = params.append('pageSize', itemsPerPage);
+    }
+
+    return this.http.get(this.baseUrl + 'admin/prodcuts-for-stock-moderation', {observe: 'response', params})
+            .pipe(
+              map(response => {
+              paginatedResult.result = <Array<ProductWithStockFromServer>>response.body;
+              if (response.headers.get('Pagination') != null) {
+                  paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+              }
+              return paginatedResult;
+            })
+            );
+  }
+
+  editStockForProduct(productId: number, stockQuantity: number) {
+    return this.http.post(this.baseUrl + `admin/edit-product/${productId}/stock-quantity/${stockQuantity}`, {});
   }
 
   getProductForEdit(id: Number): Observable<any>  {

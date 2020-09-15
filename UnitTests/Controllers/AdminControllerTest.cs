@@ -1160,5 +1160,124 @@ namespace UnitTests.Controllers
 
             _mockedUnitOfWork.Verify(v => v.Category.GetAsync(categoryId), Times.Once);
         }
+
+        [Fact]
+        public void Given_ProductIdAndQuantity_When_EditStockForProduct_CaseWhenProductHaveStock_ThenReturn_OkWithEditedStock()
+        {
+            //Arrange
+            int productId = 1;
+            int quantity = 100;
+
+            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnly(productId)).ReturnsAsync(new Product(){Stock = new Stock()});
+
+            _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(true);
+
+            _mockedUnitOfWork.Setup(s => s.Stock.GetByProductId(productId)).ReturnsAsync(new Stock());
+
+            //Act
+            var result = _cut.EditStockForProduct(productId, quantity).Result;
+
+            //Assert
+            result.Should().BeOfType<OkObjectResult>();
+            result.As<OkObjectResult>().Value.Should()
+                        .BeOfType<Stock>()
+                        .And.Should().NotBeNull();
+
+            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnly(productId), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.SaveAsync(), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Stock.GetByProductId(productId), Times.Once);
+        }
+
+        [Fact]
+        public void Given_ProductIdAndQuantity_When_EditStockForProduct_CaseWhenProductDoNotHaveStock_ThenReturn_OkWithEditedStock()
+        {
+            //Arrange
+            int productId = 1;
+            int quantity = 100;
+
+            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnly(productId)).ReturnsAsync(new Product(){Stock = null});
+
+            _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(true);
+
+            _mockedUnitOfWork.Setup(s => s.Stock.GetByProductId(productId)).ReturnsAsync(new Stock());
+
+            //Act
+            var result = _cut.EditStockForProduct(productId, quantity).Result;
+
+            //Assert
+            result.Should().BeOfType<OkObjectResult>();
+            result.As<OkObjectResult>().Value.Should()
+                        .BeOfType<Stock>()
+                        .And.Should().NotBeNull();
+
+            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnly(productId), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.SaveAsync(), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Stock.GetByProductId(productId), Times.Once);
+        }
+
+        [Fact]
+        public void Given_ProductIdThatNotExistAndQuantity_When_EditStockForProduct_ThenReturn_BadRequestWithMessage()
+        {
+            //Arrange
+            int productIdThatNotExist = 1000;
+            int quantity = 100;
+
+            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnly(productIdThatNotExist)).ReturnsAsync((Product)null);
+
+            //Act
+            var result = _cut.EditStockForProduct(productIdThatNotExist, quantity).Result;
+
+            //Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+            result.As<BadRequestObjectResult>().Value
+                            .Should().Be("Product for That Id dont exist");
+
+
+            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnly(productIdThatNotExist), Times.Once);
+        }
+
+        [Fact]
+        public void Given_ProductIdAndQuantityThatIsSameAsProductQty_When_EditStockForProduct_ThenReturn_BadRequestWithMessage()
+        {
+            //Arrange
+            int productId= 1;
+            int sameQuantityAsProductQty = 100;
+
+            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnly(productId)).ReturnsAsync(new Product(){Stock = new Stock(){Quantity = sameQuantityAsProductQty}});
+
+            //Act
+            var result = _cut.EditStockForProduct(productId, sameQuantityAsProductQty).Result;
+
+            //Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+            result.As<BadRequestObjectResult>().Value
+                            .Should().Be("Passed same quantity as product already have");
+
+
+            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnly(productId), Times.Once);
+        }
+
+        [Fact]
+        public void Given_ProductIdAndQuantity_When_EditStockForProduct_ThenReturn_BadRequestWithMessage_BecauseErrorOccuredDuringSaving()
+        {
+            //Arrange
+            int productId = 1;
+            int quantity = 100;
+
+            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnly(productId)).ReturnsAsync(new Product());
+
+            _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(false);
+
+            //Act
+            var result = _cut.EditStockForProduct(productId, quantity).Result;
+
+            //Assert
+            result.Should().BeOfType<BadRequestObjectResult>();
+            result.As<BadRequestObjectResult>().Value
+                            .Should().Be("Something went wrong during saving Stock for Product");
+
+            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnly(productId), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.SaveAsync(), Times.Once);
+        }
     }
 }

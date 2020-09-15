@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row">
+    <table class="table">
+      <tr>
+        <th style="width: 5%">Product ID</th>
+        <th style="width: 40%">Product Name</th>
+        <th style="width: 10%">Category</th>
+        <th style="width: 30%">Stock Quantity</th>
+        <th style="width: 15%"></th>
+      </tr>
+      <tr *ngFor="let product of products">
+        <td>{{product.id}}</td>
+        <td>{{product.name}}</td>
+        <td>{{product.categoryName}}</td>
+        <td>
+            <input type="text" class="form-control" name="stockQuantity" placeholder="New Stock Qty" [(ngModel)]="product.stockQuantity">
+        </td>
+        <td><button class="btn btn-warning"(click)="editStockForProduct(product.id, product.stockQuantity)">Edit Stock</button></td>
+        
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="pagination" class="d-flex justify-content-center">
+    <pagination [boundaryLinks]="true"              
+                [(ngModel)]="pagination.currentPage"
+                [itemsPerPage]="pagination.itemsPerPage"
+                [totalItems]="pagination.totalItems"
+                (pageChanged)="pageChanged($event)"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+
+  </pagination>
+  </div> 
+</div>
