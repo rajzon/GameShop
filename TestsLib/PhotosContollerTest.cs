@@ -16,7 +16,7 @@ namespace TestsLib
         private readonly PhotosController _sut;
          public PhotosContollerTest()
          {
-             _sut = new PhotosController(_mapper, _cloudinaryConfig, _unitOfWork);
+             _sut = new PhotosController(_mapper, _cloudinaryConfig, _unitOfWork, _addPhotoToCloud);
          }
 
 

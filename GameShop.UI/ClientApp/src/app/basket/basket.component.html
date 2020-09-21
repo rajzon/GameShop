@@ -1,3 +1,25 @@
+<div class="container">
+  <div class="row">
+    <table class="table">
+      <tr>
+        <th style="width: 5%">Product ID</th>
+        <th style="width: 5%">Stock ID</th>
+        <th style="width: 40%">Product Name</th>
+        <th style="width: 10%">Category</th>
+        <th style="width: 30%">Stock Quantity</th>
+        <th style="width: 5%">Price</th>
+      </tr>
+      <tr *ngFor="let product of products">
+        <td>{{product.productId}}</td>
+        <td>{{product.stockId}}</td>
+        <td>{{product.name}}</td>
+        <td>{{product.categoryName}}</td>
+        <td>{{product.stockQty}}</td>
+        <td>{{product.price}}</td>    
+      </tr>
+    </table>
+  </div>
 <p>
-  basket works!
+  <button class="btn btn-success" (click)="getBasket()">get basket TEST</button>
 </p>
+

@@ -3,12 +3,19 @@
   {{product.id}} - {{product.name}}
 </p>
 <p>
-  {{product.category.name}} - {{product.price}}$ 
+ Category: {{product.category.name}} 
+</p>
+<p>
+  Price: {{product.price}}$ 
 </p>
 <p>
    {{product.description}}
 </p>
 <p>
  {{product.description}}
+</p>
+<p>
+  <button class="btn btn-success" (click)="addToBasket()">Add To Basket</button>
+  <input type="se" class="form-control" min="1" name="product Quanitity" placeholder="Product Quantity" [(ngModel)]="product.stock.quantity">
 </p>
 </div>

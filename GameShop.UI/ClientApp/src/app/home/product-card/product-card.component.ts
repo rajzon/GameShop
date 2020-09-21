@@ -1,3 +1,5 @@
+import { ProductForCardFromServer } from './../../_models/ProductForCardFromServer';
+import { ShopOrderingService } from './../../_services/shop-ordering.service';
 import { ActivatedRoute } from '@angular/router';
 import { ShopSearchingService } from './../../_services/shop-searching.service';
 import { Component, OnInit, Input } from '@angular/core';
@@ -7,10 +9,12 @@ import { Component, OnInit, Input } from '@angular/core';
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.css']
 })
+// TO DO: change endpoint for getting product, because i do not need for example: Category.Description here
 export class ProductCardComponent implements OnInit {
-  product: any;
+  product: ProductForCardFromServer;
 
-  constructor(private shopSearchingService: ShopSearchingService, private route: ActivatedRoute) { }
+  constructor(private shopSearchingService: ShopSearchingService, 
+              private shopOrderingService: ShopOrderingService ,private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.getProduct();
@@ -18,9 +22,19 @@ export class ProductCardComponent implements OnInit {
 
   getProduct(): void {
     this.shopSearchingService.getProductForCard(+this.route.snapshot.params['id'])
-        .subscribe(response => {
+        .subscribe((response: ProductForCardFromServer) => {
          this.product = response;
          console.log(this.product);
+    }, error => {
+      console.log(error);
+    });
+  }
+
+
+  addToBasket() {
+    console.log(this.product.stock.quantity);
+    this.shopOrderingService.addProductToBasket(this.product.id, this.product.stock.quantity).subscribe( () => {
+      console.log('Added Product to Basket TEST');
     }, error => {
       console.log(error);
     });

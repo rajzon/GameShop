@@ -212,6 +212,56 @@ namespace GameShop.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("GameShop.Domain.Model.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(80)")
+                        .HasMaxLength(80);
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("PostCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(6)")
+                        .HasMaxLength(6);
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(80)")
+                        .HasMaxLength(80);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.OrderStock", b =>
+                {
+                    b.Property<int>("StockId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StockId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderStocks");
+                });
+
             modelBuilder.Entity("GameShop.Domain.Model.Photo", b =>
                 {
                     b.Property<int>("Id")
@@ -997,6 +1047,21 @@ namespace GameShop.Infrastructure.Migrations
                     b.HasOne("GameShop.Domain.Model.SubCategory", "SubCategory")
                         .WithMany("Categories")
                         .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.OrderStock", b =>
+                {
+                    b.HasOne("GameShop.Domain.Model.Order", "Order")
+                        .WithMany("OrderStocks")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GameShop.Domain.Model.Stock", "Stock")
+                        .WithMany("OrderStocks")
+                        .HasForeignKey("StockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -23,9 +23,10 @@ namespace GameShop.UI.Controllers
         private readonly IOptions<CloudinarySettings> _cloudinaryConfig;
         private readonly IUnitOfWork _unitOfWork;
         private Cloudinary _cloudinary;
+        private readonly IAddPhotoToCloud _addPhotoToCloud;
 
         public PhotosController(IMapper mapper,
-            IOptions<CloudinarySettings> cloudinaryConfig, IUnitOfWork unitOfWork)
+            IOptions<CloudinarySettings> cloudinaryConfig, IUnitOfWork unitOfWork, IAddPhotoToCloud addPhotoToCloud)
         {
             _unitOfWork = unitOfWork;
             _cloudinaryConfig = cloudinaryConfig;
@@ -37,6 +38,8 @@ namespace GameShop.UI.Controllers
             );
 
             _cloudinary = new Cloudinary(acc);
+
+            _addPhotoToCloud = addPhotoToCloud;
 
         }
 
@@ -72,26 +75,11 @@ namespace GameShop.UI.Controllers
                return BadRequest("Photo file wasn't sent");
            }
 
-           var uploadResult = new ImageUploadResult();
-
-           if (file.Length > 0) 
+           if(!_addPhotoToCloud.Do(_cloudinary, photoForCreationDto))
            {
-               using (var stream = file.OpenReadStream())
-               {
-                   var uploadParams = new ImageUploadParams() 
-                   {
-                       File = new FileDescription(file.Name, stream),
-                       Transformation = new Transformation().Width(500).Height(500)
-                            
-                   };
-
-                   uploadResult =  _cloudinary.Upload(uploadParams);
-               }
+               return BadRequest("File wasn't saved in cloud");
            }
-
-           photoForCreationDto.Url = uploadResult.Url?.ToString();
-           photoForCreationDto.PublicId = uploadResult.PublicId;
-
+    
             var photo = _mapper.Map<Photo>(photoForCreationDto);
 
             if (!productFromRepo.Photos.Any(p => p.isMain))

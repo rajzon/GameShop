@@ -31,6 +31,16 @@ namespace GameShop.Extensions.Infrastructure
                 new Category {Id=3, Name="XONE", Description="XBOX One Description"}
 
             );
+
+            modelBuilder.Entity<Stock>().HasData(
+                new Stock {Id=1, ProductId=1, Quantity=10},
+                new Stock {Id=2, ProductId=2, Quantity=25},
+                new Stock {Id=3, ProductId=3, Quantity=1},
+                new Stock {Id=4, ProductId=4, Quantity=30},
+                new Stock {Id=5, ProductId=5, Quantity=60},
+                new Stock {Id=6, ProductId=6, Quantity=5},
+                new Stock {Id=7, ProductId=7, Quantity=120}
+            );
             
 
             modelBuilder.Entity<Product>().HasData(products);

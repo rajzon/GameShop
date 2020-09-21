@@ -332,7 +332,7 @@ namespace GameShop.UI.Controllers
     public async Task<IActionResult> EditStockForProduct(int id, int quantity)
     {
 
-        var product = await _unitOfWork.Product.GetWithStockOnly(id);
+        var product = await _unitOfWork.Product.GetWithStockOnlyAsync(id);
 
         if (product == null)
         {

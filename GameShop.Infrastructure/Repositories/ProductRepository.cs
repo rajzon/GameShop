@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GameShop.Application.Helpers;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
+using GameShop.Domain.Dtos.BasketDtos;
 using GameShop.Domain.Dtos.ProductDtos;
 using GameShop.Domain.Model;
 using Microsoft.EntityFrameworkCore;
@@ -120,11 +121,30 @@ namespace GameShop.Infrastructure.Repositories
                             .FirstOrDefaultAsync();
         }
 
-        public async Task<Product> GetWithStockOnly(int productId)
+        public async Task<Product> GetWithStockOnlyAsync(int productId)
         {
             return await _ctx.Products.Where(x => x.Id == productId)
                                 .Include(s => s.Stock)
                             .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<ProductForBasketDto>> GetProductsForBasketAsync(List<ProductFromBasketCookieDto> basketCookie)
+        {
+            var productsIds = basketCookie.Select(b => b.ProductId).ToList();
+            var productsToReturn =  await _ctx.Products.Where(p => productsIds.Contains(p.Id))
+                            .Select(p => new ProductForBasketDto() 
+                            {
+                                ProductId = p.Id,
+                                Name = p.Name,
+                                Price = p.Price,
+                                CategoryName = _ctx.Categories.FirstOrDefault(c => c.Id == EF.Property<int>(p, "CategoryId")).Name,
+                            }).ToListAsync();
+            foreach (var basketItem in basketCookie)
+            {
+                productsToReturn.FirstOrDefault(p => p.ProductId == basketItem.ProductId).StockQty = basketItem.StockQty;        
+                productsToReturn.FirstOrDefault(p => p.ProductId == basketItem.ProductId).StockId = basketItem.StockId;          
+            }
+            return productsToReturn;
         }
 
         public async Task<PagedList<ProductForStockModerationDto>> GetProductsForStockModeration(ProductParams productParams)

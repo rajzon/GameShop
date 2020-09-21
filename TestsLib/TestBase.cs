@@ -3,6 +3,7 @@ using System.IO;
 using AutoMapper;
 using GameShop.Application.Helpers;
 using GameShop.Application.Mappings;
+using GameShop.Application.Photos;
 using GameShop.Domain.Model;
 using GameShop.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
@@ -32,6 +33,7 @@ namespace TestsLib
         protected readonly SignInManager<User> _signInManager;
         protected readonly RoleManager<Role> _roleManager;
         protected readonly IOptions<CloudinarySettings> _cloudinaryConfig;
+        protected readonly AddPhotoToCloud _addPhotoToCloud;
 
         public TestBase()
         {
@@ -85,6 +87,7 @@ namespace TestsLib
 
 
             _unitOfWork = new UnitOfWork(_context);
+            _addPhotoToCloud = new AddPhotoToCloud();
 
             //Cloudinary configuration
             CloudinarySettings cloudinarySettings = new CloudinarySettings()

@@ -28,6 +28,9 @@ using GameShop.Infrastructure.Extensions;
 using GameShop.UI.Extensions;
 using GameShop.Infrastructure.Interfaces;
 using GameShop.Infrastructure.Identity;
+using System;
+using GameShop.Application.Basket;
+using GameShop.Application.Photos;
 
 namespace GameShop.UI
 {
@@ -64,7 +67,10 @@ namespace GameShop.UI
             ////
 
             services.AddScoped<IJwtTokenHelper, JwtTokenHelper>();
-            // services.AddScoped<IAuthRepository , AuthRepository>();
+
+            services.AddScoped<IAddProductToBasket, AddProductToBasket>();
+            services.AddScoped<IAddPhotoToCloud, AddPhotoToCloud>();
+
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.ConfigureUnitOfWork();
@@ -72,7 +78,14 @@ namespace GameShop.UI
 
             services.ConfigureAuthorization();
 
-            services.ConfigureControllers();      
+            services.ConfigureControllers(); 
+
+            services.AddSession(options => 
+            {
+                //Small value for testing
+                options.Cookie.MaxAge = TimeSpan.FromDays(10);
+
+            });     
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -119,6 +132,8 @@ namespace GameShop.UI
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

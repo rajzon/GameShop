@@ -35,9 +35,9 @@ constructor(private http: HttpClient) { }
           })
         );
   }
-
   getProductForCard(id: number): Observable<any> {
     return this.http.get(this.baseUrl + 'products/' + id);
   }
+
 
 }

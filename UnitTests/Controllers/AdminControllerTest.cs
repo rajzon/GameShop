@@ -1168,7 +1168,7 @@ namespace UnitTests.Controllers
             int productId = 1;
             int quantity = 100;
 
-            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnly(productId)).ReturnsAsync(new Product(){Stock = new Stock()});
+            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnlyAsync(productId)).ReturnsAsync(new Product(){Stock = new Stock()});
 
             _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(true);
 
@@ -1183,7 +1183,7 @@ namespace UnitTests.Controllers
                         .BeOfType<Stock>()
                         .And.Should().NotBeNull();
 
-            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnly(productId), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnlyAsync(productId), Times.Once);
             _mockedUnitOfWork.Verify(v => v.SaveAsync(), Times.Once);
             _mockedUnitOfWork.Verify(v => v.Stock.GetByProductId(productId), Times.Once);
         }
@@ -1195,7 +1195,7 @@ namespace UnitTests.Controllers
             int productId = 1;
             int quantity = 100;
 
-            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnly(productId)).ReturnsAsync(new Product(){Stock = null});
+            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnlyAsync(productId)).ReturnsAsync(new Product(){Stock = null});
 
             _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(true);
 
@@ -1210,7 +1210,7 @@ namespace UnitTests.Controllers
                         .BeOfType<Stock>()
                         .And.Should().NotBeNull();
 
-            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnly(productId), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnlyAsync(productId), Times.Once);
             _mockedUnitOfWork.Verify(v => v.SaveAsync(), Times.Once);
             _mockedUnitOfWork.Verify(v => v.Stock.GetByProductId(productId), Times.Once);
         }
@@ -1222,7 +1222,7 @@ namespace UnitTests.Controllers
             int productIdThatNotExist = 1000;
             int quantity = 100;
 
-            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnly(productIdThatNotExist)).ReturnsAsync((Product)null);
+            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnlyAsync(productIdThatNotExist)).ReturnsAsync((Product)null);
 
             //Act
             var result = _cut.EditStockForProduct(productIdThatNotExist, quantity).Result;
@@ -1233,7 +1233,7 @@ namespace UnitTests.Controllers
                             .Should().Be("Product for That Id dont exist");
 
 
-            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnly(productIdThatNotExist), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnlyAsync(productIdThatNotExist), Times.Once);
         }
 
         [Fact]
@@ -1243,7 +1243,7 @@ namespace UnitTests.Controllers
             int productId= 1;
             int sameQuantityAsProductQty = 100;
 
-            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnly(productId)).ReturnsAsync(new Product(){Stock = new Stock(){Quantity = sameQuantityAsProductQty}});
+            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnlyAsync(productId)).ReturnsAsync(new Product(){Stock = new Stock(){Quantity = sameQuantityAsProductQty}});
 
             //Act
             var result = _cut.EditStockForProduct(productId, sameQuantityAsProductQty).Result;
@@ -1254,7 +1254,7 @@ namespace UnitTests.Controllers
                             .Should().Be("Passed same quantity as product already have");
 
 
-            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnly(productId), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnlyAsync(productId), Times.Once);
         }
 
         [Fact]
@@ -1264,7 +1264,7 @@ namespace UnitTests.Controllers
             int productId = 1;
             int quantity = 100;
 
-            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnly(productId)).ReturnsAsync(new Product());
+            _mockedUnitOfWork.Setup(s => s.Product.GetWithStockOnlyAsync(productId)).ReturnsAsync(new Product());
 
             _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(false);
 
@@ -1276,7 +1276,7 @@ namespace UnitTests.Controllers
             result.As<BadRequestObjectResult>().Value
                             .Should().Be("Something went wrong during saving Stock for Product");
 
-            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnly(productId), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Product.GetWithStockOnlyAsync(productId), Times.Once);
             _mockedUnitOfWork.Verify(v => v.SaveAsync(), Times.Once);
         }
     }

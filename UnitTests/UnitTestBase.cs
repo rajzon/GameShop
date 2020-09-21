@@ -31,10 +31,10 @@ namespace UnitTests
         protected readonly ApplicationDbContext _context;
         protected readonly IMapper _mapper;
         protected readonly Mock<IJwtTokenHelper> _mockedJwtTokenHelper;
-        protected readonly UnitOfWork _unitOfWork;
         protected readonly Mock<IUnitOfWork> _mockedUnitOfWork;
         protected readonly IOptions<CloudinarySettings> _cloudinaryConfig;
         protected readonly Mock<IFormFile> _mockedFormFile;
+        protected readonly Mock<IAddPhotoToCloud> _mockedAddPhotoToCloud;
 
         public UnitTestsBase()
         {
@@ -87,8 +87,9 @@ namespace UnitTests
                     new Mock<IUserConfirmation<User>>().Object   
             );
 
+            _mockedAddPhotoToCloud = new Mock<IAddPhotoToCloud>();
+
             //UnitOfWork mocking
-            _unitOfWork = new UnitOfWork(_context);
             _mockedUnitOfWork = new Mock<IUnitOfWork>();
 
             //FormFile mocking

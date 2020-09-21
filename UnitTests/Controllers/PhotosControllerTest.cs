@@ -14,6 +14,8 @@ using Xunit;
 namespace UnitTests.Controllers
 {
 
+    //TODO: change tests for adding photo
+
     //Info: AddPhotoForProduct() not tested uploading image to cloud
     // DeletePhoto() not tested deleting image from cloud
     public class PhotosControllerTest : UnitTestsBase, IDisposable
@@ -22,7 +24,7 @@ namespace UnitTests.Controllers
 
         public PhotosControllerTest()
         {
-            _cut = new PhotosController(_mapper, _cloudinaryConfig, _mockedUnitOfWork.Object);
+            _cut = new PhotosController(_mapper, _cloudinaryConfig, _mockedUnitOfWork.Object, _mockedAddPhotoToCloud.Object);
         }
 
         [Fact]

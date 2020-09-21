@@ -34,6 +34,8 @@ namespace GameShop.Infrastructure
         public DbSet<ProductSubCategory> ProductsSubCategories { get; set; }
         public DbSet<ProductLanguage> ProductsLanaguages { get; set; }
         public DbSet<Stock> Stocks { get; set; }
+        public DbSet<OrderStock> OrderStocks { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -50,6 +52,7 @@ namespace GameShop.Infrastructure
             builder.ApplyConfiguration(new PhotoConfiguration());
             builder.ApplyConfiguration(new CategoryConfiguration());
             builder.ApplyConfiguration(new SubCategoryConfiguration());
+            builder.ApplyConfiguration(new OrderConfiguration());
 
 
             builder.Entity<Product>()
@@ -121,6 +124,9 @@ namespace GameShop.Infrastructure
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
             });
+
+            builder.Entity<OrderStock>()
+                .HasKey(k => new { k.StockId, k.OrderId });
         }
 
     }

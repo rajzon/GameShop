@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace GameShop.Domain.Model
 {
     public class Stock
@@ -7,6 +9,7 @@ namespace GameShop.Domain.Model
 
         public int ProductId { get; set; }
         public Product Product { get; set; }
+        public ICollection<OrderStock> OrderStocks { get; set; }
 
     }
 }
