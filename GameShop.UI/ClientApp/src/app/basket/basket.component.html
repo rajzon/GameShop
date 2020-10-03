@@ -9,7 +9,7 @@
         <th style="width: 30%">Stock Quantity</th>
         <th style="width: 5%">Price</th>
       </tr>
-      <tr *ngFor="let product of products">
+      <tr *ngFor="let product of basket?.basketProducts">
         <td>{{product.productId}}</td>
         <td>{{product.stockId}}</td>
         <td>{{product.name}}</td>
@@ -18,8 +18,11 @@
         <td>{{product.price}}</td>    
       </tr>
     </table>
-  </div>
-<p>
-  <button class="btn btn-success" (click)="getBasket()">get basket TEST</button>
-</p>
+    <p>Basket Price: {{basket?.basketPrice}}$</p> 
+  </div> 
+  <p>
+    <button class="btn btn-success" (click)="getBasket()">get basket TEST</button>
+  </p>
+  <p><button class="btn btn-success" [routerLink]="['/checkout/customer-info']">Checkout</button></p>  
+</div>
 

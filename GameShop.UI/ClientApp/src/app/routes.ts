@@ -1,3 +1,5 @@
+import { PaymentComponent } from './checkout/payment/payment.component';
+import { CustomerInfoComponent } from './checkout/customer-info/customer-info.component';
 import { ProductCardComponent } from './home/product-card/product-card.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { NegateAuthGuard } from './_guards/negate-auth.guard';
@@ -17,6 +19,8 @@ export const appRoutes: Routes = [
     {path: 'basket' , component: BasketComponent },
     {path: 'contact' , component: ContactComponent },
     {path: 'product/:id' , component: ProductCardComponent },
+    {path: 'checkout/customer-info' , component: CustomerInfoComponent},
+    {path: 'checkout/payment' , component: PaymentComponent},
     {path: 'sign-in' , component: SignInComponent, canActivate: [NegateAuthGuard]},
     {path: 'register' , component: RegisterComponent, canActivate: [NegateAuthGuard]},
     {path: 'admin' , component: AdminPanelComponent, canActivate: [AuthGuard], data: {roles: ['Admin', 'Moderator']}},

@@ -225,12 +225,19 @@ namespace GameShop.Infrastructure.Migrations
                         .HasMaxLength(80);
 
                     b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(30)")
                         .HasMaxLength(30);
+
+                    b.Property<decimal>("OrderPrice")
+                        .HasColumnType("decimal(9,2)");
+
+                    b.Property<Guid>("OrderRef")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PostCode")
                         .IsRequired()
@@ -241,6 +248,16 @@ namespace GameShop.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(80)")
                         .HasMaxLength(80);
+
+                    b.Property<string>("StripeRef")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(35)")
+                        .HasMaxLength(35);
+
+                    b.Property<string>("SurName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
 
                     b.HasKey("Id");
 
@@ -253,6 +270,12 @@ namespace GameShop.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(9,2)");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("StockId", "OrderId");

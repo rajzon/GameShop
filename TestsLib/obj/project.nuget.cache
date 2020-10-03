@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "s4IW06UMkTfRDxZNdFE7yj1s+3++4tSl6Ac16LTORhuifVZDNeqWM/5rcCPNylLxmYzd5jXW/SN5Z2jgEbvvyQ==",
+  "dgSpecHash": "xHQpQwXgh4ArsuSt5ACF3RNyTKsTBVaAmUDvKpsCS2xvrv+/cC7utlwGTbWLOcgiq4Ys/kFsHHhJa5xWqjl2Fw==",
   "success": true,
   "projectFilePath": "c:\\Users\\Dawid\\Documents\\GameShop\\TestsLib\\TestsLib.csproj",
   "expectedPackageFiles": [
@@ -126,6 +126,7 @@
     "C:\\Users\\Dawid\\.nuget\\packages\\sqlitepclraw.core\\2.0.2\\sqlitepclraw.core.2.0.2.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.0.2\\sqlitepclraw.lib.e_sqlite3.2.0.2.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\sqlitepclraw.provider.dynamic_cdecl\\2.0.2\\sqlitepclraw.provider.dynamic_cdecl.2.0.2.nupkg.sha512",
+    "C:\\Users\\Dawid\\.nuget\\packages\\stripe.net\\39.5.0\\stripe.net.39.5.0.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\system.appcontext\\4.3.0\\system.appcontext.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.buffers\\4.5.0\\system.buffers.4.5.0.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",

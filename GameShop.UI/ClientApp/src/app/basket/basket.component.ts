@@ -1,3 +1,4 @@
+import { BasketFromServer } from './../_models/BasketFromServer';
 import { Component, OnInit } from '@angular/core';
 import { ShopOrderingService } from '../_services/shop-ordering.service';
 import { ProductForBasketFromServer } from '../_models/ProductForBasketFromServer';
@@ -8,7 +9,7 @@ import { ProductForBasketFromServer } from '../_models/ProductForBasketFromServe
   styleUrls: ['./basket.component.css']
 })
 export class BasketComponent implements OnInit {
-  products: ProductForBasketFromServer[];
+  basket: BasketFromServer;
 
   constructor(private  shopOrderingService: ShopOrderingService) { }
 
@@ -18,13 +19,14 @@ export class BasketComponent implements OnInit {
 
 
   getBasket() {
-    this.shopOrderingService.getProductsForBasket().subscribe((response: ProductForBasketFromServer[]) => {
+    this.shopOrderingService.getBasket().subscribe((response: BasketFromServer) => {
       console.log('get basket test successfull');
       console.log(response);
-      this.products = response;
+      this.basket = response;
     }, error => {
       console.log(error);
-    })
+    });
   }
+
 
 }

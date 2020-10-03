@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,11 +18,13 @@ namespace GameShop.UI.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAddProductToBasket _addProductToBasket;
+        private readonly ICountOrderPrice _countOrderPrice;
 
-        public BasketController(IUnitOfWork unitOfWork, IAddProductToBasket addProductToBasket)
+        public BasketController(IUnitOfWork unitOfWork, IAddProductToBasket addProductToBasket, ICountOrderPrice countOrderPrice)
         {
             _unitOfWork = unitOfWork;
             _addProductToBasket = addProductToBasket;
+            _countOrderPrice = countOrderPrice;
         }
         [HttpPost("add-product/{id}")]
         public async Task<IActionResult> AddProductToBasket(int id, [FromQuery]int stockQty)
@@ -42,10 +45,12 @@ namespace GameShop.UI.Controllers
             return Ok($"Added product {id} to basket TEST");
         }
 
+
+
         [HttpGet("get-basket")]
-        [ProducesResponseType(typeof(ProductForBasketDto),200)]
+        [ProducesResponseType(typeof(BasketDto),200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<ProductForBasketDto>> GetProductsForBasket()
+        public async Task<ActionResult<BasketDto>> GetBasket()
         {   
             var basketJson = HttpContext.Session.GetString("Basket");
             if (string.IsNullOrEmpty(basketJson))
@@ -53,11 +58,19 @@ namespace GameShop.UI.Controllers
                 return NotFound();
             } 
 
-            var basket = JsonConvert.DeserializeObject<List<ProductFromBasketCookieDto>>(basketJson);
+            var basketCookie = JsonConvert.DeserializeObject<List<ProductFromBasketCookieDto>>(basketJson);
 
-            var productsFromRepo = await _unitOfWork.Product.GetProductsForBasketAsync(basket);
+            var productsFromRepo = await _unitOfWork.Product.GetProductsForBasketAsync(basketCookie);
 
-            return Ok(productsFromRepo);
+            decimal basketPrice = _countOrderPrice.Do(productsFromRepo);
+            
+            var basketToReturn = new BasketDto()
+            {
+                BasketPrice = basketPrice,
+                BasketProducts = productsFromRepo
+            };
+
+            return Ok(basketToReturn);
 
 
         }

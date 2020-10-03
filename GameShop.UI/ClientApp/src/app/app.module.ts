@@ -1,3 +1,5 @@
+import { PaymentComponent } from './checkout/payment/payment.component';
+import { CustomerInfoComponent } from './checkout/customer-info/customer-info.component';
 import { StockManagmentComponent } from './admin/stock-managment/stock-managment.component';
 import { ShopSearchingService } from './_services/shop-searching.service';
 import { EditProductComponent } from './admin/edit-product/edit-product.component';
@@ -20,6 +22,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { CookieService } from 'ngx-cookie-service';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -35,6 +38,7 @@ import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ProductCardComponent } from './home/product-card/product-card.component';
+
 
 
 export function tokenGetter() {
@@ -60,7 +64,9 @@ export function tokenGetter() {
       EditProductComponent,
       RequirementsModalComponent,
       ProductCardComponent,
-      StockManagmentComponent
+      StockManagmentComponent,
+      CustomerInfoComponent,
+      PaymentComponent
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -86,7 +92,8 @@ export function tokenGetter() {
      ErrorInterceptorProvider,
      AuthService,
      AdminService,
-     ShopSearchingService
+     ShopSearchingService,
+     CookieService
   ],
   entryComponents: [
      RolesModalComponent,

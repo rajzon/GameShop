@@ -456,3 +456,4 @@ c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\win-
 c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dll
 c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
+c:\Users\Dawid\Documents\GameShop\TestsLib\bin\Debug\netcoreapp3.1\Stripe.net.dll

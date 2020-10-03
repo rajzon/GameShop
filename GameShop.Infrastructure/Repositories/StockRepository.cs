@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameShop.Application.Interfaces;
+using GameShop.Domain.Dtos.BasketDtos;
+using GameShop.Domain.Dtos.StockDto;
 using GameShop.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,5 +22,6 @@ namespace GameShop.Infrastructure.Repositories
             return await _ctx.Stocks.Where(s => s.ProductId == productId)
                                 .FirstOrDefaultAsync();
         }
+
     }
 }

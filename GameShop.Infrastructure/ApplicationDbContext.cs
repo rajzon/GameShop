@@ -53,6 +53,7 @@ namespace GameShop.Infrastructure
             builder.ApplyConfiguration(new CategoryConfiguration());
             builder.ApplyConfiguration(new SubCategoryConfiguration());
             builder.ApplyConfiguration(new OrderConfiguration());
+            builder.ApplyConfiguration(new OrderStockConfiguration());
 
 
             builder.Entity<Product>()

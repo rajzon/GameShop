@@ -31,6 +31,8 @@ using GameShop.Infrastructure.Identity;
 using System;
 using GameShop.Application.Basket;
 using GameShop.Application.Photos;
+using Stripe;
+using GameShop.Domain.Logic;
 
 namespace GameShop.UI
 {
@@ -70,6 +72,8 @@ namespace GameShop.UI
 
             services.AddScoped<IAddProductToBasket, AddProductToBasket>();
             services.AddScoped<IAddPhotoToCloud, AddPhotoToCloud>();
+            services.AddScoped<ICountOrderPrice, CountOrderPrice>();
+            services.AddScoped<ICreateCharge, CreateCharge>();
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
@@ -85,7 +89,9 @@ namespace GameShop.UI
                 //Small value for testing
                 options.Cookie.MaxAge = TimeSpan.FromDays(10);
 
-            });     
+            });
+
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["PrivateKey"];
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

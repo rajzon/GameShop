@@ -124,9 +124,6 @@ namespace GameShop.Extensions.Infrastructure
             modelBuilder.Entity<Photo>().HasData(photos);
         }
 
-
-
-        //TO DO
         public static List<T> GetSeedDataOf<T>(string currDirectory,string seedDataLocationSource)
         {
             string seedDataAsJson;

@@ -117,6 +117,19 @@ namespace GameShop.Infrastructure
                 return _stock; 
             }
         }
+
+        private IOrderRepository _order;
+        public IOrderRepository Order
+        {
+            get { 
+                    if(_order == null) 
+                    {
+                        _order = new OrderRepository(_ctx);
+                    } 
+                    return _order; 
+                }
+        }
+        
         
         
 
