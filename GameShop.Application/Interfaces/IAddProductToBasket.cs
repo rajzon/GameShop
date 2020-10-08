@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace GameShop.Application.Interfaces
 {
-    public interface IAddProductToBasket
+    public interface IAddStockToBasket
     {
-         void Do(ISession session, Stock stockToAdd, int stockQty);
+        void Do(ISession session, StockOnHold stockToUpdate);
     }
 }

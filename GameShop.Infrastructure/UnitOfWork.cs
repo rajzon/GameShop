@@ -129,6 +129,18 @@ namespace GameShop.Infrastructure
                     return _order; 
                 }
         }
+
+        private IStockOnHoldRepository _stockOnHold;
+        public IStockOnHoldRepository StockOnHold
+        {
+            get { 
+                    if(_order == null) 
+                    {
+                        _stockOnHold = new StockOnHoldRepository(_ctx);
+                    } 
+                    return _stockOnHold; 
+                }
+        }
         
         
         

@@ -28,6 +28,8 @@ namespace GameShop.UI.Controllers
             _countOrderPrice = countOrderPrice;
             _createCharge = createCharge;
         }
+
+        //TODO: Refactor it
         [HttpPost("charge")]
         public async Task<IActionResult> Charge([FromHeader(Name="Stripe-Token")]string stripeToken, CustomerInfoDto customerInfo)
         {
@@ -40,7 +42,7 @@ namespace GameShop.UI.Controllers
 
             var basketProductsCookie = JsonConvert.DeserializeObject<List<ProductFromBasketCookieDto>>(basketJson);
 
-            var productsFromRepo = await _unitOfWork.Product.GetProductsForBasketAsync(basketProductsCookie);
+            var productsFromRepo = await _unitOfWork.Stock.GetStockWithProductForCharge(basketProductsCookie);
 
             if (productsFromRepo.Count < 1)
             {
@@ -53,10 +55,15 @@ namespace GameShop.UI.Controllers
 
             var order =  _unitOfWork.Order.ScaffoldOrderForCreation(customerInfo, basketForPaymentDto);
 
+            var stockIdWithQtyToRemove = productsFromRepo.ToDictionary(s => s.StockId, s => s.StockQty);
+            
+            await _unitOfWork.Stock.RemoveStockQty(stockIdWithQtyToRemove);
+
            _unitOfWork.Order.Add(order);
 
            if (await _unitOfWork.SaveAsync())
-           {
+           {           
+               HttpContext.Session.Remove("Basket");
                //TODO Replace that
                return Ok(201);
            }

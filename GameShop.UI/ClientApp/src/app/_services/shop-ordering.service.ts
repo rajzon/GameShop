@@ -5,6 +5,7 @@ import { environment } from './../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +16,16 @@ export class ShopOrderingService {
   private customerInfoSubject = new BehaviorSubject<CustomerInfo>(<CustomerInfo> { });
   constructor(private httpClient: HttpClient) { }
 
-  addProductToBasket(productId: number, stockQty: number) {
-    return this.httpClient.post(this.baseUrl + `basket/add-product/${productId}?stockQty=${stockQty}`, {});
+  addStockToBasket(stockId: number, stockQty: number) {
+    return this.httpClient.post(this.baseUrl + `basket/add-stock/${stockId}?stockQty=${stockQty}`, {}, {responseType: 'text'});
   }
 
   getBasket(): Observable<BasketFromServer> {
     return this.httpClient.get<BasketFromServer>(this.baseUrl + 'basket/get-basket');
+  }
+
+  deleteStockFromBasket(stockId: number) {
+      return this.httpClient.delete(this.baseUrl + `basket/delete-stock/${stockId}`);
   }
 
   public sendCustomerInfo(customerInfo: CustomerInfo) {

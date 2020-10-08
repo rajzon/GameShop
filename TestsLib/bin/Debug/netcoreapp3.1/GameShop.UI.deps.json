@@ -34,7 +34,6 @@
           "Microsoft.EntityFrameworkCore.Proxies": "3.1.3",
           "Microsoft.EntityFrameworkCore.Sqlite": "3.1.3",
           "Microsoft.IdentityModel.Tokens": "6.5.1",
-          "Stripe.net": "39.5.0",
           "System.IdentityModel.Tokens.Jwt": "6.5.1",
           "Microsoft.AspNetCore.Antiforgery": "3.1.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions.Reference": "3.1.0.0",
@@ -2364,7 +2363,8 @@
           "CloudinaryDotNet": "1.11.0",
           "GameShop.Domain": "1.0.0",
           "Microsoft.AspNetCore.Http": "2.2.2",
-          "Microsoft.EntityFrameworkCore": "3.1.3"
+          "Microsoft.EntityFrameworkCore": "3.1.3",
+          "Stripe.net": "39.5.0"
         },
         "runtime": {
           "GameShop.Application.dll": {}

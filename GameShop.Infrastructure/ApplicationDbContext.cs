@@ -36,6 +36,8 @@ namespace GameShop.Infrastructure
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<OrderStock> OrderStocks { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<StockOnHold> StockOnHolds { get; set; }
+        
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -54,6 +56,7 @@ namespace GameShop.Infrastructure
             builder.ApplyConfiguration(new SubCategoryConfiguration());
             builder.ApplyConfiguration(new OrderConfiguration());
             builder.ApplyConfiguration(new OrderStockConfiguration());
+            builder.ApplyConfiguration(new StockOnHoldConfiguration());
 
 
             builder.Entity<Product>()

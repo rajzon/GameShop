@@ -819,6 +819,37 @@ namespace GameShop.Infrastructure.Migrations
                     b.ToTable("Stocks");
                 });
 
+            modelBuilder.Entity("GameShop.Domain.Model.StockOnHold", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ExpireTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SessionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("StockId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockQty")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StockId");
+
+                    b.ToTable("StockOnHolds");
+                });
+
             modelBuilder.Entity("GameShop.Domain.Model.SubCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -1149,6 +1180,15 @@ namespace GameShop.Infrastructure.Migrations
                     b.HasOne("GameShop.Domain.Model.Product", "Product")
                         .WithOne("Stock")
                         .HasForeignKey("GameShop.Domain.Model.Stock", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.StockOnHold", b =>
+                {
+                    b.HasOne("GameShop.Domain.Model.Stock", "Stock")
+                        .WithMany()
+                        .HasForeignKey("StockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

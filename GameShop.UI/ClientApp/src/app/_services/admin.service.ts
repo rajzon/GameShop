@@ -37,7 +37,6 @@ export class AdminService {
   setMainPhoto(productId: Number, id: Number): Observable<any> {
     return this.http.post(this.baseUrl + 'admin/product/' + productId + '/photos/' + id + '/setMain', {});
   }
- 
 
   getProducts(page?, itemsPerPage?): Observable<PaginatedResult<Array<ProductFromServer>>>  {
     const paginatedResult: PaginatedResult<Array<ProductFromServer>> = new PaginatedResult<Array<ProductFromServer>>();

@@ -6,8 +6,9 @@
         <th style="width: 5%">Stock ID</th>
         <th style="width: 40%">Product Name</th>
         <th style="width: 10%">Category</th>
-        <th style="width: 30%">Stock Quantity</th>
+        <th style="width: 5%">Stock Quantity</th>
         <th style="width: 5%">Price</th>
+        <th style="width: 25%">Delete Product</th>
       </tr>
       <tr *ngFor="let product of basket?.basketProducts">
         <td>{{product.productId}}</td>
@@ -16,6 +17,7 @@
         <td>{{product.categoryName}}</td>
         <td>{{product.stockQty}}</td>
         <td>{{product.price}}</td>    
+        <td><button class="btn btn-danger" (click)="deleteStockFromBasket(product.stockId)">Delete Product</button></td>    
       </tr>
     </table>
     <p>Basket Price: {{basket?.basketPrice}}$</p> 

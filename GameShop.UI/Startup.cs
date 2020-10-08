@@ -33,6 +33,7 @@ using GameShop.Application.Basket;
 using GameShop.Application.Photos;
 using Stripe;
 using GameShop.Domain.Logic;
+using GameShop.Application.StockManipulations;
 
 namespace GameShop.UI
 {
@@ -70,10 +71,13 @@ namespace GameShop.UI
 
             services.AddScoped<IJwtTokenHelper, JwtTokenHelper>();
 
-            services.AddScoped<IAddProductToBasket, AddProductToBasket>();
+            services.AddScoped<IAddStockToBasket, AddStockToBasket>();
             services.AddScoped<IAddPhotoToCloud, AddPhotoToCloud>();
             services.AddScoped<ICountOrderPrice, CountOrderPrice>();
             services.AddScoped<ICreateCharge, CreateCharge>();
+            services.AddScoped<ITransferStockToStockOnHold, TransferStockToStockOnHold>();
+            services.AddScoped<ITransferStockOnHoldWhenExpire, TransferStockOnHoldWhenExpire>();
+            services.AddScoped<IDeleteStockFromBasket, DeleteStockFromBasket>();
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);

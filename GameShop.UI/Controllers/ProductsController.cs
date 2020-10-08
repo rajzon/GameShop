@@ -4,6 +4,7 @@ using AutoMapper;
 using GameShop.Application.Helpers;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
+using GameShop.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,8 @@ namespace GameShop.UI.Controllers
 {
 
     [ApiController]
-    [AllowAnonymous]  
+    [AllowAnonymous]
+    [TransferStockOnHoldWhenExpireAttribute]
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {

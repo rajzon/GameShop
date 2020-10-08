@@ -28,11 +28,20 @@ namespace GameShop.Infrastructure
             _ctx.Set<T>().Remove(entity);
         }
 
+        public void DeleteRange(IEnumerable<T> entities)
+        {
+            _ctx.Set<T>().RemoveRange(entities);
+        }
+
         public async Task<T> FindAsync(Expression<Func<T, bool>> expression)
         {
            return  await _ctx.Set<T>().Where(expression).FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> expression)
+        {
+           return  await _ctx.Set<T>().Where(expression).ToListAsync();
+        }
         public virtual async Task<T> GetAsync(int id)
         {
             return await _ctx.Set<T>().FindAsync(id);

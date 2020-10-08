@@ -1,6 +1,6 @@
 import { ProductForCardFromServer } from './../../_models/ProductForCardFromServer';
 import { ShopOrderingService } from './../../_services/shop-ordering.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ShopSearchingService } from './../../_services/shop-searching.service';
 import { Component, OnInit, Input } from '@angular/core';
 
@@ -13,8 +13,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ProductCardComponent implements OnInit {
   product: ProductForCardFromServer;
 
-  constructor(private shopSearchingService: ShopSearchingService, 
-              private shopOrderingService: ShopOrderingService ,private route: ActivatedRoute) { }
+  constructor(private shopSearchingService: ShopSearchingService,
+              private shopOrderingService: ShopOrderingService , private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
     this.getProduct();
@@ -33,8 +33,9 @@ export class ProductCardComponent implements OnInit {
 
   addToBasket() {
     console.log(this.product.stock.quantity);
-    this.shopOrderingService.addProductToBasket(this.product.id, this.product.stock.quantity).subscribe( () => {
+    this.shopOrderingService.addStockToBasket(this.product.stock.id, this.product.stock.quantity).subscribe( () => {
       console.log('Added Product to Basket TEST');
+      this.router.navigate(['/basket']);
     }, error => {
       console.log(error);
     });

@@ -8,15 +8,16 @@ using Newtonsoft.Json;
 
 namespace GameShop.Application.Basket
 {
-    public class AddProductToBasket : IAddProductToBasket
+    public class AddStockToBasket : IAddStockToBasket
     {
 
-        public AddProductToBasket()
+        public AddStockToBasket()
         {
 
         }
 
-        public void Do(ISession session, Stock stockToAdd, int stockQty)
+
+        public void Do(ISession session, StockOnHold stockToUpdate)
         {
             var basketJson = session.GetString("Basket");
             var basket = new List<ProductFromBasketCookieDto>();
@@ -25,17 +26,18 @@ namespace GameShop.Application.Basket
             {
                basket =  JsonConvert.DeserializeObject<List<ProductFromBasketCookieDto>>(basketJson);
             }
-            if (basket.Any(x => x.StockId == stockToAdd.Id))
+            if (basket.Any(x => x.StockId == stockToUpdate.StockId))
             {
-                basket.FirstOrDefault(x => x.StockId == stockToAdd.Id).StockQty += stockQty;
+                basket.FirstOrDefault(x => x.StockId == stockToUpdate.StockId).StockQty = stockToUpdate.StockQty;
             } 
             else 
             {            
                 var basketInfoForProduct = new ProductFromBasketCookieDto
                 {
-                    StockId = stockToAdd.Id,
-                    ProductId = stockToAdd.ProductId,
-                    StockQty = stockQty
+                    StockId = stockToUpdate.StockId,
+                    //In The Future Remove That ProductId
+                    ProductId = stockToUpdate.ProductId,
+                    StockQty = stockToUpdate.StockQty
                 };
                 basket.Add(basketInfoForProduct);
 

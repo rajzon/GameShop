@@ -1,6 +1,8 @@
+using GameShop.Domain.Interfaces;
+
 namespace GameShop.Domain.Dtos.BasketDtos
 {
-    public class ProductForBasketDto
+    public class ProductForBasketDto : IOrderLogisticInfo
     {
         public int ProductId { get; set; }
         public int StockId { get; set; }

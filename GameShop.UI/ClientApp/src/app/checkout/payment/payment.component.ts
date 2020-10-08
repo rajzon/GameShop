@@ -4,6 +4,7 @@ import { CustomerInfo } from './../../_models/CustomerInfo';
 import { ShopOrderingService } from './../../_services/shop-ordering.service';
 
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
 
 declare var Stripe: stripe.StripeStatic;
 @Component({
@@ -24,7 +25,7 @@ export class PaymentComponent implements OnInit {
   stockIds: number[];
   customerInfo: CustomerInfo;
 
-  constructor(private shopOrderingService: ShopOrderingService) { }
+  constructor(private shopOrderingService: ShopOrderingService, private router: Router) { }
 
   ngOnInit() {
     this.getCustomerInfo();
@@ -66,6 +67,7 @@ export class PaymentComponent implements OnInit {
       console.log(token.id);
       this.shopOrderingService.chargePayment(token.id, this.customerInfo).subscribe(() => {
         console.log('successfull payment');
+        this.router.navigate(['/home']);
       }, error => {
         console.log(error);
       });

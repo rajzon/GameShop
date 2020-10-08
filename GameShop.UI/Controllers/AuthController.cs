@@ -69,7 +69,6 @@ namespace GameShop.UI.Controllers
     public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
     {
 
-
         var user = await _userManager.FindByNameAsync(userForLoginDto.Username);
         if (user == null)
         {
