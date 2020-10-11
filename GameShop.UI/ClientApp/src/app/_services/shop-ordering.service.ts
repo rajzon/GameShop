@@ -41,4 +41,8 @@ export class ShopOrderingService {
             customerInfo, {headers: {'Stripe-Token': stripeToken}});
   }
 
+  public synchronizeBasket() {
+    return this.httpClient.post(this.baseUrl + 'basket/synchronize-basket', {});
+  }
+
 }

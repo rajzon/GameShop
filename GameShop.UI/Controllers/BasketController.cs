@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos.BasketDtos;
+using GameShop.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,15 +22,17 @@ namespace GameShop.UI.Controllers
         private readonly ICountOrderPrice _countOrderPrice;
         private readonly ITransferStockToStockOnHold _transferStockToStockOnHold;
         private readonly IDeleteStockFromBasket _deleteStockFromBasket;
+        private readonly ISynchronizeBasket _synchronizeBasket;
 
         public BasketController(IUnitOfWork unitOfWork, IAddStockToBasket addProductToBasket, ICountOrderPrice countOrderPrice, 
-                        ITransferStockToStockOnHold transferStockToStockOnHold, IDeleteStockFromBasket deleteStockFromBasket)
+                        ITransferStockToStockOnHold transferStockToStockOnHold, IDeleteStockFromBasket deleteStockFromBasket, ISynchronizeBasket synchronizeBasket)
         {
             _unitOfWork = unitOfWork;
             _addStockToBasket = addProductToBasket;
             _countOrderPrice = countOrderPrice;
             _transferStockToStockOnHold = transferStockToStockOnHold;
             _deleteStockFromBasket = deleteStockFromBasket;
+            _synchronizeBasket = synchronizeBasket;
         }
 
         // Delete ProductId from StockOnHold and from Everywher , the context is basket
@@ -53,7 +56,7 @@ namespace GameShop.UI.Controllers
             {
                 return BadRequest("Requested Stock Quantity is greater then Stock in Db");
             }
-            var stockOnHoldToAdd =  await _transferStockToStockOnHold.Do(HttpContext.Session, stockToSubtract, stockQty);
+            var stockOnHoldToAdd =  await _transferStockToStockOnHold.Do(TransferStockToStockOnHoldTypeEnum.OneWithUpdatingExpireTimeForBasketProducts, HttpContext.Session, stockToSubtract, stockQty);
 
             //TODO: Implement some better validation
             if (stockOnHoldToAdd == null)
@@ -121,36 +124,41 @@ namespace GameShop.UI.Controllers
             return NoContent();
         }
 
+
+        //TODO: Inside SynchronizeBasket class , create wrapper for result of method SynchronizeBasket.Do() which will contain Result (true- means that Db was updated but 
+        //also can be that some Products in basket miss His StockOnHold , false- means Db  wasnt updated
+        //because its not needed OR because StockInDb Was not enugh to assign to this product basket Stock.Quantity < productFromBaske.StockQty) and MissingStocks
+        // If i Am gonna create that wrapper also i can implement Error property inside that wrapper, for errors like passed basketProducts list that is empty
+
         [HttpPost("synchronize-basket")]
+        [ProducesResponseType(typeof(List<NotEnoughStockInfoDto>),400)]
+        [ProducesResponseType(typeof(string),400)]
+        [ProducesResponseType(200)]
         public async Task<IActionResult> EnsureThatBasketProductsAreInStockOnHold()
         {
             var basketJson = HttpContext.Session.GetString("Basket");
+            if (string.IsNullOrEmpty(basketJson))
+            {
+                return NotFound();
+            }
 
             var basketCookie = JsonConvert.DeserializeObject<List<ProductFromBasketCookieDto>>(basketJson);
 
-
-            //TODO: MOVE THIS OUT
-
-            //TODO: Make Dto for storing products That are not able to be added to Basket(because Stock Quantity for that product is = 0)
-            var missingProductsListToReturn = new List<string>();
-
-            var stockIdsFromBasket = basketCookie.Select(b => b.StockId);
-            var stockOnHoldForThatBasket = await _unitOfWork.StockOnHold.FindAllAsync(s => s.SessionId == HttpContext.Session.Id);
-            var stockIdsFromStockOnHold = stockOnHoldForThatBasket.Select(s => s.StockId);
-            foreach (var product in basketCookie)
+            if (await _synchronizeBasket.Do(HttpContext.Session, basketCookie))
             {
-                if (!stockIdsFromStockOnHold.Contains(product.StockId))
+                if (!await _unitOfWork.SaveAsync())
                 {
-                    //IT Wont Work because i need to Include missing Entity(Product)
-                    var stockWithProductForErrorList = await _unitOfWork.Stock.GetAsync(product.StockId);
-                    missingProductsListToReturn.Add(stockWithProductForErrorList.Product.Id+": " + stockWithProductForErrorList.Product.Name);
-
-                    //TODO: Add Funcionality which will be reponsible for attempting to get StockOnHold From Stock (Stock -> StockOnHold -> apply to basket Cookie)
+                    return BadRequest("Something went wrong during saving");
                 }
             }
 
+            if (_synchronizeBasket.MissingStocks.Any())
+            {
+                return BadRequest(_synchronizeBasket.MissingStocks);
+            }
+
             return Ok();
-            ////
+    
 
         }
     }

@@ -16,7 +16,7 @@ namespace GameShop.Application.Basket
 
         }
 
-
+        //One Thing to consider , If for example basket contains StockQty that is bigger then What Db contains and when new StockQty is Adding then the line 31 will restart previos StockQty for basket (I should think if i want that things to happen)
         public void Do(ISession session, StockOnHold stockToUpdate)
         {
             var basketJson = session.GetString("Basket");

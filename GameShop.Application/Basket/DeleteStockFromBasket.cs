@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 namespace GameShop.Application.Basket
 {
     //TODO: Move out logic repsonsible for removing StockOnHold for that Session, think about reduce amount of parameters pass to method(for example use Dto)
+    //Consider remove Session when Basket do not contain any Stock (I mean elements in Basket Cookie) instead setting string as Empty,
+    //OR hold that Session for example 5 mins, and If any items is not added to That basket THEN Session is deleted[consider using Global Filter]
     public class DeleteStockFromBasket : IDeleteStockFromBasket
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -37,7 +39,17 @@ namespace GameShop.Application.Basket
 
 
             basketCookie.Remove(productToDelete);
-            var basketJson = JsonConvert.SerializeObject(basketCookie);
+
+            string basketJson;
+            if (!basketCookie.Any())
+            {
+                basketJson = string.Empty;   
+            } 
+            else
+            {
+                basketJson = JsonConvert.SerializeObject(basketCookie);
+            }
+
             session.SetString("Basket", basketJson);
 
             return true;

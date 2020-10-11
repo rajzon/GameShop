@@ -15,5 +15,7 @@ namespace GameShop.Application.Interfaces
         IOrderRepository Order { get;} 
         IStockOnHoldRepository StockOnHold { get;} 
         Task<bool> SaveAsync();
+        bool IsAnyEntityModified();
+        bool IsAnyEntityAdded();
     }
 }

@@ -20,7 +20,7 @@ namespace GameShop.Application.StockManipulations
 
             bool result = true;
 
-            if (stockOnHoldsToTransfer.Count() > 1)
+            if (stockOnHoldsToTransfer.Any())
             { 
                 foreach (var stockOnHold in stockOnHoldsToTransfer)
                 {

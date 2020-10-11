@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Threading.Tasks;
 using GameShop.Application.Interfaces;
 using GameShop.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameShop.Infrastructure
 {
@@ -142,7 +144,17 @@ namespace GameShop.Infrastructure
                 }
         }
         
-        
+        public bool IsAnyEntityModified()
+        {
+            return _ctx.ChangeTracker.Entries().Any(x => x.State == EntityState.Modified);
+   
+        }
+
+        public bool IsAnyEntityAdded()
+        {
+            return _ctx.ChangeTracker.Entries().Any(x => x.State == EntityState.Added);
+   
+        }
         
 
         public async Task<bool> SaveAsync()

@@ -1,3 +1,4 @@
+import { BasketMissingStocksModalComponent } from './basket/basket-missing-stocks-modal/basket-missing-stocks-modal.component';
 import { PaymentComponent } from './checkout/payment/payment.component';
 import { CustomerInfoComponent } from './checkout/customer-info/customer-info.component';
 import { StockManagmentComponent } from './admin/stock-managment/stock-managment.component';
@@ -66,7 +67,8 @@ export function tokenGetter() {
       ProductCardComponent,
       StockManagmentComponent,
       CustomerInfoComponent,
-      PaymentComponent
+      PaymentComponent,
+      BasketMissingStocksModalComponent
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -97,7 +99,8 @@ export function tokenGetter() {
   ],
   entryComponents: [
      RolesModalComponent,
-     RequirementsModalComponent
+     RequirementsModalComponent,
+     BasketMissingStocksModalComponent
   ],
   bootstrap: [AppComponent]
 })

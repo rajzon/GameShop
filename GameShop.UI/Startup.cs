@@ -78,6 +78,7 @@ namespace GameShop.UI
             services.AddScoped<ITransferStockToStockOnHold, TransferStockToStockOnHold>();
             services.AddScoped<ITransferStockOnHoldWhenExpire, TransferStockOnHoldWhenExpire>();
             services.AddScoped<IDeleteStockFromBasket, DeleteStockFromBasket>();
+            services.AddScoped<ISynchronizeBasket, SynchronizeBasket>();
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);

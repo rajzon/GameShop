@@ -4,6 +4,7 @@ using GameShop.Application.Interfaces;
 using GameShop.Domain.Model;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using GameShop.Domain.Enums;
 
 namespace GameShop.Application.Basket
 {
@@ -14,9 +15,12 @@ namespace GameShop.Application.Basket
         public TransferStockToStockOnHold(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-        }
+        } 
        
-        public async Task<StockOnHold> Do(ISession session, Stock stockToSubtract, int stockQty)
+       //ToDO: Reduce amount of parameters, split logic repsonsible for increasing ExpireTime for already placed products in basket
+       //ToDO: refactor , to many ifs
+       //TODO: refactor , enums , for example TransferStockToStockOnHoldTypeEnum.One is not used
+        public async Task<StockOnHold> Do(TransferStockToStockOnHoldTypeEnum transferType ,ISession session, Stock stockToSubtract, int stockQty)
         {
             if (stockToSubtract == null)
             {
@@ -27,16 +31,18 @@ namespace GameShop.Application.Basket
             {
                 return null;
             }
-
-            var stocksOnHoldToChangeExpireTime = await _unitOfWork.StockOnHold.FindAllAsync(s => s.SessionId == session.Id);
-
-            if (stocksOnHoldToChangeExpireTime.Count() > 1)
+            if (transferType == TransferStockToStockOnHoldTypeEnum.OneWithUpdatingExpireTimeForBasketProducts)
             {
-                foreach (var stockOnHold in stocksOnHoldToChangeExpireTime)
-                {        
-                    stockOnHold.ExpireTime = DateTime.Now.AddMinutes(30);
+                var stocksOnHoldToChangeExpireTime = await _unitOfWork.StockOnHold.FindAllAsync(s => s.SessionId == session.Id);
+
+                if (stocksOnHoldToChangeExpireTime.Count() > 1)
+                {
+                    foreach (var stockOnHold in stocksOnHoldToChangeExpireTime)
+                    {        
+                        stockOnHold.ExpireTime = DateTime.Now.AddMinutes(30);
+                    }
                 }
-            }  
+            }           
             var stockOnHoldToBeAdded = await _unitOfWork.StockOnHold.FindAsync(s => s.SessionId == session.Id && s.StockId == stockToSubtract.Id);
 
             if (stockOnHoldToBeAdded != null)

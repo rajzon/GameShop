@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos.BasketDtos;
@@ -78,6 +79,11 @@ namespace GameShop.Infrastructure.Repositories
                 stocksToModerate.FirstOrDefault(s => s.Id == item.Key).Quantity -= item.Value;
             }
         
+        }
+        
+        public async Task<Stock> FindWithProductAsync(Expression<Func<Stock, bool>> expression)
+        {
+            return await _ctx.Stocks.Include(s => s.Product).Where(expression).FirstOrDefaultAsync();
         }
 
     }
