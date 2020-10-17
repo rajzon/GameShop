@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using FluentAssertions;
 using GameShop.Domain.Dtos;
@@ -98,6 +99,8 @@ namespace UnitTests.Controllers
             _mockedUnitOfWork.Setup(s => s.Product.GetWithPhotosOnly(productId))
                     .ReturnsAsync(new Product(){Photos = new List<Photo>()});
 
+            _mockedAddPhotoToCloud.Setup(s => s.Do(It.IsAny<Cloudinary>(),photoForCreationDto)).Returns(true);
+
             _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(false);
             
 
@@ -125,6 +128,8 @@ namespace UnitTests.Controllers
             _mockedUnitOfWork.Setup(s => s.Product.GetWithPhotosOnly(productId))
                     .ReturnsAsync(new Product(){Photos = emptyPhotoList});
 
+            _mockedAddPhotoToCloud.Setup(s => s.Do(It.IsAny<Cloudinary>(),photoForCreationDto)).Returns(true);
+
             _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(true);
             
 
@@ -151,6 +156,8 @@ namespace UnitTests.Controllers
 
             _mockedUnitOfWork.Setup(s => s.Product.GetWithPhotosOnly(productId))
                     .ReturnsAsync(new Product(){Photos = productPhotoList});
+            
+            _mockedAddPhotoToCloud.Setup(s => s.Do(It.IsAny<Cloudinary>(),photoForCreationDto)).Returns(true);
 
             _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(true);
             
@@ -179,6 +186,8 @@ namespace UnitTests.Controllers
 
             _mockedUnitOfWork.Setup(s => s.Product.GetWithPhotosOnly(productId))
                     .ReturnsAsync(new Product(){Photos = productPhotoList});
+
+            _mockedAddPhotoToCloud.Setup(s => s.Do(It.IsAny<Cloudinary>(),photoForCreationDto)).Returns(true);
 
             _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(true);
             
@@ -220,7 +229,7 @@ namespace UnitTests.Controllers
             _mockedUnitOfWork.Setup(s => s.Photo.GetAsync(photoId))
                                 .ReturnsAsync(new Photo(){Id = photoId, isMain = false});
             
-            _mockedUnitOfWork.Setup(s => s.Photo.FindAsync(p => p.ProductId == productId))
+            _mockedUnitOfWork.Setup(s => s.Photo.FindAsync(p => p.ProductId == productId && p.isMain == true))
                                 .ReturnsAsync(new Photo(){Id = photoIdOfCurrentMainPhoto, isMain = true});
             
             _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(true);
@@ -236,7 +245,7 @@ namespace UnitTests.Controllers
 
             _mockedUnitOfWork.Verify(v => v.Photo.GetAsync(photoId), Times.Once);
 
-            _mockedUnitOfWork.Verify(v => v.Photo.FindAsync(p => p.ProductId == productId), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Photo.FindAsync(p => p.ProductId == productId && p.isMain == true), Times.Once);
 
             _mockedUnitOfWork.Verify(v => v.SaveAsync(), Times.Once);
  
@@ -317,7 +326,7 @@ namespace UnitTests.Controllers
             _mockedUnitOfWork.Setup(s => s.Photo.GetAsync(photoId))
                         .ReturnsAsync(new Photo());
 
-            _mockedUnitOfWork.Setup(s => s.Photo.FindAsync(p => p.ProductId == productId))
+            _mockedUnitOfWork.Setup(s => s.Photo.FindAsync(p => p.ProductId == productId && p.isMain == true))
                         .ReturnsAsync(new Photo());
 
             _mockedUnitOfWork.Setup(s => s.SaveAsync()).ReturnsAsync(false);
@@ -333,7 +342,7 @@ namespace UnitTests.Controllers
 
             _mockedUnitOfWork.Verify(v => v.Product.GetWithPhotosOnly(productId), Times.Once);
             _mockedUnitOfWork.Verify(v => v.Photo.GetAsync(photoId), Times.Once);
-            _mockedUnitOfWork.Verify(v => v.Photo.FindAsync(p => p.ProductId == productId), Times.Once);
+            _mockedUnitOfWork.Verify(v => v.Photo.FindAsync(p => p.ProductId == productId && p.isMain == true), Times.Once);
             _mockedUnitOfWork.Verify(v => v.SaveAsync(), Times.Once);
             
         }

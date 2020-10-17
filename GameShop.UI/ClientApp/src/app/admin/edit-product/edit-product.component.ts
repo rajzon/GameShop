@@ -27,6 +27,11 @@ export class EditProductComponent implements OnInit {
   subCategories: SubCategory[];
   currentMainPhoto: Photo;
 
+  productNameMaxLength: number = environment.productNameMaxLength;
+  productDescriptionMaxLength: number = environment.productDescriptionMaxLength;
+  productPriceMaxValue: number = environment.productPriceMaxValue;
+  productPriceMinValue: number = environment.productPriceMinValue;
+
 
   uploader: FileUploader;
   hasBaseDropZoneOver = false;
@@ -149,6 +154,7 @@ export class EditProductComponent implements OnInit {
       this.messagePopup.displaySuccess('Product edited successfully');
       this.uploadPhotos();
     }, error => {
+      this.editionState = false;
       this.messagePopup.displayError(error);
     });
   }

@@ -4,12 +4,10 @@ using System.Threading.Tasks;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos.BasketDtos;
 using GameShop.Domain.Dtos.CustomerDto;
-using GameShop.Domain.Dtos.PaymentDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Stripe;
 
 namespace GameShop.UI.Controllers
 {

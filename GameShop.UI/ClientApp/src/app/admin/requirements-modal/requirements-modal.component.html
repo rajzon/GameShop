@@ -8,6 +8,7 @@
   <form #requirementsForm="ngForm" id="subCategoryFrom">
     <div class="form-group">
       <input type="text"
+        maxlength="{{osMaxLength}}"
         name="os" 
         class="form-control"
         placeholder="OS"     
@@ -16,7 +17,8 @@
     </div>
 
     <div class="form-group">
-      <input type="text"  
+      <input type="text"
+        maxlength="{{processorMaxLength}}"  
         name="processor" 
         class="form-control"
         placeholder="Processor"
@@ -43,7 +45,8 @@
     </div>
 
     <div class="form-group">
-      <input type="text" 
+      <input type="text"
+        maxlength="{{graphicsCardMaxLength}}"  
         name="graphicsCard"
         class="form-control"
         placeholder="GraphicsCard"

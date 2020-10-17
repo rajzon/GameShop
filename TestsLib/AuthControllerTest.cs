@@ -281,9 +281,9 @@ namespace TestsLib
         }
 
         [Theory]
-        [InlineData("Holly","badpassword")]
-        [InlineData("Zelma","badpassword")]
-        [InlineData("Admin","badpassword")]
+        [InlineData("Holly","badpassw")]
+        [InlineData("Zelma","badpassw")]
+        [InlineData("Admin","badpassw")]
         public void IntegrationTest_Given_UserForLoginDtoWithBadPassword_When_Login_Then_Return_Unauthorized(string userName, string password)
         {
             //Arrange

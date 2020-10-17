@@ -87,7 +87,8 @@ namespace TestsLib
 
 
             _unitOfWork = new UnitOfWork(_context);
-            _addPhotoToCloud = new AddPhotoToCloud();
+            var cloudinaryOptions = Options.Create(config.GetSection("CloudinarySettings").Get<CloudinarySettings>());
+            _addPhotoToCloud = new AddPhotoToCloud(cloudinaryOptions);
 
             //Cloudinary configuration
             CloudinarySettings cloudinarySettings = new CloudinarySettings()

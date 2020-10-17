@@ -1,25 +1,4 @@
-<!-- <div *ngIf="product" class="container">
-<p>
-  {{product.id}} - {{product.name}}
-</p>
-<p>
- Category: {{product.category.name}} 
-</p>
-<p>
-  Price: {{product.price}}$ 
-</p>
-<p>
-   {{product.description}}
-</p>
-<p>
- {{product.description}}
-</p>
-<p>
-  <button class="btn btn-success" (click)="addToBasket()">Add To Basket</button>
-  <input type="se" class="form-control" min="1" name="product Quanitity" placeholder="Product Quantity" [(ngModel)]="product.stock.quantity">
-</p>
-</div> -->
-  <div class="container">
+<div class="container">
     <div *ngIf="product" class="col-md-6 mt-5">
       <h5>{{product.name}}</h5>
       <p><span class="mr-1"><strong>{{product.price}}$</strong></span></p>

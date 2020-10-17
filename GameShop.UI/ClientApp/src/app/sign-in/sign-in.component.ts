@@ -2,6 +2,7 @@ import { MessagePopupService } from './../_services/message-popup.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-sign-in',
@@ -11,7 +12,13 @@ import { Router } from '@angular/router';
 export class SignInComponent implements OnInit {
   model: any = {};
 
-  constructor(private authService: AuthService , private router: Router,private messagePopup: MessagePopupService) { }
+  userNameMaxLength: number = environment.userNameMaxLength;
+  userNameMinLength: number = environment.userNameMinLength;
+  userPasswordMaxLength: number = environment.userPasswordMaxLength;
+  userPasswordMinLength: number = environment.userPasswordMinLength;
+
+
+  constructor(private authService: AuthService , private router: Router, private messagePopup: MessagePopupService) { }
 
   ngOnInit() {}
 

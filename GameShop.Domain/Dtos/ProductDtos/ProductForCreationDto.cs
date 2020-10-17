@@ -10,12 +10,15 @@ namespace GameShop.Domain.Dtos
     {
 
         [Required]
+        [StringLength(50)]
         public string Name { get; set; }
         [Required]
+        [StringLength(2000)]
         public string Description { get; set; }
         [Required]
         public byte Pegi { get; set; }
         [Required]
+        [Range(0, 9999999.99)]
         public decimal Price { get; set; }   
         [Required] 
         public bool IsDigitalMedia { get; set; }

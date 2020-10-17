@@ -332,6 +332,11 @@ namespace GameShop.UI.Controllers
     public async Task<IActionResult> EditStockForProduct(int id, int quantity)
     {
 
+        if (quantity < 0 )
+        {
+            return BadRequest("Quantity value to set can not be less then 0");
+        }
+
         var product = await _unitOfWork.Product.GetWithStockOnlyAsync(id);
 
         if (product == null)

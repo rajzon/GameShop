@@ -4,7 +4,7 @@
       <hr>
     
       <div class="form-group">
-        <input type="text" class="form-control" name="name" required placeholder="ProductName" [(ngModel)]="model.name">
+        <input maxlength="{{productNameMaxLength}}" type="text" class="form-control" name="name" required placeholder="ProductName" [(ngModel)]="model.name">
       </div>
     
 
@@ -56,11 +56,11 @@
       </div>
 
       <div class="form-group">
-        <input type="number" class="form-control" name="pegi" required placeholder="Pegi" [(ngModel)]="model.pegi">
+        <input min="0" type="number" class="form-control" name="pegi" required placeholder="Pegi" [(ngModel)]="model.pegi">
       </div>
 
       <div class="form-group">
-        <input type="number" class="form-control" name="price" required placeholder="Price" [(ngModel)]="model.price">
+        <input min="{{productPriceMinValue}}" max="{{productPriceMaxValue}}" type="number" class="form-control" name="price" required placeholder="Price" [(ngModel)]="model.price">
       </div>
 
       <div class="form-group">
@@ -82,7 +82,7 @@
       </div>
      
       <div class="form-group">
-        <input type="text" class="form-control" name="description" required placeholder="Description" [(ngModel)]="model.description">
+        <input maxlength="{{productDescriptionMaxLength}}" type="text" class="form-control" name="description" required placeholder="Description" [(ngModel)]="model.description">
       </div>
 
       <!-- uploader -->

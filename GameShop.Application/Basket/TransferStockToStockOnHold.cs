@@ -5,16 +5,20 @@ using GameShop.Domain.Model;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using GameShop.Domain.Enums;
+using GameShop.Application.Helpers;
+using Microsoft.Extensions.Options;
 
 namespace GameShop.Application.Basket
 {
     public class TransferStockToStockOnHold : ITransferStockToStockOnHold
     {
         private IUnitOfWork _unitOfWork;
+        private readonly IOptions<BasketSettings> _basketOptions;
 
-        public TransferStockToStockOnHold(IUnitOfWork unitOfWork)
+        public TransferStockToStockOnHold(IUnitOfWork unitOfWork, IOptions<BasketSettings> basketOptions)
         {
             _unitOfWork = unitOfWork;
+            _basketOptions = basketOptions;
         } 
        
        //ToDO: Reduce amount of parameters, split logic repsonsible for increasing ExpireTime for already placed products in basket
@@ -42,7 +46,7 @@ namespace GameShop.Application.Basket
                 {
                     foreach (var stockOnHold in stocksOnHoldToChangeExpireTime)
                     {        
-                        stockOnHold.ExpireTime = DateTime.Now.AddMinutes(30);
+                        stockOnHold.ExpireTime = DateTime.Now.AddMinutes(_basketOptions.Value.StockOnHoldExpireMinutes);
                     }
                 }
             }           
@@ -58,7 +62,7 @@ namespace GameShop.Application.Basket
                 {
                     SessionId = session.Id,
                     StockId = stockToSubtract.Id,
-                    ExpireTime = DateTime.Now.AddMinutes(30),
+                    ExpireTime = DateTime.Now.AddMinutes(_basketOptions.Value.StockOnHoldExpireMinutes),
                     StockQty = stockQty,
                     //In The Future Remove That ProductId
                     ProductId = stockToSubtract.ProductId

@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using FluentAssertions;
+using GameShop.Application.Helpers;
 using GameShop.Domain.Model;
 using GameShop.Infrastructure;
 using GameShop.Infrastructure.Identity;
@@ -12,6 +13,7 @@ using GameShop.UI;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Xunit;
 
@@ -49,8 +51,6 @@ namespace TestsLib
                 
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                
-
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
                 var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
@@ -59,7 +59,9 @@ namespace TestsLib
 
                 Seed.SeedUsers(userManager, roleManager, config);
 
-                var sut = new JwtTokenHelper();
+
+                var jwtOptions = Options.Create(config.GetSection("JWTSettings").Get<JWTSettings>());
+                var sut = new JwtTokenHelper(jwtOptions);
 
                 user = context.Users.Where(u => u.Id == userId).FirstOrDefault();
 
@@ -126,7 +128,8 @@ namespace TestsLib
 
                 Seed.SeedUsers(userManager, roleManager, config);
 
-                var sut = new JwtTokenHelper();
+                var jwtOptions = Options.Create(config.GetSection("JWTSettings").Get<JWTSettings>());
+                var sut = new JwtTokenHelper(jwtOptions);
 
                 nullUser = context.Users.Where(u => u.Id == fakeUserId).FirstOrDefault();
 

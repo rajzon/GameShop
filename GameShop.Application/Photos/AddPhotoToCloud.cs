@@ -1,12 +1,20 @@
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using GameShop.Application.Helpers;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
+using Microsoft.Extensions.Options;
 
 namespace GameShop.Application.Photos
 {
     public class AddPhotoToCloud : IAddPhotoToCloud
     {
+        private readonly IOptions<CloudinarySettings> _cloudinaryOptions;
+
+        public AddPhotoToCloud(IOptions<CloudinarySettings> cloudinaryOptions)
+        {
+            _cloudinaryOptions = cloudinaryOptions;
+        }
         public bool Do(Cloudinary cloudinary, PhotoForCreationDto photoForCreationDto)
         {
 
@@ -21,7 +29,7 @@ namespace GameShop.Application.Photos
                    var uploadParams = new ImageUploadParams() 
                    {
                        File = new FileDescription(file.Name, stream),
-                       Transformation = new Transformation().Width(500).Height(500)
+                       Transformation = new Transformation().Width(_cloudinaryOptions.Value.ImageWidth).Height(_cloudinaryOptions.Value.ImageHeight)
                             
                    };
 

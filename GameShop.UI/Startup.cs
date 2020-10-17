@@ -34,6 +34,8 @@ using GameShop.Application.Photos;
 using Stripe;
 using GameShop.Domain.Logic;
 using GameShop.Application.StockManipulations;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace GameShop.UI
 {
@@ -81,6 +83,8 @@ namespace GameShop.UI
             services.AddScoped<ISynchronizeBasket, SynchronizeBasket>();
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+            services.Configure<BasketSettings>(Configuration.GetSection("BasketSettings"));
+            services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.ConfigureUnitOfWork();
             services.ConfigureAuthentication(Configuration);
@@ -91,8 +95,8 @@ namespace GameShop.UI
 
             services.AddSession(options => 
             {
-                //Small value for testing
-                options.Cookie.MaxAge = TimeSpan.FromDays(10);
+                var cookieExpireDays = int.Parse(Configuration["BasketSettings:CookieExpireDays"]);
+                options.Cookie.MaxAge = TimeSpan.FromDays(cookieExpireDays);
 
             });
 

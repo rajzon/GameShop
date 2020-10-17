@@ -5,20 +5,44 @@
 export const environment = {
   production: false,
   baseUrl: 'api/',
+  //CustomerInfo config
   nameMaxLength: 30,
   surNameMaxLength: 30,
   addressMaxLength: 80,
   streetMaxLength: 80,
   postCodeMaxLength: 6,
   cityMaxLength: 40,
+  ///////////////////////
+  //Pagination config
   pageNumber: 1,
   pageSize: 5,
+  ///////////////////
+  //Image uploader config
   maxFileSize: 10 * 1024 * 1024, //10MB
+  ///////////////////////
+  //User management config
   availableRoles: [
     {name: 'Admin', value: 'Admin'},
     {name: 'Moderator', value: 'Moderator'},
     {name: 'Customer', value: 'Customer'},
-  ]
+  ],
+  ///////////////////////
+  //User login/register config
+  userNameMaxLength: 30,
+  userNameMinLength: 3,
+  userPasswordMaxLength: 8,
+  userPasswordMinLength: 4,
+  /////////////////
+  //Requirements model config
+  osMaxLength: 30,
+  processorMaxLength: 100,
+  graphicsCardMaxLength: 100,
+  ////////////////
+  //Product model config
+  productNameMaxLength: 50,
+  productDescriptionMaxLength: 2000,
+  productPriceMaxValue: 9999999.99,
+  productPriceMinValue: 0
 };
 
 /*

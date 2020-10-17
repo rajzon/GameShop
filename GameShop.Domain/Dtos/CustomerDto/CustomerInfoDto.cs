@@ -22,6 +22,7 @@ namespace GameShop.Domain.Dtos.CustomerDto
 
         [Required]
         [MaxLength(6)]
+        //TO DO: implement post code validation
         public string PostCode { get; set; }
         
         [MaxLength(40)]

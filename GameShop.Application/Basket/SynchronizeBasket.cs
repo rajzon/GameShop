@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameShop.Application.Helpers;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos.BasketDtos;
 using GameShop.Domain.Enums;
 using GameShop.Domain.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace GameShop.Application.Basket
 {
@@ -14,21 +16,23 @@ namespace GameShop.Application.Basket
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITransferStockToStockOnHold _transferStockToStockOnHold;
+        private readonly IOptions<BasketSettings> _basketSettings;
 
         public List<NotEnoughStockInfoDto> MissingStocks { get; private set; }
 
-        public SynchronizeBasket(IUnitOfWork unitOfWork, ITransferStockToStockOnHold transferStockToStockOnHold)
+        public SynchronizeBasket(IUnitOfWork unitOfWork, ITransferStockToStockOnHold transferStockToStockOnHold, IOptions<BasketSettings> basketSettings)
         {
             _unitOfWork = unitOfWork;
             _transferStockToStockOnHold = transferStockToStockOnHold;
+            _basketSettings = basketSettings;
 
             MissingStocks = new List<NotEnoughStockInfoDto>();
         }
 
-        //TODO: Create wrapper for response which will contain Errors, Resutlt[true,false] and MissingStocks
+        //Consider: Create wrapper for response which will contain Errors, Resutlt[true,false] and MissingStocks
         //Consider put Wrapper class as internal class or nested class of that class
         //Consider not allowing Saving Db when Any missing stock occured
-        //I Should consider if i need lohic responsible for increase ExpireTime for existing StockOnHold(from line 44)  when I use that method for synchronizing Basket during Charge
+        //I Should consider if i need logic responsible for increase ExpireTime for existing StockOnHold(from line 44)  when I use that method for synchronizing Basket during Charge
         public async Task<bool> Do(ISession session, List<ProductFromBasketCookieDto> basketCookie)
         {
             if (basketCookie == null || !basketCookie.Any())
@@ -44,8 +48,7 @@ namespace GameShop.Application.Basket
                 {                  
                     var stockOnHoldThatIsAssignedToThatBasekt = stocksOnHoldForThatBasket.FirstOrDefault(s => s.StockId == product.StockId);
                     
-                    //TODO: Source for Adding Minutes should comes from Config File
-                    stockOnHoldThatIsAssignedToThatBasekt.ExpireTime = DateTime.Now.AddMinutes(30);
+                    stockOnHoldThatIsAssignedToThatBasekt.ExpireTime = DateTime.Now.AddMinutes(_basketSettings.Value.StockOnHoldExpireMinutes);
                 }
                 else
                 {

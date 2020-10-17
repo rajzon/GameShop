@@ -25,6 +25,11 @@ export class CreateProductComponent implements OnInit {
   subCategories: SubCategory[];
   languages: Languague[];
 
+  productNameMaxLength: number = environment.productNameMaxLength;
+  productDescriptionMaxLength: number = environment.productDescriptionMaxLength;
+  productPriceMaxValue: number = environment.productPriceMaxValue;
+  productPriceMinValue: number = environment.productPriceMinValue;
+
 
   uploader: FileUploader;
   hasBaseDropZoneOver = false;

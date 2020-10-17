@@ -4,16 +4,24 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using GameShop.Application.Helpers;
 using GameShop.Domain.Model;
 using GameShop.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace GameShop.Infrastructure.Identity
 {
     public class JwtTokenHelper : IJwtTokenHelper
     {
+        private readonly IOptions<JWTSettings> _jwtOptions;
+
+        public JwtTokenHelper(IOptions<JWTSettings> jwtOptions)
+        {
+            _jwtOptions = jwtOptions;
+        }
         public  async Task<string> GenerateJwtToken(User user, UserManager<User> userManager, IConfiguration config)
         {
             if (user == null)
@@ -41,7 +49,7 @@ namespace GameShop.Infrastructure.Identity
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddDays(_jwtOptions.Value.ExpireDays),
                 SigningCredentials = creds
             };
 

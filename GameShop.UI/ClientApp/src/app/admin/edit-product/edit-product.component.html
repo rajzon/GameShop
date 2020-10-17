@@ -4,7 +4,7 @@
         <hr>
       
         <div class="form-group">
-          <input type="text" class="form-control" name="name" required placeholder="ProductName" [(ngModel)]="model.name">
+          <input type="text" maxlength="{{productNameMaxLength}}" class="form-control" name="name" required placeholder="ProductName" [(ngModel)]="model.name">
         </div>
   
         <div class="form-group">
@@ -54,11 +54,11 @@
         </div>
   
         <div class="form-group">
-          <input type="number" class="form-control" name="pegi" required placeholder="Pegi" [(ngModel)]="model.pegi">
+          <input type="number" min="0" class="form-control" name="pegi" required placeholder="Pegi" [(ngModel)]="model.pegi">
         </div>
   
         <div class="form-group">
-          <input type="number" class="form-control" name="price" required placeholder="Price" [(ngModel)]="model.price">
+          <input type="number" min="{{productPriceMinValue}}" max="{{productPriceMaxValue}}" class="form-control" name="price" required placeholder="Price" [(ngModel)]="model.price">
         </div>
   
   
@@ -81,7 +81,7 @@
         </div>
        
         <div class="form-group">
-          <input type="text" class="form-control" name="description" required placeholder="Description" [(ngModel)]="model.description">
+          <input type="text" maxlength="{{productDescriptionMaxLength}}" class="form-control" name="description" required placeholder="Description" [(ngModel)]="model.description">
         </div>
 
         <div class="row">
