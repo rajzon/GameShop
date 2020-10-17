@@ -1,3 +1,4 @@
+import { MessagePopupService } from './../_services/message-popup.service';
 import { AuthService } from './../_services/auth.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
@@ -9,7 +10,7 @@ import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 export class AuthGuard implements CanActivate {
   private loggedIn: boolean;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService, private messagePopup: MessagePopupService) {}
   canActivate(next: ActivatedRouteSnapshot):  boolean  {
     const roles = next.data['roles'] as Array<string>;
     this.loggedIn = this.authService.loggedIn();
@@ -18,7 +19,7 @@ export class AuthGuard implements CanActivate {
       if (match) {
         return true;
       } else {
-        console.log('You do not have privlage to access that page');
+        this.messagePopup.displayError('You do not have privilege to access that page');
         this.router.navigate(['home']);
       }
     }
@@ -29,7 +30,7 @@ export class AuthGuard implements CanActivate {
     }
 
 
-    console.log('You are not allowed to get to that page');
+    this.messagePopup.displayError('You are not allowed to get to that page');
     this.router.navigate(['/home']);
     return false;
   }

@@ -1,3 +1,4 @@
+import { MessagePopupService } from './../../_services/message-popup.service';
 import { ProductForCardFromServer } from './../../_models/ProductForCardFromServer';
 import { ShopOrderingService } from './../../_services/shop-ordering.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,7 +15,8 @@ export class ProductCardComponent implements OnInit {
   product: ProductForCardFromServer;
 
   constructor(private shopSearchingService: ShopSearchingService,
-              private shopOrderingService: ShopOrderingService , private route: ActivatedRoute, private router: Router) { }
+              private shopOrderingService: ShopOrderingService , private route: ActivatedRoute, private router: Router, 
+              private messagePopup: MessagePopupService) { }
 
   ngOnInit() {
     this.getProduct();
@@ -26,7 +28,7 @@ export class ProductCardComponent implements OnInit {
          this.product = response;
          console.log(this.product);
     }, error => {
-      console.log(error);
+      this.messagePopup.displayError(error);
     });
   }
 
@@ -37,7 +39,7 @@ export class ProductCardComponent implements OnInit {
       console.log('Added Product to Basket TEST');
       this.router.navigate(['/basket']);
     }, error => {
-      console.log(error);
+      this.messagePopup.displayError(error);
     });
   }
 

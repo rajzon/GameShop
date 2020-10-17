@@ -1,7 +1,10 @@
+import { MessagePopupService } from './../../_services/message-popup.service';
+import { environment } from './../../../environments/environment';
 import { ShopOrderingService } from './../../_services/shop-ordering.service';
 import { Component, OnInit } from '@angular/core';
 import { CustomerInfo } from 'src/app/_models/CustomerInfo';
 import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-customer-info',
@@ -11,8 +14,14 @@ import { Router } from '@angular/router';
 export class CustomerInfoComponent implements OnInit {
 
   model: CustomerInfo;
+  nameMaxLength = environment.nameMaxLength;
+  surNameMaxLength = environment.surNameMaxLength;
+  addressMaxLength = environment.addressMaxLength;
+  streetMaxLength = environment.streetMaxLength;
+  postCodeMaxLength = environment.postCodeMaxLength;
+  cityMaxLength = environment.cityMaxLength;
 
-  constructor(private shopOrderingService: ShopOrderingService,private router: Router) { }
+  constructor(private shopOrderingService: ShopOrderingService, private router: Router, private messagePopup: MessagePopupService) { }
 
   ngOnInit() {
     this.getCustomerInfo();
@@ -26,7 +35,7 @@ export class CustomerInfoComponent implements OnInit {
     this.shopOrderingService.getCustomerInfo().subscribe((response: CustomerInfo) => {
       this.model = response;
     }, error => {
-      console.log(error);
+      this.messagePopup.displayError(error);
     });
   }
 

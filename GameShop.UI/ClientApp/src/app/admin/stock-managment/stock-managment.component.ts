@@ -1,7 +1,9 @@
+import { MessagePopupService } from './../../_services/message-popup.service';
 import { AdminService } from './../../_services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { PaginatedResult, Pagination } from 'src/app/_models/Pagination';
 import { ProductWithStockFromServer } from 'src/app/_models/ProductWithStockFromServer';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-stock-managment',
@@ -12,10 +14,10 @@ export class StockManagmentComponent implements OnInit {
   products: ProductWithStockFromServer[];
   pagination: Pagination;
 
-  pageNumber = 1;
-  pageSize = 5;
+  pageNumber = environment.pageNumber;
+  pageSize = environment.pageSize;
 
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService, private messagePopup: MessagePopupService) { }
 
   ngOnInit() {
     this.getProductsWithStock(this.pageNumber, this.pageSize);
@@ -33,16 +35,16 @@ export class StockManagmentComponent implements OnInit {
       this.products = products.result;
       this.pagination = products.pagination;
     }, error => {
-      console.log(error);
+      this.messagePopup.displayError(error);
     });
   }
 
   editStockForProduct(productid: number, stockQuantity: number) {
       this.adminService.editStockForProduct(productid, stockQuantity)
             .subscribe(() => {
-              console.log(`Successfully changed stock for productId: ${productid}`);
+              this.messagePopup.displaySuccess(`Successfully changed stock for productId: ${productid}`);
             }, error => {
-              console.log(error);
+              this.messagePopup.displayError(error);
             });
   }
 }

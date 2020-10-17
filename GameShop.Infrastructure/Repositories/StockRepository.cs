@@ -47,39 +47,8 @@ namespace GameShop.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<List<StockWithProductForCountOrderPrice>> GetStockWithProductForCharge(List<ProductFromBasketCookieDto> basketProductsCookie)
-        {
-            var stockIds = basketProductsCookie.Select(s => s.StockId).ToList();
+     
 
-            var result = await _ctx.Stocks.Where(s => stockIds.Contains(s.Id)).Select(s => new StockWithProductForCountOrderPrice()
-            {
-                StockId = s.Id,
-                ProductId = s.ProductId,
-                Price = s.Product.Price,
-                StockQty = s.Quantity
-            }).ToListAsync();
-            
-            foreach (var item in basketProductsCookie)
-            {
-               int stockToUpdate = result.FirstOrDefault(p => p.StockId == item.StockId).StockQty;
-               if (stockToUpdate < item.StockQty)
-               {
-                   throw new ArgumentException("Requested Stock Quantity is greater then Stock in Db");
-               }      
-            };
-            return result;
-        }
-
-        public async Task RemoveStockQty(Dictionary<int,int> stockIdWithQtyToRemove)
-        {
-            var dictionaryKey = stockIdWithQtyToRemove.Keys.ToList();
-            var stocksToModerate = await _ctx.Stocks.Where(s => dictionaryKey.Contains(s.Id)).ToListAsync();
-            foreach (var item in stockIdWithQtyToRemove)
-            {
-                stocksToModerate.FirstOrDefault(s => s.Id == item.Key).Quantity -= item.Value;
-            }
-        
-        }
         
         public async Task<Stock> FindWithProductAsync(Expression<Func<Stock, bool>> expression)
         {

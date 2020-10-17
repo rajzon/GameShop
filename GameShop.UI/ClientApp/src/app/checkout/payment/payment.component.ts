@@ -1,5 +1,4 @@
-import { PaymentInfo } from './../../_models/PaymentInfo';
-import { BasketFromServer } from './../../_models/BasketFromServer';
+import { MessagePopupService } from './../../_services/message-popup.service';
 import { CustomerInfo } from './../../_models/CustomerInfo';
 import { ShopOrderingService } from './../../_services/shop-ordering.service';
 
@@ -25,7 +24,7 @@ export class PaymentComponent implements OnInit {
   stockIds: number[];
   customerInfo: CustomerInfo;
 
-  constructor(private shopOrderingService: ShopOrderingService, private router: Router) { }
+  constructor(private shopOrderingService: ShopOrderingService, private router: Router, private messagePopup: MessagePopupService) { }
 
   ngOnInit() {
     this.getCustomerInfo();
@@ -37,7 +36,7 @@ export class PaymentComponent implements OnInit {
     this.shopOrderingService.getCustomerInfo().subscribe((response: CustomerInfo) => {
       this.customerInfo = response;
     }, error => {
-      console.log(error);
+      this.messagePopup.displayError(error);
     });
   }
 
@@ -62,14 +61,14 @@ export class PaymentComponent implements OnInit {
 
     if (error) {
       const cardErrors = error.message;
-      console.log(cardErrors);
+      this.messagePopup.displayError(cardErrors);
     } else {
       console.log(token.id);
       this.shopOrderingService.chargePayment(token.id, this.customerInfo).subscribe(() => {
-        console.log('successfull payment');
+        this.messagePopup.displaySuccess('Successfull Payment');
         this.router.navigate(['/home']);
       }, error => {
-        console.log(error);
+        this.messagePopup.displayError(error);
       });
       console.log(token);
     }

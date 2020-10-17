@@ -1,8 +1,11 @@
+import { MessagePopupService } from './../../_services/message-popup.service';
 import { Router } from '@angular/router';
 import { ProductFromServer } from './../../_models/ProductFromServer';
 import { AdminService } from './../../_services/admin.service';
 import { Component, OnInit, } from '@angular/core';
 import { PaginatedResult, Pagination } from 'src/app/_models/Pagination';
+import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-product-management',
@@ -17,13 +20,14 @@ export class ProductManagementComponent implements OnInit {
   pagination: Pagination;
 
 
-  constructor(private adminService: AdminService, private router: Router) { }
+  constructor(private adminService: AdminService, private router: Router, private messagePopup: MessagePopupService) { }
 
   ngOnInit() {
     this.createButtonClicked = false;
     this.editButtonClicked = false;
-    const pageNumber = 1;
-    const pageSize = 5;
+    const pageNumber = environment.pageNumber;
+    const pageSize = environment.pageSize;
+
     this.getProducts(pageNumber, pageSize);
   }
 
@@ -37,16 +41,16 @@ export class ProductManagementComponent implements OnInit {
       this.products = products.result;
       this.pagination = products.pagination;
     }, error => {
-      console.log(error);
+      this.messagePopup.displayError(error);
     });
   }
 
   deleteProduct(id: Number): void {
     this.adminService.deleteProduct(id).subscribe(() => {
-      console.log('Porduct of Id:' + id + 'has been deleted');
+      this.messagePopup.displaySuccess('Porduct of Id: ' + id + ' has been deleted');
       this.refreshComponent();
     }, error => {
-      console.log(error);
+      this.messagePopup.displayError(error);
     });
   }
 

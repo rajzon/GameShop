@@ -4,7 +4,21 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'api/'
+  baseUrl: 'api/',
+  nameMaxLength: 30,
+  surNameMaxLength: 30,
+  addressMaxLength: 80,
+  streetMaxLength: 80,
+  postCodeMaxLength: 6,
+  cityMaxLength: 40,
+  pageNumber: 1,
+  pageSize: 5,
+  maxFileSize: 10 * 1024 * 1024, //10MB
+  availableRoles: [
+    {name: 'Admin', value: 'Admin'},
+    {name: 'Moderator', value: 'Moderator'},
+    {name: 'Customer', value: 'Customer'},
+  ]
 };
 
 /*

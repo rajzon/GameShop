@@ -1,3 +1,4 @@
+import { MessagePopupService } from './../_services/message-popup.service';
 import { AuthService } from './../_services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -14,7 +15,7 @@ export class NavComponent implements OnInit {
   loggedIn: boolean;
   subscription: Subscription;
 
-  constructor(private authService: AuthService , private router: Router) {}
+  constructor(private authService: AuthService , private router: Router, private messagePopup: MessagePopupService) {}
 
   ngOnInit() {
     this.subscription = this.authService.getLoggedInStatus().subscribe(x => {
@@ -33,13 +34,16 @@ export class NavComponent implements OnInit {
 
   logout(): void {
     localStorage.removeItem('token');
+
     console.log(this.loggedIn);
     this.authService.sendLoggedInStatus(this.authService.loggedIn());
+
     console.log(this.loggedIn);
     const decodedToken = null;
     this.authService.sendDecodedToken(decodedToken);
+
     this.router.navigate(['/home']);
-    console.log('Logged out');
+    this.messagePopup.displaySuccess('Logged out successfully');
   }
 
 

@@ -1,3 +1,4 @@
+import { MessagePopupService } from './../../_services/message-popup.service';
 import { Product } from './../../_models/Product';
 import { RequirementsModalComponent } from './../requirements-modal/requirements-modal.component';
 import { Languague } from './../../_models/Languague';
@@ -9,6 +10,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { FileUploader } from 'ng2-file-upload';
 import { ProductFromServer } from 'src/app/_models/ProductFromServer';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-create-product',
@@ -27,11 +29,14 @@ export class CreateProductComponent implements OnInit {
   uploader: FileUploader;
   hasBaseDropZoneOver = false;
   response: string;
-  baseUrl = 'api/';
+  baseUrl = environment.baseUrl;
+
+  creationState = false;
 
   constructor(
     private adminService: AdminService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private messagePopup: MessagePopupService
   ) {}
 
   ngOnInit() {
@@ -54,31 +59,42 @@ export class CreateProductComponent implements OnInit {
       allowedFileType: ['image'],
       removeAfterUpload: true,
       autoUpload: false,
-      maxFileSize: 10 * 1024 * 1024 //10MB
+      maxFileSize: environment.maxFileSize
     });
+
+    this.uploader.onErrorItem = (item, response, status, headers ) => {
+      this.messagePopup.displayError('Error occured during uploading photo');
+    };
   }
 
   createProduct(): void {
+    this.creationState = true;
     this.adminService.createProduct(this.model).subscribe(
       (next: ProductFromServer) => {
-        console.log('Product Created');
+        this.messagePopup.displaySuccess('Product Created');
+
         const productIdFromServer = next.id;
         console.log(productIdFromServer);
         this.uploadPhotos(productIdFromServer);
       },
       error => {
-        console.log(error);
+        this.messagePopup.displayError(error);
+        this.creationState = false;
       }
     );
   }
 
   private uploadPhotos(productIdFromServer: number): void {
       if (this.uploader.queue.length > 0) {
+        const photosUploadedCount = this.uploader.queue.length;
+
         this.uploader.onBeforeUploadItem  = (file) => {
           file.url = this.baseUrl + 'admin/product/' + productIdFromServer + '/photos'};
         console.log(this.uploader.options.url);
+
         this.uploader.uploadAll();
         this.uploader.onCompleteAll = () => {
+          this.messagePopup.displaySuccess(`${photosUploadedCount} Photos Uploaded`);
           this.creationMode.emit(false);
         };
       } else {
@@ -113,7 +129,7 @@ export class CreateProductComponent implements OnInit {
         this.languages = next;
       },
       error => {
-        console.log(error);
+        this.messagePopup.displayError(error);
       }
     );
   }
@@ -125,7 +141,7 @@ export class CreateProductComponent implements OnInit {
         console.log(this.subCategories);
       },
       error => {
-        console.log(error);
+        this.messagePopup.displayError(error);
       }
     );
   }
@@ -137,16 +153,12 @@ export class CreateProductComponent implements OnInit {
         console.log(this.categories);
       },
       error => {
-        console.log(error);
+        this.messagePopup.displayError(error);
       }
     );
   }
 
   cancelButton(): void {
     this.creationMode.emit(false);
-  }
-
-  nameof<T>(key: keyof T, instance?: T): keyof T {
-    return key;
   }
 }

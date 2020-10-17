@@ -20,6 +20,9 @@ namespace GameShop.Application.Basket
        //ToDO: Reduce amount of parameters, split logic repsonsible for increasing ExpireTime for already placed products in basket
        //ToDO: refactor , to many ifs
        //TODO: refactor , enums , for example TransferStockToStockOnHoldTypeEnum.One is not used
+       //Consider not returning StockOnHold, because i do not want to do antything with that Stock, and also It can produce some issuse, 
+       //because someone could add that Stock to Db that is already added in that method (line: 66)
+       //Instead consider return bool,void(with Error/Status prop in class) or Dto but NO REAL STOCKONHOLD which is used by EF
         public async Task<StockOnHold> Do(TransferStockToStockOnHoldTypeEnum transferType ,ISession session, Stock stockToSubtract, int stockQty)
         {
             if (stockToSubtract == null)

@@ -29,7 +29,7 @@ namespace GameShop.Infrastructure.Repositories
                 Address = customerInfo.Address,
                 Street = customerInfo.Street,
                 PostCode = customerInfo.PostCode,
-                City = customerInfo.PostCode,
+                City = customerInfo.City,
                 OrderPrice = basketForPaymentDto.BasketPrice,
                 StripeRef = basketForPaymentDto.StripeRef,
                 OrderStocks = basketForPaymentDto.BasketProducts.Select(x => new OrderStock()

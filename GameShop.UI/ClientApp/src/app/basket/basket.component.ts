@@ -1,12 +1,11 @@
+import { MessagePopupService } from './../_services/message-popup.service';
 import { BasketMissingStocksModalComponent } from './basket-missing-stocks-modal/basket-missing-stocks-modal.component';
 import { BasketFromServer } from './../_models/BasketFromServer';
 import { Component, OnInit } from '@angular/core';
 import { ShopOrderingService } from '../_services/shop-ordering.service';
-import { ProductForBasketFromServer } from '../_models/ProductForBasketFromServer';
 import { Router } from '@angular/router';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { NotEnoughStockInfoFromServer } from '../_models/NotEnoughStockInfoFromServer';
-import { isDeepStrictEqual } from 'util';
 
 @Component({
   selector: 'app-basket',
@@ -16,7 +15,9 @@ import { isDeepStrictEqual } from 'util';
 export class BasketComponent implements OnInit {
   basket: BasketFromServer;
 
-  constructor(private  shopOrderingService: ShopOrderingService, private router: Router, private modalService: BsModalService) { }
+
+  constructor(private  shopOrderingService: ShopOrderingService, private router: Router, private modalService: BsModalService,
+              private messagePopup: MessagePopupService) { }
 
   ngOnInit() {
     this.getBasket();
@@ -29,6 +30,7 @@ export class BasketComponent implements OnInit {
       console.log(response);
       this.basket = response;
     }, error => {
+      this.messagePopup.displayError(error);
       console.log(error);
     });
   }
@@ -42,6 +44,7 @@ export class BasketComponent implements OnInit {
        });
     }, error => {
       console.log(error);
+      this.messagePopup.displayError(error);
     });
   }
   synchronizeBasket() {
@@ -54,8 +57,11 @@ export class BasketComponent implements OnInit {
         error
       };
       this.modalService.show(BasketMissingStocksModalComponent, {initialState});
-    }
+    } else {
+      this.messagePopup.displayError(error);
       console.log(error);
+    }
+
 
     });
   }
@@ -64,15 +70,15 @@ export class BasketComponent implements OnInit {
     if (error instanceof Array) {
       if (error.every(x => (x as NotEnoughStockInfoFromServer).stockId !== undefined
           && (x as NotEnoughStockInfoFromServer).productName !== undefined
-          && (x as NotEnoughStockInfoFromServer).availableStockQty !== undefined))
-      {
+          && (x as NotEnoughStockInfoFromServer).availableStockQty !== undefined)) {
         return true;
-      } else {
-        return false;
       }
-    } else {
-      return false;
+        return false;
     }
+
+
+    return false;
+
   }
 
 

@@ -21,15 +21,21 @@ namespace GameShop.UI.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICountOrderPrice _countOrderPrice;
         private readonly ICreateCharge _createCharge;
+        private readonly ISynchronizeBasket _synchronizeBasket;
 
-        public PaymentController(IUnitOfWork unitOfWork, ICountOrderPrice countOrderPrice, ICreateCharge createCharge)
+        public PaymentController(IUnitOfWork unitOfWork, ICountOrderPrice countOrderPrice, ICreateCharge createCharge, ISynchronizeBasket synchronizeBasket)
         {
             _unitOfWork = unitOfWork;
             _countOrderPrice = countOrderPrice;
             _createCharge = createCharge;
+            _synchronizeBasket = synchronizeBasket;
         }
 
         //TODO: Refactor it
+        //TODO: Move maxLength Value Validation prop for CustomerInfoDto to JSON file config also move that value for OrderConfiguration prop
+        //TODO: Change Return Type for SynchronizeBasket And for TransferStockTOStockOnHold
+        //TODO: Check if StockOnHoldWithProd for calculate order price contains same StockId, and Same Qty(line 54)
+        //TODO: Add filtering that selects StockOnHOld to create base on SessionId AND StockId from basket (line 72)
         [HttpPost("charge")]
         public async Task<IActionResult> Charge([FromHeader(Name="Stripe-Token")]string stripeToken, CustomerInfoDto customerInfo)
         {
@@ -42,7 +48,12 @@ namespace GameShop.UI.Controllers
 
             var basketProductsCookie = JsonConvert.DeserializeObject<List<ProductFromBasketCookieDto>>(basketJson);
 
-            var productsFromRepo = await _unitOfWork.Stock.GetStockWithProductForCharge(basketProductsCookie);
+            if(!await _synchronizeBasket.Do(HttpContext.Session, basketProductsCookie) && !_synchronizeBasket.MissingStocks.Any())
+            {
+                return BadRequest("Stocks in Basket are not able to be assign to that Session");
+            }
+
+            var productsFromRepo = await _unitOfWork.StockOnHold.GetStockOnHoldWithProductForCharge(HttpContext.Session, basketProductsCookie);
 
             if (productsFromRepo.Count < 1)
             {
@@ -55,9 +66,11 @@ namespace GameShop.UI.Controllers
 
             var order =  _unitOfWork.Order.ScaffoldOrderForCreation(customerInfo, basketForPaymentDto);
 
-            var stockIdWithQtyToRemove = productsFromRepo.ToDictionary(s => s.StockId, s => s.StockQty);
+            // var stockIdWithQtyToRemove = productsFromRepo.ToDictionary(s => s.StockId, s => s.StockQty);
             
-            await _unitOfWork.Stock.RemoveStockQty(stockIdWithQtyToRemove);
+            // await _unitOfWork.Stock.RemoveStockQty(stockIdWithQtyToRemove);
+
+            await _unitOfWork.StockOnHold.DeleteRange(s => s.SessionId == HttpContext.Session.Id);
 
            _unitOfWork.Order.Add(order);
 

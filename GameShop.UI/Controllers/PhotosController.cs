@@ -119,7 +119,7 @@ namespace GameShop.UI.Controllers
                 return BadRequest("This is already main photo");
             }
 
-            var currrentMainPhoto = await _unitOfWork.Photo.FindAsync(p => p.ProductId == productId);
+            var currrentMainPhoto = await _unitOfWork.Photo.FindAsync(p => p.ProductId == productId && p.isMain == true);
 
             if (currrentMainPhoto != null)
             {

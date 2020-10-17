@@ -1,3 +1,4 @@
+import { MessagePopupService } from './../_services/message-popup.service';
 import { AuthService } from './../_services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -11,16 +12,16 @@ export class RegisterComponent implements OnInit {
   model: any = {};
 
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private messagePopup: MessagePopupService) { }
 
   ngOnInit() {
   }
 
   register(): void {
     this.authService.register(this.model).subscribe(() => {
-      console.log('registration successful');
+      this.messagePopup.displaySuccess('Successful registration');
     }, error => {
-      console.log(error);
+      this.messagePopup.displayError(error);
     });
   }
 

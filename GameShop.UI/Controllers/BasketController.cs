@@ -82,7 +82,7 @@ namespace GameShop.UI.Controllers
         [ProducesResponseType(typeof(BasketDto),200)]
         [ProducesResponseType(404)]
         public async Task<ActionResult<BasketDto>> GetBasket()
-        {   
+        {  
             var basketJson = HttpContext.Session.GetString("Basket");
             if (string.IsNullOrEmpty(basketJson))
             {
@@ -139,6 +139,7 @@ namespace GameShop.UI.Controllers
             var basketJson = HttpContext.Session.GetString("Basket");
             if (string.IsNullOrEmpty(basketJson))
             {
+                //Consider return text that contains more accurate info
                 return NotFound();
             }
 

@@ -4,8 +4,8 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<div class="modal-body" *ngFor="let stock of error">
-  StockId:{{stock.stockId}} - {{stock.productName}} - Available Stock({{stock.availableStockQty}})
+<div class="modal-body" *ngFor="let missingStock of error">
+  StockId:{{missingStock.stockId}} - {{missingStock.productName}} - Available Stock({{missingStock.availableStockQty}})
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancel</button>

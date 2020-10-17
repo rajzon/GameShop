@@ -6,5 +6,5 @@
 
     <p>{{cardErrors}}</p>
 
-    <button class="btn btn-success" >Buy</button>
+    <button [disabled]="cardErrors" class="btn btn-success" >Buy</button>
 </form>

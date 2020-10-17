@@ -28,6 +28,7 @@ namespace GameShop.Application.Basket
         //TODO: Create wrapper for response which will contain Errors, Resutlt[true,false] and MissingStocks
         //Consider put Wrapper class as internal class or nested class of that class
         //Consider not allowing Saving Db when Any missing stock occured
+        //I Should consider if i need lohic responsible for increase ExpireTime for existing StockOnHold(from line 44)  when I use that method for synchronizing Basket during Charge
         public async Task<bool> Do(ISession session, List<ProductFromBasketCookieDto> basketCookie)
         {
             if (basketCookie == null || !basketCookie.Any())

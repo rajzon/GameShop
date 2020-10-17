@@ -24,6 +24,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CookieService } from 'ngx-cookie-service';
+import { ToastrModule } from 'ngx-toastr';
+
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -39,6 +41,7 @@ import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ProductCardComponent } from './home/product-card/product-card.component';
+import { MessagePopupService } from './_services/message-popup.service';
 
 
 
@@ -82,6 +85,7 @@ export function tokenGetter() {
       ModalModule.forRoot(),
       NgSelectModule,
       FileUploadModule,
+      ToastrModule.forRoot(),
       JwtModule.forRoot({
          config: {
             tokenGetter: tokenGetter,
@@ -95,7 +99,8 @@ export function tokenGetter() {
      AuthService,
      AdminService,
      ShopSearchingService,
-     CookieService
+     MessagePopupService,
+     CookieService,
   ],
   entryComponents: [
      RolesModalComponent,

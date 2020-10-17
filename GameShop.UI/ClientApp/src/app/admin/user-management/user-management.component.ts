@@ -1,8 +1,10 @@
+import { MessagePopupService } from './../../_services/message-popup.service';
 import { AdminService } from './../../_services/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/_models/User';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { RolesModalComponent } from '../roles-modal/roles-modal.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-user-management',
@@ -13,7 +15,7 @@ export class UserManagementComponent implements OnInit {
   users: User[];
   bsModalRef: BsModalRef;
 
-  constructor(private adminService: AdminService, private modalService: BsModalService) { }
+  constructor(private adminService: AdminService, private modalService: BsModalService, private messagePopup: MessagePopupService) { }
 
   ngOnInit() {
     this.getUsersWithRoles();
@@ -23,7 +25,7 @@ export class UserManagementComponent implements OnInit {
     this.adminService.getUsersWithRoles().subscribe((users: User[]) => {
       this.users = users;
     }, error => {
-      console.log(error);
+      this.messagePopup.displayError(error);
     });
   }
 
@@ -40,8 +42,10 @@ export class UserManagementComponent implements OnInit {
       if (rolesToUpdate) {
         this.adminService.updateUserRoles(user, rolesToUpdate).subscribe(() => {
           user.roles = [...rolesToUpdate.roleNames];
+          
+          
         }, error => {
-          console.log(error);
+          this.messagePopup.displayError(error);
         });
       }
     });
@@ -50,11 +54,7 @@ export class UserManagementComponent implements OnInit {
   private getRolesArray(user: User): any[] {
     const roles = [];
     const userRoles = user.roles;
-    const availableRoles: any[] = [
-      {name: 'Admin', value: 'Admin'},
-      {name: 'Moderator', value: 'Moderator'},
-      {name: 'Customer', value: 'Customer'},
-    ];
+    const availableRoles: any[] = environment.availableRoles;
 
     for (let i = 0; i < availableRoles.length; i++) {
       let isMatch = false;

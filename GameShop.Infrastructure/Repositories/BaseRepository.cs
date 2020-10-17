@@ -33,6 +33,12 @@ namespace GameShop.Infrastructure
             _ctx.Set<T>().RemoveRange(entities);
         }
 
+        public async Task DeleteRange(Expression<Func<T, bool>> expression)
+        {
+            var entitiesToDelete = await _ctx.Set<T>().Where(expression).ToListAsync();
+            _ctx.Set<T>().RemoveRange(entitiesToDelete);
+        }
+
         public async Task<T> FindAsync(Expression<Func<T, bool>> expression)
         {
            return  await _ctx.Set<T>().Where(expression).FirstOrDefaultAsync();

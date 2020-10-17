@@ -83,10 +83,6 @@
         <div class="form-group">
           <input type="text" class="form-control" name="description" required placeholder="Description" [(ngModel)]="model.description">
         </div>
-  
-        <!-- <div class="form-group">
-          <input type="text" class="form-control" name="photos"  placeholder="Photos" [(ngModel)]="model.photos.url">
-        </div> -->
 
         <div class="row">
           <div class="col-sm-2" *ngFor="let photo of model.photos">
@@ -117,10 +113,10 @@
               </div>
    
               Multiple
-              <input type="file" ng2FileSelect [uploader]="uploader" multiple  /><br/>
+              <input  type="file" [disabled]="uploader.isUploading" ng2FileSelect [uploader]="uploader" multiple  /><br/>
    
               Single
-              <input type="file" ng2FileSelect [uploader]="uploader" />
+              <input type="file" [disabled]="uploader.isUploading" ng2FileSelect [uploader]="uploader" />
           </div>
    
           <div class="col-md-9" style="margin-bottom: 40px" *ngIf="uploader?.queue?.length">
@@ -149,7 +145,7 @@
                             <span class="glyphicon glyphicon-ban-circle"></span> Cancel
                         </button>
                         <button type="button" class="btn btn-danger btn-xs"
-                                (click)="item.remove()">
+                                (click)="item.remove()" [disabled]="item.isUploading">
                             <span class="glyphicon glyphicon-trash"></span> Remove
                         </button>
                     </td>                     
@@ -173,7 +169,7 @@
                       <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
                   </button>
                   <button type="button" class="btn btn-danger btn-s"
-                          (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                          (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length || uploader.isUploading">
                       <span class="fa fa-trash"></span> Remove All
                   </button>
               </div>
@@ -183,7 +179,7 @@
       </div>
       
         <div class="form-group text-center">
-          <button [disabled]="!createProductForm.valid" class="btn btn-success"  type="submit">Edit Product</button>
+          <button [disabled]="!createProductForm.valid || editionState || uploader.isUploading" class="btn btn-success"  type="submit">Edit Product</button>
           <button class="btn btn-default"  type="button" (click)="cancelButton()">Cancel</button>
         </div> 
       </form>

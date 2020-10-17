@@ -1,5 +1,7 @@
 <div class="container">
-  <button *ngIf="!createButtonClicked && !editButtonClicked" class="btn btn-info" (click)="createProductButtonSelected()">Create Product</button>
+  <div *ngIf="!createButtonClicked && !editButtonClicked">
+    <button  class="btn btn-info w-100" (click)="createProductButtonSelected()">Create Product</button>
+  </div>
   <div *ngIf="createButtonClicked">
     <app-create-product (creationMode)="canceledOrSuccesfullCreation($event)"></app-create-product>   
   </div>

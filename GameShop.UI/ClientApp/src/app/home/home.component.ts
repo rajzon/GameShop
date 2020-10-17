@@ -1,9 +1,11 @@
+import { MessagePopupService } from './../_services/message-popup.service';
 import { Pagination } from './../_models/Pagination';
 import { Photo } from './../_models/Photo';
 import { ProductForSearching } from './../_models/ProductForSearching';
 import { ShopSearchingService } from './../_services/shop-searching.service';
 import { Component, OnInit } from '@angular/core';
 import { PaginatedResult } from '../_models/Pagination';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -14,11 +16,11 @@ export class HomeComponent implements OnInit {
   pagination: Pagination;
 
 
-  constructor(private shopSearchingService: ShopSearchingService) { }
+  constructor(private shopSearchingService: ShopSearchingService, private messagePopup: MessagePopupService) { }
 
   ngOnInit() {
-    const pageNumber = 1;
-    const pageSize = 5;
+    const pageNumber = environment.pageNumber;
+    const pageSize = environment.pageSize;
     this.getProductsForSearching(pageNumber, pageSize);
   }
 
@@ -35,7 +37,7 @@ export class HomeComponent implements OnInit {
       this.initPhotoIfItsNull();
       console.log(this.products);
     }, error => {
-      console.log(error);
+      this.messagePopup.displayError(error);
     });
 
     console.log(this.pagination);

@@ -4,27 +4,27 @@
     <hr>
 
     <div class="form-group">
-      <input type="text" class="form-control" required name="name" placeholder="Name" [(ngModel)]="model.name" >
+      <input type="text" class="form-control" required name="name"  maxlength="{{nameMaxLength}}" placeholder="Name" [(ngModel)]="model.name" >
     </div>
     
     <div class="form-group">
-      <input type="text" class="form-control" required name="surName" placeholder="SurName" [(ngModel)]="model.surName">
+      <input type="text" class="form-control" required name="surName" maxlength="{{surNameMaxLength}}" placeholder="SurName" [(ngModel)]="model.surName">
     </div>
 
     <div class="form-group">
-      <input type="text" class="form-control" required name="address" placeholder="Address" [(ngModel)]="model.address">
+      <input type="text" class="form-control" required name="address" maxlength="{{addressMaxLength}}" placeholder="Address" [(ngModel)]="model.address">
     </div>
 
     <div class="form-group">
-      <input type="text" class="form-control" required name="street" placeholder="Street" [(ngModel)]="model.street">
+      <input type="text" class="form-control" required name="street" maxlength="{{streetMaxLength}}" placeholder="Street" [(ngModel)]="model.street">
     </div>
 
     <div class="form-group">
-      <input type="text" class="form-control" required name="postCode" placeholder="Post Code" [(ngModel)]="model.postCode">
+      <input type="text" class="form-control" required name="postCode" maxlength="{{postCodeMaxLength}}" placeholder="Post Code" [(ngModel)]="model.postCode">
     </div>
 
     <div class="form-group">
-      <input type="text" class="form-control" name="city" placeholder="City" [(ngModel)]="model.city">
+      <input type="text" class="form-control" name="city" placeholder="City" maxlength="{{cityMaxLength}}" [(ngModel)]="model.city">
     </div>
 
     <div class="form-group text-center">
