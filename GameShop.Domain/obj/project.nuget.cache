@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NtvZnrVZKdLHPNHycs28qdcsCLHQW/PmSD8ypTseJLPoASqSkw72Xeu6wWAW+RI/LwDD0N9B+vsZvtB8acjpbg==",
+  "dgSpecHash": "+WzO78SkM6IPRjoxz6Vhcoz8mJbfGjXTmkNflzm0RogeESVyOezRjK4W1bRfFGN2GpXVZFRjI57MbUL0tpg88A==",
   "success": true,
-  "projectFilePath": "c:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Domain\\GameShop.Domain.csproj",
+  "projectFilePath": "C:\\Users\\Dawid\\Documents\\GameShop\\GameShop.Domain\\GameShop.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dawid\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\Dawid\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
