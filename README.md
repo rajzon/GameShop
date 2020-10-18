@@ -3,7 +3,7 @@
 ## GameShop
 
 GameShop app will allow user and anonymous to buy product and admin will be able to: edit products, track orders, etc.
-#### Store already have the following functionality:
+### Store already have the following functionalities:
 - basket functionality with holding Stock for concrete customer and synchronize basket,
 - returning expired stock that is hold for specific customer to the stock that is available to retrieve by another customer,
 - payment functionality (only basic implementation allowing create charge to Stripe service)
@@ -19,7 +19,7 @@ GameShop app will allow user and anonymous to buy product and admin will be able
 
 
 
-#### Store will have the following functionality:
+### Store will have the following functionalities:
 - extended product purchase functionality (for example sending e-mail about order etc.),
 - extended user registration functionality,
 - additional refresh token,
@@ -66,6 +66,6 @@ dotnet run
 - EntityFramework Core
 - Angular
 - Bootstrap 4
-- XUnit,
-- Moq,
+- XUnit
+- Moq
 - FluentAssertions
