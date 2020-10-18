@@ -19,14 +19,12 @@ export class RequirementsModalComponent implements OnInit {
   constructor(public bsModalRef: BsModalRef) { }
 
   ngOnInit() {
-    console.log(this.requirements);
     if (Object.keys(this.requirements).length === 0) {
     this.requirements.isNetworkConnectionRequire = false;
     }
   }
 
   createRequirements() {
-    console.log(this.requirements);
     this.createdRequirements.emit(this.requirements);
     this.bsModalRef.hide();
   }

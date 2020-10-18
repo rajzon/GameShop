@@ -18,19 +18,12 @@ export class HasRoleDirective implements OnInit {
 
   ngOnInit() {
     this.subscription = this.authService.activateHasRoleDirective().subscribe(x => {
-      console.log('DecodedToken From hasRoleDirective  passed by sign-in component or nav-bar component' + this.authService.decodedToken);
-      console.log(localStorage.getItem('token'));
-
       if (!this.isUserAuthenticated()) { return; }
       this.userAuthorization();
 
     });
-    console.log('TEST2');
     // it guard the DOM from unauthorised users during refreshing and navigating
     if (this.authService.loggedIn()) {
-      console.log('DecodedToken From hasRoleDirective during refresing page or navigating to protected elements'
-                     + this.authService.decodedToken);
-      console.log(localStorage.getItem('token'));
       if (!this.isUserAuthenticated()) { return; }
       this.userAuthorization();
 
@@ -50,14 +43,10 @@ export class HasRoleDirective implements OnInit {
   }
 
   userAuthorization(): void {
-
-      console.log(this.authService.decodedToken);
       const userRoles = this.authService.decodedToken.role as Array<string>;
-      console.log(userRoles);
       if (!userRoles) {
         this.viewContainerRef.clear();
       }
-      console.log(this.isVisible);
       if (this.authService.roleMatch(this.appHasRole)) {
         if (!this.isVisible) {
           this.isVisible = true;

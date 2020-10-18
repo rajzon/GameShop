@@ -26,7 +26,6 @@ export class ProductCardComponent implements OnInit {
     this.shopSearchingService.getProductForCard(+this.route.snapshot.params['id'])
         .subscribe((response: ProductForCardFromServer) => {
          this.product = response;
-         console.log(this.product);
     }, error => {
       this.messagePopup.displayError(error);
     });
@@ -34,9 +33,7 @@ export class ProductCardComponent implements OnInit {
 
 
   addToBasket() {
-    console.log(this.product.stock.quantity);
     this.shopOrderingService.addStockToBasket(this.product.stock.id, this.product.stock.quantity).subscribe( () => {
-      console.log('Added Product to Basket TEST');
       this.router.navigate(['/basket']);
     }, error => {
       this.messagePopup.displayError(error);

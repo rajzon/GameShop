@@ -14,7 +14,6 @@ export class NegateAuthGuard implements CanActivate {
   canActivate():  boolean  {
     const token = localStorage.getItem('token');
     this.loggedIn = !this.jwtHelper.isTokenExpired(token);
-    console.log(this.loggedIn);
     if (!this.loggedIn) {
       return true;
     }

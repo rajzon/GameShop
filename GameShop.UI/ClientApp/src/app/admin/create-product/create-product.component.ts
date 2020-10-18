@@ -79,7 +79,6 @@ export class CreateProductComponent implements OnInit {
         this.messagePopup.displaySuccess('Product Created');
 
         const productIdFromServer = next.id;
-        console.log(productIdFromServer);
         this.uploadPhotos(productIdFromServer);
       },
       error => {
@@ -95,7 +94,6 @@ export class CreateProductComponent implements OnInit {
 
         this.uploader.onBeforeUploadItem  = (file) => {
           file.url = this.baseUrl + 'admin/product/' + productIdFromServer + '/photos'};
-        console.log(this.uploader.options.url);
 
         this.uploader.uploadAll();
         this.uploader.onCompleteAll = () => {
@@ -113,7 +111,6 @@ export class CreateProductComponent implements OnInit {
       const initialState = {
         requirements: this.model.requirements
       };
-      console.log(initialState);
       this.bsModalRef = this.modalService.show(RequirementsModalComponent, {
         initialState
       });
@@ -143,7 +140,6 @@ export class CreateProductComponent implements OnInit {
     this.adminService.getSubCategories().subscribe(
       (next: SubCategory[]) => {
         this.subCategories = next;
-        console.log(this.subCategories);
       },
       error => {
         this.messagePopup.displayError(error);
@@ -155,7 +151,6 @@ export class CreateProductComponent implements OnInit {
     this.adminService.getCategories().subscribe(
       (next: Category[]) => {
         this.categories = next;
-        console.log(this.categories);
       },
       error => {
         this.messagePopup.displayError(error);

@@ -26,24 +26,19 @@ export class BasketComponent implements OnInit {
 
   getBasket() {
     this.shopOrderingService.getBasket().subscribe((response: BasketFromServer) => {
-      console.log('get basket test successfull');
-      console.log(response);
       this.basket = response;
     }, error => {
       this.messagePopup.displayError(error);
-      console.log(error);
     });
   }
 
 
   deleteStockFromBasket(stockId: number) {
     this.shopOrderingService.deleteStockFromBasket(stockId).subscribe(() => {
-      console.log('successfully deleted Stock from Basket');
       this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
         this.router.navigate(['/basket']);
        });
     }, error => {
-      console.log(error);
       this.messagePopup.displayError(error);
     });
   }
@@ -51,7 +46,6 @@ export class BasketComponent implements OnInit {
     this.shopOrderingService.synchronizeBasket().subscribe(() => {
       this.router.navigateByUrl('/checkout/customer-info');
     }, error => {
-      console.log(error);
      if (this.isArrayOfNotEnoughStockInfoFromServer(error)) {
       const initialState = {
         error
@@ -59,7 +53,6 @@ export class BasketComponent implements OnInit {
       this.modalService.show(BasketMissingStocksModalComponent, {initialState});
     } else {
       this.messagePopup.displayError(error);
-      console.log(error);
     }
 
 

@@ -28,7 +28,6 @@ export class PaymentComponent implements OnInit {
 
   ngOnInit() {
     this.getCustomerInfo();
-    console.log(this.customerInfo);
     this.initStripe();
   }
 
@@ -50,7 +49,6 @@ export class PaymentComponent implements OnInit {
 
     this.card.addEventListener('change', ({ error }) => {
         this.cardErrors = error && error.message;
-        console.log(this.cardErrors);
     });
   }
 
@@ -63,14 +61,12 @@ export class PaymentComponent implements OnInit {
       const cardErrors = error.message;
       this.messagePopup.displayError(cardErrors);
     } else {
-      console.log(token.id);
       this.shopOrderingService.chargePayment(token.id, this.customerInfo).subscribe(() => {
-        this.messagePopup.displaySuccess('Successfull Payment');
+        this.messagePopup.displaySuccess('Successfull Payment, order created');
         this.router.navigate(['/home']);
       }, error => {
         this.messagePopup.displayError(error);
       });
-      console.log(token);
     }
   }
 

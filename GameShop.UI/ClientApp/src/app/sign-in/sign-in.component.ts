@@ -31,9 +31,7 @@ export class SignInComponent implements OnInit {
       const token = this.authService.loggedIn();
       this.authService.sendLoggedInStatus(token);
       const decodedToken = this.authService.decodedToken;
-      console.log(decodedToken);
       this.authService.sendDecodedToken(decodedToken);
-      console.log('TEST');
       this.router.navigate(['/home']);
     });
 
@@ -41,7 +39,6 @@ export class SignInComponent implements OnInit {
 
 
   cancel(): void {
-    console.log('canceled');
     this.router.navigate(['/home']);
   }
 

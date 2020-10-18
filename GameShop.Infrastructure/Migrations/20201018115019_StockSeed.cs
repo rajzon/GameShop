@@ -2,7 +2,7 @@
 
 namespace GameShop.Infrastructure.Migrations
 {
-    public partial class StockOnHoldSeed : Migration
+    public partial class StockSeed : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

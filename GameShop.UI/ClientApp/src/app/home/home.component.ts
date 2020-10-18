@@ -35,12 +35,10 @@ export class HomeComponent implements OnInit {
       this.pagination = next.pagination;
       this.products = next.result;
       this.initPhotoIfItsNull();
-      console.log(this.products);
     }, error => {
       this.messagePopup.displayError(error);
     });
 
-    console.log(this.pagination);
 
   }
 

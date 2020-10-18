@@ -43,7 +43,6 @@ export class EditProductComponent implements OnInit {
   constructor(private adminService: AdminService, private modalService: BsModalService, private messagePopup: MessagePopupService) { }
 
   ngOnInit() {
-    console.log(this.productIdFromProductsPanel);
     this.getProductForEdit(this.productIdFromProductsPanel);
     this.getCategories();
     this.getSubCategories();
@@ -109,8 +108,7 @@ export class EditProductComponent implements OnInit {
     if (this.model.requirements != null ) {
       const initialState = {
         requirements: this.model.requirements
-      }
-      console.log(initialState);
+      };
 
       this.bsModalRef = this.modalService.show(RequirementsModalComponent, {initialState});
     } else {
@@ -141,14 +139,12 @@ export class EditProductComponent implements OnInit {
   getSubCategories(): void {
     this.adminService.getSubCategories().subscribe((next: SubCategory[]) => {
       this.subCategories = next;
-      console.log(this.subCategories);
     }, error => {
       this.messagePopup.displayError(error);
     });
   }
 
   editProduct(): void {
-    console.log(this.model);
     this.editionState = true;
     this.adminService.editProduct(this.model, this.productIdFromProductsPanel).subscribe(() => {
       this.messagePopup.displaySuccess('Product edited successfully');
@@ -176,7 +172,6 @@ export class EditProductComponent implements OnInit {
   getProductForEdit(id: Number): void {
     this.adminService.getProductForEdit(id).subscribe((next: Product) => {
       this.model = next;
-      console.log(this.model);
     }, error => {
       this.messagePopup.displayError(error);
     });

@@ -20,7 +20,6 @@ export class NavComponent implements OnInit {
   ngOnInit() {
     this.subscription = this.authService.getLoggedInStatus().subscribe(x => {
       this.loggedIn = x;
-      console.log('LoggedInStatus From nav bar passed by sign-in component' + this.loggedIn);
     });
 
     this.authService.sendLoggedInStatus(this.authService.loggedIn());
@@ -35,10 +34,8 @@ export class NavComponent implements OnInit {
   logout(): void {
     localStorage.removeItem('token');
 
-    console.log(this.loggedIn);
     this.authService.sendLoggedInStatus(this.authService.loggedIn());
 
-    console.log(this.loggedIn);
     const decodedToken = null;
     this.authService.sendDecodedToken(decodedToken);
 

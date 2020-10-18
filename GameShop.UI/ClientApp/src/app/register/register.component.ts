@@ -31,7 +31,6 @@ export class RegisterComponent implements OnInit {
   }
 
   cancel(): void {
-    console.log('cancled');
     this.router.navigate(['/home']);
   }
 

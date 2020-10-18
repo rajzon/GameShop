@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201017203711_StockOnHoldSeed")]
-    partial class StockOnHoldSeed
+    [Migration("20201018115019_StockSeed")]
+    partial class StockSeed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
