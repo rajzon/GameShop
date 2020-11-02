@@ -32,11 +32,11 @@ export class PaymentComponent implements OnInit {
   }
 
   getCustomerInfo() {
-    this.shopOrderingService.getCustomerInfo().subscribe((response: CustomerInfo) => {
-      this.customerInfo = response;
-    }, error => {
-      this.messagePopup.displayError(error);
-    });
+    const customerInfoJSON = localStorage.getItem('customerInfo');
+    this.customerInfo = JSON.parse(customerInfoJSON);
+    if (!this.customerInfo) {
+      this.customerInfo = <CustomerInfo>{};
+    }
   }
 
 
@@ -63,6 +63,8 @@ export class PaymentComponent implements OnInit {
     } else {
       this.shopOrderingService.chargePayment(token.id, this.customerInfo).subscribe(() => {
         this.messagePopup.displaySuccess('Successfull Payment, order created');
+
+        localStorage.removeItem('customerInfo');
         this.router.navigate(['/home']);
       }, error => {
         this.messagePopup.displayError(error);

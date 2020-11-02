@@ -6,6 +6,7 @@ import { ShopOrderingService } from '../_services/shop-ordering.service';
 import { Router } from '@angular/router';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { NotEnoughStockInfoFromServer } from '../_models/NotEnoughStockInfoFromServer';
+import { IsArrayOfNotEnoughStockInfoFromServer } from '../_helpers/isArrayOfNotEnoughStockInfoFromServer';
 
 @Component({
   selector: 'app-basket',
@@ -46,7 +47,7 @@ export class BasketComponent implements OnInit {
     this.shopOrderingService.synchronizeBasket().subscribe(() => {
       this.router.navigateByUrl('/checkout/customer-info');
     }, error => {
-     if (this.isArrayOfNotEnoughStockInfoFromServer(error)) {
+     if (IsArrayOfNotEnoughStockInfoFromServer(error)) {
       const initialState = {
         error
       };
@@ -57,21 +58,6 @@ export class BasketComponent implements OnInit {
 
 
     });
-  }
-
-  private isArrayOfNotEnoughStockInfoFromServer(error: any): boolean {
-    if (error instanceof Array) {
-      if (error.every(x => (x as NotEnoughStockInfoFromServer).stockId !== undefined
-          && (x as NotEnoughStockInfoFromServer).productName !== undefined
-          && (x as NotEnoughStockInfoFromServer).availableStockQty !== undefined)) {
-        return true;
-      }
-        return false;
-    }
-
-
-    return false;
-
   }
 
 

@@ -109,7 +109,7 @@ namespace GameShop.UI.Controllers
 
             if (!product.Photos.Any(p => p.Id == id))
             {
-                return Unauthorized();
+                return BadRequest("Trying to change photo that do not exists for that product");
             }
 
             var photoFromRepo = await _unitOfWork.Photo.GetAsync(id);

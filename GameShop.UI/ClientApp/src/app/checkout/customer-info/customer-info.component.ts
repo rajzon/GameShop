@@ -4,6 +4,7 @@ import { ShopOrderingService } from './../../_services/shop-ordering.service';
 import { Component, OnInit } from '@angular/core';
 import { CustomerInfo } from 'src/app/_models/CustomerInfo';
 import { Router } from '@angular/router';
+import { AngularWaitBarrier } from 'blocking-proxy/built/lib/angular_wait_barrier';
 
 
 @Component({
@@ -28,15 +29,18 @@ export class CustomerInfoComponent implements OnInit {
   }
 
   submitCustomerInfo() {
-    this.shopOrderingService.sendCustomerInfo(this.model);
+    const customerInfo = JSON.stringify(this.model);
+    localStorage.setItem('customerInfo', customerInfo);
+    this.router.navigate(['/checkout/payment']);
+    // this.shopOrderingService.sendCustomerInfo(this.model);
   }
 
   getCustomerInfo() {
-    this.shopOrderingService.getCustomerInfo().subscribe((response: CustomerInfo) => {
-      this.model = response;
-    }, error => {
-      this.messagePopup.displayError(error);
-    });
+    const customerInfo = localStorage.getItem('customerInfo');
+    this.model = JSON.parse(customerInfo);
+    if (!this.model) {
+      this.model = <CustomerInfo>{};
+    }
   }
 
   cancel() {

@@ -25,9 +25,8 @@
 
     <div class="dropdown" dropdown>
       <a class="dropdown-toggle text-light" dropdownToggle>
-          Sign in | Register
+          {{loggedIn ?  "Sign out | My Account" : "Sign in | Register"}}
       </a>
-      
 
       <div class="dropdown-menu mt-3" *dropdownMenu>
           <a class="dropdown-item" *ngIf="!loggedIn" [routerLink]="['/sign-in']" routerLinkActive="router-link-active"><i class="fa fa-sign-in"></i>Sign in</a>
