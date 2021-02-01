@@ -1,0 +1,86 @@
+<div class="sidebar">
+  <a [routerLink]="['/account']">Home</a>
+  <a [routerLink]="['/account/change-user-info']">Change User Acc Info</a>
+  <a class="active" [routerLink]="['/account/address-book']">Address Book</a>
+  <a href="#contact">Change Password</a>
+</div>
+
+<div *ngIf="!creationMode && !editionMode" class="content">
+    <section id="address-book-creation" class="py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <div class="card-body">
+                  <h2 class="card-title text-capitalize font-weight-bold">address book</h2>
+                  <button class="btn btn-success text-capitalize" type="button" (click)="creationMode = true">add new address</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      
+      <section id="address-book" class="py-5">
+        <div class="container">
+          <div class="row ">
+            <div *ngFor="let address of model" class="col-8 py-2">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title text-capitalize font-weight-bold">Addres {{address.id}}</h4>
+                  <div class="row">
+                    <div class="col-6">
+                        <p class="card-text ">
+                          <span class="text-capitalize font-weight-bold">Name: </span> <span>{{address.name}}</span>
+                        </p> 
+                        <p class="card-text ">
+                          <span class="text-capitalize font-weight-bold">SurName:</span>  <span>{{address.surName}}</span>
+                        </p>
+                        <p class="card-text ">
+                          <span class="text-capitalize font-weight-bold">Street: </span>  <span>{{address.street}}</span>
+                        </p>
+                        <p class="card-text ">
+                          <span class="text-capitalize font-weight-bold">PostCode: </span>  <span>{{address.postCode}}</span>
+                        </p>
+                        <p class="card-text ">
+                          <span class="text-capitalize font-weight-bold">Phone: </span>  <span>{{address.phone}}</span>
+                        </p>
+                        <p class="card-text ">
+                          <span class="text-capitalize font-weight-bold">Email: </span>  <span>{{address.email}}</span>
+                        </p>
+                        <p class="card-text ">
+                          <span class="text-capitalize font-weight-bold">City: </span>  <span>{{address.city}}</span>
+                        </p>
+                        <p class="card-text ">
+                          <span class="text-capitalize font-weight-bold">Country: </span>  <span>{{address.country}}</span></p>
+                    </div>
+                    <div class="col-6">
+                      <div class="row">
+                        <div class="col-12">
+                            <button class="btn-warning" 
+                              (click)="editionMode = true; 
+                                    addressToEdit = address">Edit</button>
+                        </div>
+                        <div class="col-12 py-1">
+                            <button class="btn-danger" (click)="deleteUserAddress(address.id)">Delete</button>
+                        </div>
+                      </div>   
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+</div>
+<div class="content" *ngIf="creationMode">
+  <app-create-address (creationMode)="canceledOrSuccessfullCreation($event)"></app-create-address>
+</div>
+<div class="content" *ngIf="editionMode">
+  <app-edit-address [userAddressToEdit]='addressToEdit' (editionMode)="canceledOrSuccessfullEdition($event)"></app-edit-address>
+</div>
+
+
+

@@ -1,0 +1,83 @@
+
+    <div *ngIf="!addressBookOpt" class="card">
+      <div class="card-header">
+        <h4 class="card-title text-uppercase text-center font-weight-bold">Edit Address Delivery</h4>
+      </div>
+      <div class="card-body">
+          <div class="container">
+              <!-- <form #orderInfoForm="ngForm" (ngSubmit)="submitCustomerAddress()">
+                <div class="form-group">
+                  <input type="text" class="form-control" required name="name"  maxlength="{{nameMaxLength}}" placeholder="Name" [(ngModel)]="orderInfo.name" >
+                </div>
+                
+                <div class="form-group">
+                  <input type="text" class="form-control" required name="surName" maxlength="{{surNameMaxLength}}" placeholder="SurName" [(ngModel)]="orderInfo.surName">
+                </div>
+            
+                <div class="form-group">
+                  <input type="text" class="form-control" required name="street" maxlength="{{streetMaxLength}}" placeholder="Street" [(ngModel)]="orderInfo.street">
+                </div>
+            
+                <div class="form-group">
+                  <input type="text" class="form-control" required name="postCode" maxlength="{{postCodeMaxLength}}" placeholder="Post Code" [(ngModel)]="orderInfo.postCode">
+                </div>
+            
+                <div class="form-group">
+                  <input type="text" class="form-control" name="city" placeholder="City" maxlength="{{cityMaxLength}}" [(ngModel)]="orderInfo.city">
+                </div>
+            
+                <div class="form-group text-center">
+                  <button [disabled]="!orderInfoForm.valid" class="btn btn-success" type="submit">Edit</button>
+                  <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
+                </div> 
+              </form> -->
+              <form [formGroup]='editAddressForm' (ngSubmit)='submitCustomerAddress()'>
+                <app-text-input [formControl]='editAddressForm.controls["name"]' [label]='"Name"'></app-text-input>
+                <app-text-input [formControl]='editAddressForm.controls["surName"]' [label]='"SurName"'></app-text-input>
+                <app-text-input [formControl]='editAddressForm.controls["street"]' [label]='"Street"'></app-text-input>
+                <app-text-input [formControl]='editAddressForm.controls["postCode"]' [label]='"Post Code"'></app-text-input>
+                <app-text-input [formControl]='editAddressForm.controls["phone"]' [label]='"Phone"'></app-text-input>
+                <app-text-input [formControl]='editAddressForm.controls["email"]' [label]='"Email"'></app-text-input>
+                <app-text-input [formControl]='editAddressForm.controls["city"]' [label]='"City"'></app-text-input>
+                <app-text-input [formControl]='editAddressForm.controls["country"]' [label]='"Country"'></app-text-input>
+                <div class="form-group text-center">
+                  <button [disabled]="!editAddressForm.valid" class="btn btn-success" type="submit">Edit</button>
+                  <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
+                </div> 
+              </form>
+              <button *appHasRole="['Customer']" class="btn btn-outline-success" (click)="addressBookOpt = true;">Choose From Address Book</button>
+            </div>
+      </div>
+    </div>
+
+        <div *ngIf="addressBookOpt" class="card my-4">
+            <div class="card-header">
+              <h4 class="card-title text-uppercase text-center font-weight-bold">Address Book</h4>
+            </div>
+            <div class="card-body">
+              <form #addressBookFrom="ngForm" (submit)="applyDataFromAddressBook()">
+                <div *ngFor="let userAddress of userAddressBook" class="col-12 py-3">
+                    <div class="row">
+                      <div class="col-12">
+                        <p class="card-text font-weight-bold text-capitalize">address id:{{userAddress.id}}</p>
+                      </div>
+                      <div class="form-group col-10 ml-5">
+                          <div class="form-check">
+                              <label for="{{userAddress.id}}" class="form-check-label float-left mr-5">Name: {{userAddress.name}}, SurName: {{userAddress.surName}}, Street: {{userAddress.street}},
+                                Post Code: {{userAddress.postCode}}, Phone: {{userAddress.phone}}, Email: {{userAddress.email}}, City: {{userAddress.city}}, Country: {{userAddress.country}} test {{selectedAddressBookElId}}</label>        
+                              <input type="radio" name="{{userAddress.id}}" [value]="userAddress.id" [(ngModel)]="selectedAddressBookElId" class="form-check-input ml-1 float-right" id="{{userAddress.id}}">                          
+                          </div>
+                      </div>
+                    </div>
+                    <hr>
+                </div>
+                <button [disabled]="!addressBookFrom.dirty || !decodedToken" class="btn btn-success mb-1" type="submit">Apply </button>
+              </form>
+              <button class="btn btn-outline-success" (click)="addressBookOpt = false">Insert address manually</button>
+              <button class="btn btn-outline-success" (click)="this.editionMode.emit(false);">Cancel</button>         
+            </div>
+          </div>
+   
+ 
+
+

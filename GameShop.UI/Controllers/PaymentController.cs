@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos.BasketDtos;
-using GameShop.Domain.Dtos.CustomerDto;
+using GameShop.Domain.Dtos.OrderInfoDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +35,7 @@ namespace GameShop.UI.Controllers
         //TODO: Check if StockOnHoldWithProd for calculate order price contains same StockId, and Same Qty(line 54)
         //TODO: Add filtering that selects StockOnHOld to create base on SessionId AND StockId from basket (line 72)
         [HttpPost("charge")]
-        public async Task<IActionResult> Charge([FromHeader(Name="Stripe-Token")]string stripeToken, CustomerInfoDto customerInfo)
+        public async Task<IActionResult> Charge([FromHeader(Name="Stripe-Token")]string stripeToken, OrderInfoDto customerInfo)
         {
             var basketJson = HttpContext.Session.GetString("Basket");
 
@@ -68,13 +68,13 @@ namespace GameShop.UI.Controllers
             
             // await _unitOfWork.Stock.RemoveStockQty(stockIdWithQtyToRemove);
 
-            await _unitOfWork.StockOnHold.DeleteRange(s => s.SessionId == HttpContext.Session.Id);
+            await _unitOfWork.StockOnHold.DeleteRangeAsync(s => s.SessionId == HttpContext.Session.Id);
 
            _unitOfWork.Order.Add(order);
 
            if (await _unitOfWork.SaveAsync())
-           {           
-               HttpContext.Session.Remove("Basket");
+           {    
+               Response.Cookies.Delete("Basket");
                //TODO Replace that
                return Ok(201);
            }

@@ -5,13 +5,15 @@
 export const environment = {
   production: false,
   baseUrl: 'api/',
-  //CustomerInfo config
+  //OrderInfo config
   nameMaxLength: 30,
   surNameMaxLength: 30,
-  addressMaxLength: 80,
   streetMaxLength: 80,
-  postCodeMaxLength: 6,
+  postCodeMaxLength: 12,
   cityMaxLength: 40,
+  countryMaxLength: 40,
+  phonePattern: '^[0-9]{1,15}$',
+  emailPattern: '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$',
   ///////////////////////
   //Pagination config
   pageNumber: 1,
@@ -30,6 +32,8 @@ export const environment = {
   //User login/register config
   userNameMaxLength: 30,
   userNameMinLength: 3,
+  userSurNameMaxLength: 40,
+  userSurNameMinLength: 3,
   userPasswordMaxLength: 8,
   userPasswordMinLength: 4,
   /////////////////

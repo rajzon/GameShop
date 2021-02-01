@@ -1,7 +1,9 @@
-import { CheckoutCustomerinfoGuard } from './_guards/checkout-customerinfo.guard';
+import { AddressBookComponent } from './my-account/address-book/address-book.component';
+import { ChangeUserInfoComponent } from './my-account/change-user-info/change-user-info.component';
+import { CheckoutOrderinfoGuard } from './_guards/checkout-orderinfo.guard';
 import { CheckoutPaymentGuard } from './_guards/checkout-payment.guard';
 import { PaymentComponent } from './checkout/payment/payment.component';
-import { CustomerInfoComponent } from './checkout/customer-info/customer-info.component';
+import { OrderInfoComponent } from './checkout/order-info/order-info.component';
 import { ProductCardComponent } from './home/product-card/product-card.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { NegateAuthGuard } from './_guards/negate-auth.guard';
@@ -18,11 +20,13 @@ import { RegisterComponent } from './register/register.component';
 export const appRoutes: Routes = [
     {path: 'home' , component: HomeComponent },
     {path: 'account' , component: MyAccountComponent, canActivate: [AuthGuard] },
+    {path: 'account/change-user-info' , component: ChangeUserInfoComponent, canActivate: [AuthGuard] },
+    {path: 'account/address-book' , component: AddressBookComponent, canActivate: [AuthGuard] },
     {path: 'basket' , component: BasketComponent },
     {path: 'contact' , component: ContactComponent },
     {path: 'product/:id' , component: ProductCardComponent },
-    {path: 'checkout/customer-info' , component: CustomerInfoComponent, canActivate: [CheckoutCustomerinfoGuard]},
-    {path: 'checkout/payment' , component: PaymentComponent, canActivate: [CheckoutPaymentGuard, CheckoutCustomerinfoGuard]},
+    {path: 'checkout/order-info' , component: OrderInfoComponent, canActivate: [CheckoutOrderinfoGuard]},
+    {path: 'checkout/payment' , component: PaymentComponent, canActivate: [CheckoutPaymentGuard, CheckoutOrderinfoGuard]},
     {path: 'sign-in' , component: SignInComponent, canActivate: [NegateAuthGuard]},
     {path: 'register' , component: RegisterComponent, canActivate: [NegateAuthGuard]},
     {path: 'admin' , component: AdminPanelComponent, canActivate: [AuthGuard], data: {roles: ['Admin', 'Moderator']}},

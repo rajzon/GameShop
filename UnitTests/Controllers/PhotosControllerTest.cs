@@ -253,7 +253,7 @@ namespace UnitTests.Controllers
         }
 
         [Fact]
-        public void Given_ProductIdAndPhotoIdThatProductDoNotHave_When_SetMainPhoto_ThenReturn_Unauthorized()
+        public void Given_ProductIdAndPhotoIdThatProductDoNotHave_When_SetMainPhoto_ThenReturn_BadRequestWithMessage()
         {
             //Arrange
             int productId = 1;
@@ -271,7 +271,8 @@ namespace UnitTests.Controllers
             var result = _cut.SetMainPhoto(productId, photoIdThatProductDoNotHave).Result;
 
             //Assert
-            result.Should().BeOfType<UnauthorizedResult>();
+            result.Should().BeOfType<BadRequestObjectResult>();
+            result.As<BadRequestObjectResult>().Value.Should().Be("Trying to change photo that do not exists for that product");
 
 
             _mockedUnitOfWork.Verify(v => v.Product.GetWithPhotosOnly(productId), Times.Once);

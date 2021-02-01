@@ -27,6 +27,7 @@ namespace UnitTests.Controllers
             var userForRegisterDto = new UserForRegisterDto()
             {
                 Username = "David",
+                SurName = "Example",
                 Email = "david.example@example.com",
                 Password = "Password"
             };
@@ -60,6 +61,7 @@ namespace UnitTests.Controllers
             var userForRegisterDto = new UserForRegisterDto()
             {
                 Username = "David",
+                SurName = "Example",
                 Email = "david.example@example.com",
                 Password = "Password"
             };
@@ -90,13 +92,13 @@ namespace UnitTests.Controllers
             //Arrange
             var userForLoginDto = new UserForLoginDto()
             {
-                Username = "TestUser",
+                Email = "TestUser@example.com",
                 Password = "Password"
             };
 
 
 
-            _mockedUserManager.Setup(s => s.FindByNameAsync(userForLoginDto.Username))
+            _mockedUserManager.Setup(s => s.FindByEmailAsync(userForLoginDto.Email))
                         .ReturnsAsync(new User());
 
             _mockedSignInManager.Setup(s => s.CheckPasswordSignInAsync(It.IsAny<User>(), userForLoginDto.Password, false))
@@ -115,7 +117,7 @@ namespace UnitTests.Controllers
             //Assert
             result.Should().BeOfType<OkObjectResult>();
 
-            _mockedUserManager.Verify(v => v.FindByNameAsync(userForLoginDto.Username), Times.Once);
+            _mockedUserManager.Verify(v => v.FindByEmailAsync(userForLoginDto.Email), Times.Once);
 
             _mockedSignInManager.Verify(v => v.CheckPasswordSignInAsync(It.IsAny<User>(), userForLoginDto.Password, false), Times.Once);
 
@@ -129,11 +131,11 @@ namespace UnitTests.Controllers
             //Arrange
             var userForLoginDto = new UserForLoginDto()
             {
-                Username = "UserThatNotExist",
+                Email = "EmailThatNotExists@example.com",
                 Password = "Password"
             };
 
-            _mockedUserManager.Setup(s => s.FindByNameAsync(userForLoginDto.Username))
+            _mockedUserManager.Setup(s => s.FindByEmailAsync(userForLoginDto.Email))
                         .Returns(Task.FromResult<User>(null));
 
             var cut = new AuthController(_mockedConfig.Object, _mockedUserManager.Object, _mockedSignInManager.Object, _mockedJwtTokenHelper.Object);
@@ -146,7 +148,7 @@ namespace UnitTests.Controllers
             //Assert
             result.Should().BeOfType<UnauthorizedResult>();
 
-            _mockedUserManager.Verify(v => v.FindByNameAsync(userForLoginDto.Username), Times.Once);
+            _mockedUserManager.Verify(v => v.FindByEmailAsync(userForLoginDto.Email), Times.Once);
             // _startup.mockedSignInManager.Verify(v => v.CheckPasswordSignInAsync(It.IsAny<User>(), userForLoginDto.Password, false), Times.Once);
         }
 
@@ -156,12 +158,12 @@ namespace UnitTests.Controllers
             //Arrange
             var userForLoginDto = new UserForLoginDto()
             {
-                Username = "Holly",
+                Email = "hollyjones@isodrive.com",
                 Password = "BadPassword"
             };
 
-            _mockedUserManager.Setup(s => s.FindByNameAsync(userForLoginDto.Username))
-                        .Returns(Task.FromResult<User>(new User(){UserName = userForLoginDto.Username}));
+            _mockedUserManager.Setup(s => s.FindByEmailAsync(userForLoginDto.Email))
+                        .Returns(Task.FromResult<User>(new User(){UserName = userForLoginDto.Email}));
 
             _mockedSignInManager.Setup(s => s.CheckPasswordSignInAsync(It.IsAny<User>(), userForLoginDto.Password, false))
                         .Returns(Task.FromResult(Microsoft.AspNetCore.Identity.SignInResult.Failed));
@@ -176,7 +178,7 @@ namespace UnitTests.Controllers
             //Assert
             result.Should().BeOfType<UnauthorizedResult>();
 
-            _mockedUserManager.Verify(v => v.FindByNameAsync(userForLoginDto.Username), Times.Once);
+            _mockedUserManager.Verify(v => v.FindByEmailAsync(userForLoginDto.Email), Times.Once);
             _mockedSignInManager.Verify(v => v.CheckPasswordSignInAsync(It.IsAny<User>(), userForLoginDto.Password, false), Times.Once);
         }
 

@@ -16,20 +16,30 @@ namespace GameShop.Infrastructure.Configurations
                 .HasMaxLength(30)
                 .IsRequired();
 
-            builder.Property(o => o.Address)
-                .HasMaxLength(80)
-                .IsRequired();
-
             builder.Property(o => o.Street)
                 .HasMaxLength(80)
                 .IsRequired();
                 
             builder.Property(o => o.PostCode)
-                .HasMaxLength(6)
+                .HasMaxLength(12)
+                .IsRequired();
+
+            builder.Property(o => o.Phone)
+                .HasMaxLength(15);
+
+            builder.Property(x => x.Email)
+                .HasMaxLength(320)
                 .IsRequired();
 
             builder.Property(o => o.City)
                 .HasMaxLength(40);
+
+            builder.Property(x => x.Country)
+                .HasMaxLength(40);
+
+            builder.Property(x => x.DeliveryType)
+                .HasMaxLength(30)
+                .IsRequired();
 
             builder.Property(o => o.OrderRef)
                 .IsRequired();

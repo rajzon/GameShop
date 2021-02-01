@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using GameShop.Domain.Dtos;
+using GameShop.Domain.Dtos.AddressDtos;
+using GameShop.Domain.Dtos.DeliveryOptDtos;
+using GameShop.Domain.Dtos.UserDtos;
 using GameShop.Domain.Model;
 
 namespace GameShop.Application.Mappings
@@ -24,6 +27,15 @@ namespace GameShop.Application.Mappings
             CreateMap<Language,LanguageToReturnDto>();
             CreateMap<Photo,PhotoForReturnDto>();      
             CreateMap<PhotoForCreationDto,Photo>();
+            CreateMap<UserAccInfoToEditDto, User>()
+                    .ForMember(dest => dest.UserName, x => x.MapFrom(src => src.Name));
+            CreateMap<Product,Product>()
+                    .ForMember(dest => dest.Photos, opt => opt.Ignore())
+                    .ForMember(dest => dest.Stock, opt => opt.Ignore());
+            CreateMap<UserAddressInfoForCreationDto, Address>();
+            CreateMap<UserAddressInfoForEditDto, Address>();
+            CreateMap<Address, UserAddressesForListDto>();
+            CreateMap<DeliveryOpt, DeliveryOptToReturnDto>();
 
             /// Parsing Product To Updated Product with nested Objects in Product Class, using option Ignore for Ids which are tracked by Entity Framework
             // CreateMap<ProductSubCategory,ProductSubCategory>()

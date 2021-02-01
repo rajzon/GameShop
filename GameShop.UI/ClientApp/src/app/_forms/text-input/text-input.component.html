@@ -1,0 +1,18 @@
+        <div class="form-group">
+          <input
+              [class.is-invalid]="ngControl.touched && ngControl.invalid"
+              type={{type}}
+              class="form-control" 
+              [formControl]="ngControl.control"
+              placeholder={{label}}>
+          <div *ngIf="ngControl.control.errors?.required"
+              class="invalid-feedback">{{label}} field cannot be empty</div>
+          <div *ngIf="ngControl.control.errors?.minlength"
+            class="invalid-feedback">{{label}} must be at least {{ngControl.control.errors.minlength['requiredLength']}}</div>
+          <div *ngIf="ngControl.control.errors?.maxlength"
+            class="invalid-feedback">{{label}} must be at most {{ngControl.control.errors.maxlength['requiredLength']}}</div>
+          <div *ngIf="ngControl.control.errors?.IsInvalidPhoneNum"
+            class="invalid-feedback">Phone field must match phone number address specification</div>
+          <div *ngIf="ngControl.control.errors?.IsInvalidEmail"
+            class="invalid-feedback">Email field must match email address specification</div>
+      </div>

@@ -17,7 +17,10 @@ namespace GameShop.Infrastructure.Extensions
             services.AddDbContext<Infrastructure.ApplicationDbContext>(x => 
             {
                 //x.UseLazyLoadingProxies();
-                x.UseSqlServer(configuration.GetConnectionString("DefaultConnection") , b => b.MigrationsAssembly("GameShop.Infrastructure"));
+                x.UseSqlServer(configuration.GetConnectionString("DefaultConnection") , b => 
+                {
+                    b.MigrationsAssembly("GameShop.Infrastructure");
+                });
             }); 
         }
     }

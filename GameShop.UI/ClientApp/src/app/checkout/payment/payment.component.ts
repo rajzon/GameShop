@@ -1,5 +1,5 @@
 import { MessagePopupService } from './../../_services/message-popup.service';
-import { CustomerInfo } from './../../_models/CustomerInfo';
+import { OrderInfo } from '../../_models/OrderInfo';
 import { ShopOrderingService } from './../../_services/shop-ordering.service';
 
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
@@ -22,7 +22,7 @@ export class PaymentComponent implements OnInit {
   confirmation: any;
 
   stockIds: number[];
-  customerInfo: CustomerInfo;
+  orderInfo: OrderInfo;
 
   constructor(private shopOrderingService: ShopOrderingService, private router: Router, private messagePopup: MessagePopupService) { }
 
@@ -32,10 +32,10 @@ export class PaymentComponent implements OnInit {
   }
 
   getCustomerInfo() {
-    const customerInfoJSON = localStorage.getItem('customerInfo');
-    this.customerInfo = JSON.parse(customerInfoJSON);
-    if (!this.customerInfo) {
-      this.customerInfo = <CustomerInfo>{};
+    const orderInfoJSON = localStorage.getItem('orderInfo');
+    this.orderInfo = JSON.parse(orderInfoJSON);
+    if (!this.orderInfo) {
+      this.orderInfo = <OrderInfo>{};
     }
   }
 
@@ -61,10 +61,11 @@ export class PaymentComponent implements OnInit {
       const cardErrors = error.message;
       this.messagePopup.displayError(cardErrors);
     } else {
-      this.shopOrderingService.chargePayment(token.id, this.customerInfo).subscribe(() => {
+      this.shopOrderingService.chargePayment(token.id, this.orderInfo).subscribe(() => {
         this.messagePopup.displaySuccess('Successfull Payment, order created');
 
-        localStorage.removeItem('customerInfo');
+        localStorage.removeItem('orderInfo');
+        localStorage.removeItem('selectedAddressBookElId')
         this.router.navigate(['/home']);
       }, error => {
         this.messagePopup.displayError(error);

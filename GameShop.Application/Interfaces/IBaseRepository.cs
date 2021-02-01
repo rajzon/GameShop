@@ -18,7 +18,7 @@ namespace GameShop.Application.Interfaces
         void Update(T entity);
         void Delete(T entity);
         void DeleteRange(IEnumerable<T> entities);
-        Task DeleteRange(Expression<Func<T, bool>> expression);
+        Task DeleteRangeAsync(Expression<Func<T, bool>> expression);
          
     }
 }

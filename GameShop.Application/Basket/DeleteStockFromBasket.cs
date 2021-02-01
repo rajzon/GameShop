@@ -43,11 +43,12 @@ namespace GameShop.Application.Basket
             string basketJson;
             if (!basketCookie.Any())
             {
-                basketJson = string.Empty;   
+                basketJson = string.Empty; 
             } 
             else
             {
                 basketJson = JsonConvert.SerializeObject(basketCookie);
+                
             }
 
             session.SetString("Basket", basketJson);

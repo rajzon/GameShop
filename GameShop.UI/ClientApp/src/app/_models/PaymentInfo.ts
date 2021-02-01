@@ -1,6 +1,6 @@
 import { BasketFromServer } from './BasketFromServer';
-import { CustomerInfo } from 'src/app/_models/CustomerInfo';
+import { OrderInfo } from 'src/app/_models/OrderInfo';
 export interface PaymentInfo {
     basket: BasketFromServer;
-    customerInfo: CustomerInfo;
+    orderInfo: OrderInfo;
 }

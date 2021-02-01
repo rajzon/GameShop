@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable} from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
 
@@ -9,9 +9,9 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl = environment.baseUrl + 'auth/';
-  jwtHelper = new JwtHelperService();
-  decodedToken: any;
+   baseUrl = environment.baseUrl + 'auth/';
+   jwtHelper = new JwtHelperService();
+   decodedToken: any;
 
 
   private loggedInStatus = new Subject<any>();
@@ -59,6 +59,7 @@ export class AuthService {
   public getLoggedInStatus(): Observable<any> {
     return this.loggedInStatus.asObservable();
   }
+
 
   public sendDecodedToken(decodedToken: any): void {
     this.tokenSubject.next(decodedToken);

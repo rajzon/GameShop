@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos.BasketDtos;
@@ -23,9 +24,11 @@ namespace GameShop.UI.Controllers
         private readonly ITransferStockToStockOnHold _transferStockToStockOnHold;
         private readonly IDeleteStockFromBasket _deleteStockFromBasket;
         private readonly ISynchronizeBasket _synchronizeBasket;
+        private readonly ITransferStockOnHoldWhenExpire _transferStockOnHoldWhenExpire;
 
         public BasketController(IUnitOfWork unitOfWork, IAddStockToBasket addProductToBasket, ICountOrderPrice countOrderPrice, 
-                        ITransferStockToStockOnHold transferStockToStockOnHold, IDeleteStockFromBasket deleteStockFromBasket, ISynchronizeBasket synchronizeBasket)
+                        ITransferStockToStockOnHold transferStockToStockOnHold, IDeleteStockFromBasket deleteStockFromBasket, ISynchronizeBasket synchronizeBasket,
+                        ITransferStockOnHoldWhenExpire transferStockOnHoldWhenExpire)
         {
             _unitOfWork = unitOfWork;
             _addStockToBasket = addProductToBasket;
@@ -33,12 +36,13 @@ namespace GameShop.UI.Controllers
             _transferStockToStockOnHold = transferStockToStockOnHold;
             _deleteStockFromBasket = deleteStockFromBasket;
             _synchronizeBasket = synchronizeBasket;
+            _transferStockOnHoldWhenExpire = transferStockOnHoldWhenExpire;
         }
 
         // Delete ProductId from StockOnHold and from Everywher , the context is basket
         [HttpPost("add-stock/{id}")]
-        [ProducesResponseType(typeof(string),400)]
-        [ProducesResponseType(typeof(string),200)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> AddStockToBasket(int id, [FromQuery]int stockQty)
         {
             if (stockQty < 1)
@@ -79,8 +83,8 @@ namespace GameShop.UI.Controllers
         //WARNING: Consider using _unitOfWork.Product.GetProductsForBasketAsync(basketCookie); Because using Stock to get Product info cause many Joins so it is not good in terms of Performance
         //!!OR Refactor _unitOfWork.Stock.GetStockWithProductForBasket() to not use that many Joins
         [HttpGet("get-basket")]
-        [ProducesResponseType(typeof(BasketDto),200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(typeof(BasketDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType( (int)HttpStatusCode.NotFound)]
         public async Task<ActionResult<BasketDto>> GetBasket()
         {  
             var basketJson = HttpContext.Session.GetString("Basket");
@@ -108,8 +112,8 @@ namespace GameShop.UI.Controllers
         }
 
         [HttpDelete("delete-stock/{stockId}")]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(204)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> DeleteStockFromBasket(int stockId)
         {
             var basketJson = HttpContext.Session.GetString("Basket");
@@ -119,6 +123,11 @@ namespace GameShop.UI.Controllers
             if (!await _deleteStockFromBasket.Do(HttpContext.Session, basketCookie, stockId))
             {
                 return BadRequest("Something went wrong during removing StockOnHold");
+            }
+
+            if ( string.IsNullOrEmpty(HttpContext.Session.GetString("Basket")) )
+            {
+                Response.Cookies.Delete("Basket");
             }
 
             return NoContent();
@@ -131,9 +140,9 @@ namespace GameShop.UI.Controllers
         // If i Am gonna create that wrapper also i can implement Error property inside that wrapper, for errors like passed basketProducts list that is empty
 
         [HttpPost("synchronize-basket")]
-        [ProducesResponseType(typeof(List<NotEnoughStockInfoDto>),400)]
-        [ProducesResponseType(typeof(string),400)]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(List<NotEnoughStockInfoDto>), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType( (int)HttpStatusCode.OK)]
         public async Task<IActionResult> EnsureThatBasketProductsAreInStockOnHold()
         {
             var basketJson = HttpContext.Session.GetString("Basket");
@@ -161,6 +170,34 @@ namespace GameShop.UI.Controllers
             return Ok();
     
 
+        }
+
+        [HttpDelete("clear")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(string),(int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ClearBasket()
+        {
+
+            if (!await _unitOfWork.StockOnHold.SetExpiredForStocksOnHoldAsync(HttpContext.Session))
+            {
+                return NotFound();
+            }
+
+            if (!await _unitOfWork.SaveAsync())
+            {
+                return BadRequest("Something went wrong saving StocksOnHold expire time");
+            }
+
+            if (!await _transferStockOnHoldWhenExpire.Do())
+            {
+                return BadRequest("Something went wrong during transfering StockOnHold to Stock");
+            }
+
+            
+
+            Response.Cookies.Delete("Basket");
+            return NoContent();
         }
     }
 }

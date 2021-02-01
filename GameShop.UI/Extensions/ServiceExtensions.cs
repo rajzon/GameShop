@@ -31,7 +31,7 @@ namespace GameShop.UI.Extensions
             {
                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
                 options.AddPolicy("ModerateProductRole", policy => policy.RequireRole("Admin", 
-                "Moderator"));                
+                "Moderator"));               
             });
         }
 

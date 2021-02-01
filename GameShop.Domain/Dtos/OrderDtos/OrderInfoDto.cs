@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using GameShop.Domain.Validators;
 
-namespace GameShop.Domain.Dtos.CustomerDto
+namespace GameShop.Domain.Dtos.OrderInfoDtos
 {
-    public class CustomerInfoDto
+    public class OrderInfoDto
     {
         [Required]
         [MaxLength(30)]
@@ -14,18 +15,26 @@ namespace GameShop.Domain.Dtos.CustomerDto
 
         [Required]
         [MaxLength(80)]
-        public string Address { get; set; }
-
-        [Required]
-        [MaxLength(80)]
         public string Street { get; set; }
 
         [Required]
-        [MaxLength(6)]
+        [MaxLength(12)]
         //TO DO: implement post code validation
         public string PostCode { get; set; }
+
+        [Required]
+        [Phone]
+        public string Phone { get; set; }
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
         
         [MaxLength(40)]
         public string City { get; set; }
+        [MaxLength(40)]
+        public string Country { get; set; }
+
+        [DeliveryType("DPD", "DHL", "INPOST", "DIGITAL_PRODUCT")]
+        public string DeliveryType { get; set; }
     }
 }

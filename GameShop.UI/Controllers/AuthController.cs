@@ -44,14 +44,15 @@ namespace GameShop.UI.Controllers
         var userToCreate = new User
         {
             UserName = userForRegisterDto.Username,
-            Email = userForRegisterDto.Email
+            SurName = userForRegisterDto.SurName,
+            Email = userForRegisterDto.Email,
+            PhoneNumber = userForRegisterDto.Phone
         };
 
         var result = await _userManager.CreateAsync(userToCreate , userForRegisterDto.Password);
 
         if(!result.Succeeded) 
         {
- 
             return BadRequest(result.Errors);
         }
 
@@ -69,7 +70,7 @@ namespace GameShop.UI.Controllers
     public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
     {
 
-        var user = await _userManager.FindByNameAsync(userForLoginDto.Username);
+        var user = await _userManager.FindByEmailAsync(userForLoginDto.Email);
         if (user == null)
         {
             return Unauthorized();

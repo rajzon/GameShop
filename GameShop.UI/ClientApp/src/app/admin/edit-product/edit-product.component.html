@@ -1,5 +1,5 @@
 <div class="container">
-    <form #createProductForm="ngForm" (ngSubmit)="editProduct()">
+    <form #editProductForm="ngForm" (ngSubmit)="editProduct()">
         <h2 class="text-center text-primary">Edit Product</h2>
         <hr>
       
@@ -179,7 +179,7 @@
       </div>
       
         <div class="form-group text-center">
-          <button [disabled]="!createProductForm.valid || editionState || uploader.isUploading" class="btn btn-success"  type="submit">Edit Product</button>
+          <button [disabled]="!editProductForm.valid || editionState || uploader.isUploading" class="btn btn-success"  type="submit">Edit Product</button>
           <button class="btn btn-default"  type="button" (click)="cancelButton()">Cancel</button>
         </div> 
       </form>

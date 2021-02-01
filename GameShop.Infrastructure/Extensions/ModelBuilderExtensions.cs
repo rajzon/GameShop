@@ -122,6 +122,12 @@ namespace GameShop.Extensions.Infrastructure
             List<Photo> photos = ModelBuilderExtensions.GetSeedDataOf<Photo>(currDirectory, photoSeedDataLocation);
 
             modelBuilder.Entity<Photo>().HasData(photos);
+
+
+            string deliveryOptSeedDataLocation = seedDataLocationOptions.DeliveryOptSeedData;
+            List<DeliveryOpt> deliveryOpts = ModelBuilderExtensions.GetSeedDataOf<DeliveryOpt>(currDirectory, deliveryOptSeedDataLocation);
+
+            modelBuilder.Entity<DeliveryOpt>().HasData(deliveryOpts);
         }
 
         public static List<T> GetSeedDataOf<T>(string currDirectory,string seedDataLocationSource)

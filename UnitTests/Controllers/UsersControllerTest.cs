@@ -15,7 +15,7 @@ namespace UnitTests.Controllers
 
         public UsersControllerTest()
         {
-            _cut = new UsersController(_mapper,_mockedUnitOfWork.Object); 
+            _cut = new UsersController(_mockedUnitOfWork.Object, _mapper, _mockedUserManager.Object); 
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace UnitTests.Controllers
             _mockedUnitOfWork.Setup(s => s.User.GetAsync(userId))
                     .ReturnsAsync((User)null);
             //Act
-            var result = _cut.GetUser(userId).Result;
+            var result = _cut.GetUserForAccInfo(userId).Result;
 
             //Assert
             result.Should().BeOfType<NotFoundResult>();

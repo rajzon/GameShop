@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GameShop.Application.Interfaces;
 using GameShop.Domain.Dtos;
+using GameShop.Domain.Dtos.UserDtos;
 using GameShop.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,17 @@ namespace GameShop.Infrastructure.Repositories
             }).ToListAsync();
 
             return usersToReturn;
+        }
+
+    public async Task<UserForAccInfoDto> GetForAccInfoAsync(int id)
+        {
+            return await _ctx.Users.Where(u => u.Id == id).Select(u => new UserForAccInfoDto
+            {
+                Name = u.UserName,
+                SurName = u.SurName,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber
+            }).FirstOrDefaultAsync();
         }
     }
 }

@@ -1,4 +1,4 @@
-import { MessagePopupService } from './../_services/message-popup.service';
+import { MessagePopupService } from '../_services/message-popup.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable, of, } from 'rxjs';
@@ -11,7 +11,7 @@ import { IsArrayOfNotEnoughStockInfoFromServer } from '../_helpers/isArrayOfNotE
 @Injectable({
   providedIn: 'root'
 })
-export class CheckoutCustomerinfoGuard implements CanActivate {
+export class CheckoutOrderinfoGuard implements CanActivate {
 
   constructor(private router: Router, private shopOrderingService: ShopOrderingService,
         private messagePopup: MessagePopupService, private modalService: BsModalService ) {}

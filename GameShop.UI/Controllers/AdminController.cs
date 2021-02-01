@@ -241,35 +241,8 @@ namespace GameShop.UI.Controllers
 
         var updatedProduct = await _unitOfWork.Product.ScaffoldProductForEditAsync(id, productToEditDto, requirementsToUpdate, selectedCategory, productFromDb);
 
-        productFromDb.Id = updatedProduct.Id;
-        productFromDb.Name = updatedProduct.Name;
-        productFromDb.Description = updatedProduct.Description;
-        productFromDb.Pegi = updatedProduct.Pegi;
-        productFromDb.Price = updatedProduct.Price;
-        productFromDb.IsDigitalMedia = updatedProduct.IsDigitalMedia;
-        productFromDb.ReleaseDate = updatedProduct.ReleaseDate;
-        productFromDb.Category = selectedCategory;
-        productFromDb.Languages = updatedProduct.Languages;
-        productFromDb.Requirements = requirementsToUpdate;
-        productFromDb.SubCategories = updatedProduct.SubCategories;
-
-        //var productToUpdate = _mapper.Map<Product>(updatedProduct);          
-
-
-        // productFromDb.Languages = updatedProduct.Languages;
-
-        // productFromDb.Requirements = requirementsToUpdate;
-        // //_ctx.Entry(productFromDb.Requirements).State = EntityState.Modified;
-        // productFromDb.SubCategories = updatedProduct.SubCategories;
-
-        //  productFromDb.Photos = updatedProduct.Photos;
-
-
-
-
-        //_ctx.Entry(productFromDb).State = EntityState.Modified;
-        // _ctx.Update(productFromDb);
-        //  _ctx.Entry(productFromDb).CurrentValues.SetValues(productToUpdate);            
+        productFromDb = _mapper.Map(updatedProduct, productFromDb);
+                 
         if (await _unitOfWork.SaveAsync())
         {
             var editedProduct =  await _unitOfWork.Product.GetAsync(id);

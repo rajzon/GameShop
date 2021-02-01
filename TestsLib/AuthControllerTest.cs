@@ -61,6 +61,7 @@ namespace TestsLib
             var expected = new UserForRegisterDto()
             {
                 Username = "David",
+                SurName = "Example",
                 Email = "david.example@example.com",
                 Password = "Password"
             };
@@ -249,16 +250,16 @@ namespace TestsLib
         }
 
         [Theory]
-        [InlineData("Holly","password")]
-        [InlineData("Zelma","password")]
-        [InlineData("Admin","password")]
-        public void IntegrationTest_Given_UserForLoginDto_When_Login_Then_Return_TokenAndUserWithOkStatus(string userName, string password)
+        [InlineData("hollyjones@isodrive.com","password")]
+        [InlineData("zelmajones@isodrive.com","password")]
+        [InlineData("admin@shop.eu","password")]
+        public void IntegrationTest_Given_UserForLoginDto_When_Login_Then_Return_TokenAndUserWithOkStatus(string email, string password)
         {
             //Arrange
 
             var expected = new UserForLoginDto()
             {
-                Username = userName,
+                Email = email,
                 Password = password
             };
 
@@ -281,16 +282,16 @@ namespace TestsLib
         }
 
         [Theory]
-        [InlineData("Holly","badpassw")]
-        [InlineData("Zelma","badpassw")]
-        [InlineData("Admin","badpassw")]
-        public void IntegrationTest_Given_UserForLoginDtoWithBadPassword_When_Login_Then_Return_Unauthorized(string userName, string password)
+        [InlineData("hollyjones@isodrive.com","badpassw")]
+        [InlineData("zelmajones@isodrive.com","badpassw")]
+        [InlineData("admin@shop.eu","badpassw")]
+        public void IntegrationTest_Given_UserForLoginDtoWithBadPassword_When_Login_Then_Return_Unauthorized(string email, string password)
         {
             //Arrange
 
             var expected = new UserForLoginDto()
             {
-                Username = userName,
+                Email = email,
                 Password = password
             };
 
@@ -315,7 +316,7 @@ namespace TestsLib
 
             var expected = new UserForLoginDto()
             {
-                Username = "badusername",
+                Email = "bademail@example.com",
                 Password = "password"
             };
 

@@ -1,3 +1,25 @@
-<p>
-  my-account works!
-</p>
+
+
+  <div class="sidebar">
+    <a class="active" [routerLink]="['/account']">Home</a>
+    <a [routerLink]="['/account/change-user-info']">Change User Acc Info</a>
+    <a [routerLink]="['/account/address-book']">Address Book</a>
+    <a href="#contact">Change Password</a>
+  </div>
+<div class="content">
+  <p>
+    UserName: {{model.name}}
+  </p>
+  <p>
+    SurName: {{model.surName}}
+  </p>
+  <p>
+    Email: {{model.email}}
+  </p>
+  <p>
+    Phone: {{model.phoneNumber}}
+  </p>
+</div>
+
+
+

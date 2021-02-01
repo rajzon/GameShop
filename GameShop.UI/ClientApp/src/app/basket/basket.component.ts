@@ -45,7 +45,8 @@ export class BasketComponent implements OnInit {
   }
   synchronizeBasket() {
     this.shopOrderingService.synchronizeBasket().subscribe(() => {
-      this.router.navigateByUrl('/checkout/customer-info');
+      console.log(this.basket);
+      this.router.navigateByUrl('/checkout/order-info');
     }, error => {
      if (IsArrayOfNotEnoughStockInfoFromServer(error)) {
       const initialState = {

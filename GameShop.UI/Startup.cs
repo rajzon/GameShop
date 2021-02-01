@@ -97,6 +97,7 @@ namespace GameShop.UI
             {
                 var cookieExpireDays = int.Parse(Configuration["BasketSettings:CookieExpireDays"]);
                 options.Cookie.MaxAge = TimeSpan.FromDays(cookieExpireDays);
+                options.Cookie.Name = "Basket";
 
             });
 

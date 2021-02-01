@@ -10,5 +10,6 @@ namespace GameShop.Application.Interfaces
     public interface IStockOnHoldRepository : IBaseRepository<StockOnHold>
     {
         Task<List<StockOnHoldWithProductForCountOrderPriceDto>> GetStockOnHoldWithProductForCharge(ISession session, List<ProductFromBasketCookieDto> basketProductsCookie);
+        Task<bool> SetExpiredForStocksOnHoldAsync(ISession session);
     }
 }

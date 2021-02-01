@@ -136,13 +136,41 @@ namespace GameShop.Infrastructure
         public IStockOnHoldRepository StockOnHold
         {
             get { 
-                    if(_order == null) 
+                    if(_stockOnHold == null) 
                     {
                         _stockOnHold = new StockOnHoldRepository(_ctx);
                     } 
                     return _stockOnHold; 
                 }
         }
+
+        private IAddressRepository _address;
+        public IAddressRepository Address
+        {
+            get { 
+                    if(_address == null) 
+                    {
+                        _address = new AddressRepository(_ctx);
+                    } 
+                    return _address; 
+                }
+
+        }
+
+        private IDeliveryOptRepository _deliveryOpt;
+        public IDeliveryOptRepository DeliveryOpt
+        {
+            get {
+                if (_deliveryOpt == null)
+                {
+                    _deliveryOpt = new DeliveryOptRepository(_ctx);
+                }
+                return _deliveryOpt;   
+            }
+            
+        }
+        
+        
         
         public bool IsAnyEntityModified()
         {
@@ -154,6 +182,11 @@ namespace GameShop.Infrastructure
         {
             return _ctx.ChangeTracker.Entries().Any(x => x.State == EntityState.Added);
    
+        }
+
+        public bool IsAnyEntityDeleted()
+        {
+            return _ctx.ChangeTracker.Entries().Any(x => x.State.Equals(EntityState.Deleted));
         }
         
 

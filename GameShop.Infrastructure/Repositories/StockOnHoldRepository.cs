@@ -38,5 +38,19 @@ namespace GameShop.Infrastructure.Repositories
             return result;                     
         }
 
+        public async Task<bool> SetExpiredForStocksOnHoldAsync(ISession session)
+        {
+            var stocksToExpire = await _ctx.StockOnHolds.Where(s => s.SessionId.Equals(session.Id)).ToListAsync();
+
+            if (stocksToExpire.Any())
+            {
+                stocksToExpire.ForEach(s => s.ExpireTime = DateTime.Now.AddYears(-1));
+                return true;      
+            }
+
+
+            return false;
+        }
+
     }
 }

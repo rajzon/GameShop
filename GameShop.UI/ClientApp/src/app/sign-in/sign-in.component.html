@@ -4,7 +4,7 @@
         <hr>
       
         <div class="form-group">
-          <input type="text" class="form-control" minlength="{{userNameMinLength}}" maxlength="{{userNameMaxLength}}" name="username" required placeholder="Username" [(ngModel)]="model.username">
+          <input type="email" class="form-control" [pattern]="emailPattern" name="email" required placeholder="Email" [(ngModel)]="model.email">
         </div>
       
         <div class="form-group">

@@ -74,7 +74,6 @@ namespace GameShop.Application.Basket
             }
             stockToSubtract.Quantity -= stockQty;
             
-
             return stockOnHoldToBeAdded;
 
         }

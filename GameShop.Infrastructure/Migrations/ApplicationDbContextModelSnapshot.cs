@@ -19,6 +19,61 @@ namespace GameShop.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("GameShop.Domain.Model.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(320)")
+                        .HasMaxLength(320);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
+
+                    b.Property<string>("PostCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(12)")
+                        .HasMaxLength(12);
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(80)")
+                        .HasMaxLength(80);
+
+                    b.Property<string>("SurName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("GameShop.Domain.Model.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -163,6 +218,69 @@ namespace GameShop.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("GameShop.Domain.Model.DeliveryOpt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(5)")
+                        .HasMaxLength(5);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(9,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliveryOpts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Currency = "$",
+                            Description = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit, similique?",
+                            Name = "DPD",
+                            Price = 5m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Currency = "$",
+                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam pharetra, magna et blandit faucibus, tortor turpis euismod tellus, eu efficitur lorem ligula in ante.Maecenas finibus velit vel ante dictum sagittis. Morbi vitae eros tellus. Fusce mollis sit amet est sed accumsan.",
+                            Name = "DHL",
+                            Price = 4.55m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Currency = "$",
+                            Description = "Vivamus sed nulla quam. Aliquam sit amet risus hendrerit orci scelerisque pellentesque.",
+                            Name = "INPOST",
+                            Price = 5.20m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Currency = "$",
+                            Description = "Usce mollis sit amet est sed accumsan. Proin vel quam vitae velit condimentum lobortis et ac diam.",
+                            Name = "DIGITAL_PRODUCT",
+                            Price = 0m
+                        });
+                });
+
             modelBuilder.Entity("GameShop.Domain.Model.Language", b =>
                 {
                     b.Property<int>("Id")
@@ -219,14 +337,23 @@ namespace GameShop.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(80)")
-                        .HasMaxLength(80);
-
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(40)")
                         .HasMaxLength(40);
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
+
+                    b.Property<string>("DeliveryType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(320)")
+                        .HasMaxLength(320);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -239,10 +366,14 @@ namespace GameShop.Infrastructure.Migrations
                     b.Property<Guid>("OrderRef")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
+
                     b.Property<string>("PostCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(6)")
-                        .HasMaxLength(6);
+                        .HasColumnType("nvarchar(12)")
+                        .HasMaxLength(12);
 
                     b.Property<string>("Street")
                         .IsRequired()
@@ -1013,6 +1144,10 @@ namespace GameShop.Infrastructure.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SurName")
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -1132,6 +1267,15 @@ namespace GameShop.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("GameShop.Domain.Model.Address", b =>
+                {
+                    b.HasOne("GameShop.Domain.Model.User", "User")
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GameShop.Domain.Model.CategorySubCategory", b =>

@@ -1,3 +1,4 @@
+import { ShopOrderingService } from 'src/app/_services/shop-ordering.service';
 import { MessagePopupService } from './../_services/message-popup.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
@@ -12,13 +13,13 @@ import { environment } from 'src/environments/environment';
 export class SignInComponent implements OnInit {
   model: any = {};
 
-  userNameMaxLength: number = environment.userNameMaxLength;
-  userNameMinLength: number = environment.userNameMinLength;
+  emailPattern = '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
+
   userPasswordMaxLength: number = environment.userPasswordMaxLength;
   userPasswordMinLength: number = environment.userPasswordMinLength;
 
 
-  constructor(private authService: AuthService , private router: Router, private messagePopup: MessagePopupService) { }
+  constructor(private authService: AuthService , private router: Router, private messagePopup: MessagePopupService, private shopOrdering: ShopOrderingService) { }
 
   ngOnInit() {}
 
@@ -32,7 +33,19 @@ export class SignInComponent implements OnInit {
       this.authService.sendLoggedInStatus(token);
       const decodedToken = this.authService.decodedToken;
       this.authService.sendDecodedToken(decodedToken);
-      this.router.navigate(['/home']);
+
+
+      localStorage.removeItem('orderInfo');
+      this.shopOrdering.clearBasket().subscribe(response => {
+        this.messagePopup.displaySuccess('Basket cleared successfully');
+        this.router.navigate(['/home']); 
+      }, error => {
+        this.messagePopup.displayError(error);
+        this.router.navigate(['/home']);
+      });
+
+      
+      
     });
 
   }

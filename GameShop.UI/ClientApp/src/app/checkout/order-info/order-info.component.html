@@ -1,0 +1,157 @@
+<!-- <div class="container">
+  <form #orderInfoForm="ngForm" (ngSubmit)="submitCustomerInfo()">
+    <h2 class="text-center text-primary">Order Informations</h2>
+    <hr>
+
+    <div class="form-group">
+      <input type="text" class="form-control" required name="name"  maxlength="{{nameMaxLength}}" placeholder="Name" [(ngModel)]="model.name" >
+    </div>
+    
+    <div class="form-group">
+      <input type="text" class="form-control" required name="surName" maxlength="{{surNameMaxLength}}" placeholder="SurName" [(ngModel)]="model.surName">
+    </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" required name="street" maxlength="{{streetMaxLength}}" placeholder="Street" [(ngModel)]="model.street">
+    </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" required name="postCode" maxlength="{{postCodeMaxLength}}" placeholder="Post Code" [(ngModel)]="model.postCode">
+    </div>
+
+    <div class="form-group">
+      <input type="text" class="form-control" name="city" placeholder="City" maxlength="{{cityMaxLength}}" [(ngModel)]="model.city">
+    </div>
+
+    <div class="form-group text-center">
+      <button [disabled]="!orderInfoForm.valid" class="btn btn-success" type="submit">Payment</button>
+      <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
+    </div> 
+  </form>
+</div> -->
+<div class="mx-5 my-5">
+  <div class="row my-3">
+    <!--Main section-->
+    <div class="col-lg-8 col-12 ">
+      <div class="row">
+        <!--Delivery address-->
+        <div *ngIf="!editionAddressMode" class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-uppercase text-center font-weight-bold">delivery address</h4>
+              <div class="row">
+                <div class="col-md-9 col-10">
+                  <p class="card-text">Name+SurName: {{model.name}} {{model.surName}}</p>
+                  <p class="card-text">Street: {{model.street}}</p>
+                  <p class="card-text">City: {{model.city}}</p>
+                  <p class="card-text">PostCode: {{model.postCode}}</p>
+                  <p class="card-text">Country: {{model.country}}</p>
+                  <p class="card-text">Phone: {{model.phone}}</p>
+                </div>
+                <div class="col-md-3 col-12 mt-1">
+                  <button class="btn btn-outline-success" type="button" (click)="editionAddressMode = true;">Change</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--End of delivery address-->
+        <!--Edit Address-->
+        <div class="col-12">
+            <app-edit-address-checkout *ngIf="editionAddressMode" [orderInfo] ="model" (editionMode)="canceledOrSuccessfullAddressEdition($event)"></app-edit-address-checkout>
+        </div>
+       
+        <!--End of Edit Address-->
+        <!--Delivery Options-->
+        <div class="col-12 my-3">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title text-uppercase text-center font-weight-bold">delivery options</h4>
+            </div>
+            <div class="card-body">
+              <div *ngFor="let deliveryOpt of deliveryOpts" class="row">
+                <div class="col-12 py-3">
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="row">
+                          <div class="col-2">
+                              <p class="card-text font-weight-bold">{{deliveryOpt.price}} {{deliveryOpt.currency}}</p>
+                          </div>
+                          <div class="col-11">
+                              <span class="card-text font-weight-bold text-uppercase">{{deliveryOpt.name}}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 ml-5">
+                          <div class="row">
+                            <div class="col-10">
+                                <label for="{{deliveryOpt.id}}" class="form-check-label">{{deliveryOpt.description}}</label>
+                            </div>
+                              <div class="col-2">
+                                  <input type="radio" name="deliveryOptions" (change)="saveDeliveryOpt()" [value]="deliveryOpt.name" [(ngModel)]="model.deliveryType"  class="form-check-input ml-2 mr-1" id="{{deliveryOpt.id}}">
+                              </div>
+                                                        
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <!--End of Delivery Options-->
+      </div>
+      </div>
+    </div>
+    <!--End of main section-->
+    <!--Basket Card--->
+    <div class="col-lg-4 col-12">
+      <div class="d-flex">
+        <div class="col-12">
+         <div class="card">
+           <div class="card-body">
+             <div class="row card-title">
+               <div class="col-md-9 col-12">
+                 <h6 class=" text-uppercase font-weight-bold">Item 1</h6>
+                </div>
+                <div class="col-md-3 col-12">
+                  <button class="btn btn-outline-success" type="button">Edit</button>
+                </div>
+             </div>
+             <div class="d-flex">
+               <div class="col-12">
+                 <div *ngFor="let product of basket?.basketProducts" class="row mb-2">
+                   <div class="col-4">
+                      <img class="card-img" src="http://placehold.it/200x300.jpg" alt="placehold">
+                   </div>
+                   <div class="col-8">
+                      <p class="card-text font-weight-bold">{{product.price}}$</p>
+                      <p class="card-text">{{product.name}}</p>
+                      <p class="card-text">Qty: {{product.stockQty}}</p>
+                      <p class="card-text">{{product.categoryName}}</p>
+                   </div>
+                 </div>
+                 <div class="row">
+                  <div class="col-12">
+                    <p class="card-text">Subtotal: {{basket?.basketPrice}}$</p>
+                    <p class="card-text">Delivery: delivery cost</p>
+                    <p class="card-text text-uppercase font-weight-bold">Total to pay: price with delivery cost</p>
+                  </div>
+                 </div>
+                 
+               </div>
+             </div>
+             
+           </div>
+         </div>
+        </div>
+      </div>
+    </div>
+    <!-- End of Basket Card--->
+  </div>
+  <div class="col-12 col-lg-8 my-3">      
+      <button type="button" class="btn btn-success px-5 py-2 d-block mx-auto w-75" [disabled]="!isOrderInfoDirty()"  (click)="goToPaySection()">Go To Pay Section</button>     
+    </div>
+</div>
+<!-- <div *ngIf="editionAddressMode">
+  <app-edit-address-checkout [orderInfo] ="model"></app-edit-address-checkout>
+</div> -->

@@ -9,6 +9,11 @@ export class MessagePopupService {
 constructor(private toastr: ToastrService) { }
 
 public displayError(error: any): void {
+  if (error instanceof Array) {
+      let errors = '';
+      error.forEach(x => errors += x.description + '; ' );
+      this.toastr.error(errors);
+  } else
   if (error instanceof Object) {
       this.toastr.error(error.title);
   } else {

@@ -13,9 +13,12 @@ namespace GameShop.Application.Interfaces
         IRequirementsRepository Requirements { get; } 
         IStockRepository Stock { get; }
         IOrderRepository Order { get;} 
-        IStockOnHoldRepository StockOnHold { get;} 
+        IStockOnHoldRepository StockOnHold { get;}
+        IAddressRepository Address { get; }
+        IDeliveryOptRepository DeliveryOpt { get; } 
         Task<bool> SaveAsync();
         bool IsAnyEntityModified();
         bool IsAnyEntityAdded();
+        bool IsAnyEntityDeleted();
     }
 }

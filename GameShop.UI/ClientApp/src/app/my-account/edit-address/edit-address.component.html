@@ -1,0 +1,114 @@
+
+<div class="container my-5">
+    <form [formGroup]='editAddressForm' (submit)="editUserAddress()">
+        <h2 class="text-center text-primary text-capitalize">edit address</h2>
+        <hr>
+    
+        <div class="form-group">
+            <input
+                [class.is-invalid]="editAddressForm.get('name').errors && editAddressForm.get('name').touched"  
+                type="text" 
+                class="form-control" 
+                formControlName='name'  
+                placeholder="Name">
+            <div *ngIf="editAddressForm.get('name').hasError('required')" 
+                class="invalid-feedback">Name field cannot be empty</div>
+            <div *ngIf="editAddressForm.get('name').hasError('maxlength')" 
+                class="invalid-feedback">Name field must be at most {{nameMaxLength}} characters</div>
+        </div>
+    
+        <div class="form-group">
+            <input 
+                [class.is-invalid]="editAddressForm.get('surName').errors && editAddressForm.get('surName').touched" 
+                type="text" 
+                class="form-control" 
+                formControlName='surName'  
+                placeholder="SurName">
+            <div *ngIf="editAddressForm.get('surName').hasError('required')" 
+                class="invalid-feedback">Surname field cannot be empty</div>
+            <div *ngIf="editAddressForm.get('surName').hasError('maxlength')" 
+                class="invalid-feedback">Surname field must be at most {{surNameMaxLength}} characters</div>
+        </div>
+    
+        <div class="form-group">
+            <input
+                [class.is-invalid]="editAddressForm.get('street').errors && editAddressForm.get('street').touched" 
+                type="text" 
+                class="form-control" 
+                formControlName='street'  
+                placeholder="Street">
+            <div *ngIf="editAddressForm.get('street').hasError('required')" 
+                class="invalid-feedback">Street field cannot be empty</div>
+            <div *ngIf="editAddressForm.get('street').hasError('maxlength')" 
+                class="invalid-feedback">Street field must be at most {{streetMaxLength}} characters</div>
+        </div>
+    
+        <div class="form-group">
+            <input
+                [class.is-invalid]="editAddressForm.get('postCode').errors && editAddressForm.get('postCode').touched"  
+                type="text" 
+                class="form-control" 
+                formControlName='postCode'  
+                placeholder="Post code">
+            <div *ngIf="editAddressForm.get('postCode').hasError('required')" 
+                class="invalid-feedback">Post code field cannot be empty</div>
+            <div *ngIf="editAddressForm.get('postCode').hasError('maxlength')" 
+                class="invalid-feedback">Post code field must be at most {{streetMaxLength}} characters</div>
+        </div>
+    
+        <div class="form-group">
+            <input
+                [class.is-invalid]="editAddressForm.get('phone').errors && editAddressForm.get('phone').touched"   
+                type="text" 
+                class="form-control" 
+                formControlName='phone'  
+                placeholder="Phone">
+            <div *ngIf="editAddressForm.get('phone').hasError('required')" 
+                class="invalid-feedback">Phone field cannot be empty</div>
+            <div *ngIf="editAddressForm.get('phone').hasError('pattern')" 
+                class="invalid-feedback">Phone field must match phone number address specification</div>
+        </div>
+    
+        <div class="form-group">
+            <input
+                [class.is-invalid]="editAddressForm.get('email').errors && editAddressForm.get('email').touched"    
+                type="text" 
+                class="form-control" 
+                formControlName='email'  
+                placeholder="Email">
+            <div *ngIf="editAddressForm.get('email').hasError('required')" 
+                class="invalid-feedback">Email field cannot be empty</div>
+            <div *ngIf="editAddressForm.get('email').hasError('pattern')" 
+                class="invalid-feedback">Email field must match email address specification</div>
+        </div>
+    
+        <div class="form-group">
+            <input
+                [class.is-invalid]="editAddressForm.get('city').errors && editAddressForm.get('city').touched"    
+                type="text" 
+                class="form-control" 
+                formControlName='city'  
+                placeholder="City">
+            <div *ngIf="editAddressForm.get('city').hasError('maxlength')" 
+                class="invalid-feedback">City field must be at most {{cityMaxLength}} characters</div>
+        </div>
+    
+        <div class="form-group">
+            <input
+                [class.is-invalid]="editAddressForm.get('country').errors && editAddressForm.get('country').touched"
+                type="text" 
+                class="form-control" 
+                formControlName='country'  
+                placeholder="Country">
+            <div *ngIf="editAddressForm.get('country').hasError('maxlength')" 
+                class="invalid-feedback">Country field must be at most {{countryMaxLength}} characters</div>
+        </div>
+    
+    
+        <div class="form-group text-center">
+            <button [disabled]="!editAddressForm.valid || !editAddressForm.dirty" class="btn btn-success" type="submit">Edit Address</button>
+            <button class="btn btn-default" (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+</div>
+

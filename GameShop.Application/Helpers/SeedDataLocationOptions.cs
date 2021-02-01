@@ -9,5 +9,6 @@ namespace GameShop.Application.Helpers
         public string RequirementsSeedData { get; set; }
         public string SubCategorySeedData { get; set; }
         public string UserSeedData { get; set; }
+        public string DeliveryOptSeedData { get; set; }
     }
 }

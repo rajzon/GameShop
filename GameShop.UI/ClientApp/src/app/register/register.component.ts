@@ -3,6 +3,7 @@ import { AuthService } from './../_services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -12,8 +13,13 @@ import { environment } from 'src/environments/environment';
 export class RegisterComponent implements OnInit {
   model: any = {};
 
+  emailPattern = '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
+  phonePattern = '^[0-9]{1,15}$';
+
   userNameMaxLength: number = environment.userNameMaxLength;
   userNameMinLength: number = environment.userNameMinLength;
+  userSurNameMaxLength: number = environment.userSurNameMaxLength;
+  userSurNameMinLength: number = environment.userSurNameMinLength;
   userPasswordMaxLength: number = environment.userPasswordMaxLength;
   userPasswordMinLength: number = environment.userPasswordMinLength;
 
@@ -23,11 +29,15 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): void {
+    console.log(this.model);
     this.authService.register(this.model).subscribe(() => {
       this.messagePopup.displaySuccess('Successful registration');
+      this.router.navigate(['/home']);
     }, error => {
+      console.log(error);
       this.messagePopup.displayError(error);
     });
+
   }
 
   cancel(): void {

@@ -1,6 +1,13 @@
+import { TextInputComponent } from './_forms/text-input/text-input.component';
+import { EditAddressCheckoutComponent } from './checkout/edit-address-checkout/edit-address-checkout.component';
+import { EditAddressComponent } from './my-account/edit-address/edit-address.component';
+import { CreateAddressComponent } from './my-account/create-address/create-address.component';
+import { AddressBookComponent } from './my-account/address-book/address-book.component';
+import { ChangeUserInfoComponent } from './my-account/change-user-info/change-user-info.component';
+import { UserService } from './_services/user.service';
 import { BasketMissingStocksModalComponent } from './basket/basket-missing-stocks-modal/basket-missing-stocks-modal.component';
 import { PaymentComponent } from './checkout/payment/payment.component';
-import { CustomerInfoComponent } from './checkout/customer-info/customer-info.component';
+import { OrderInfoComponent } from './checkout/order-info/order-info.component';
 import { StockManagmentComponent } from './admin/stock-managment/stock-managment.component';
 import { ShopSearchingService } from './_services/shop-searching.service';
 import { EditProductComponent } from './admin/edit-product/edit-product.component';
@@ -15,8 +22,8 @@ import { AuthService } from './_services/auth.service';
 import { appRoutes } from './routes';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -69,14 +76,21 @@ export function tokenGetter() {
       RequirementsModalComponent,
       ProductCardComponent,
       StockManagmentComponent,
-      CustomerInfoComponent,
+      OrderInfoComponent,
       PaymentComponent,
-      BasketMissingStocksModalComponent
+      BasketMissingStocksModalComponent,
+      ChangeUserInfoComponent,
+      AddressBookComponent,
+      CreateAddressComponent,
+      EditAddressComponent,
+      EditAddressCheckoutComponent,
+      TextInputComponent
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
       HttpClientModule,
       FormsModule,
+      ReactiveFormsModule,
       BrowserAnimationsModule,
       BsDropdownModule.forRoot(),
       PaginationModule.forRoot(),
@@ -101,6 +115,7 @@ export function tokenGetter() {
      ShopSearchingService,
      MessagePopupService,
      CookieService,
+     UserService
   ],
   entryComponents: [
      RolesModalComponent,

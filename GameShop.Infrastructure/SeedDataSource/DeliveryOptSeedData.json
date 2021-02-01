@@ -1,0 +1,30 @@
+[
+    {
+        "Id":1,
+        "name": "DPD",
+        "price": 5,
+        "currency": "$",
+        "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit, similique?"
+    },
+    {
+        "Id":2,
+        "name": "DHL",
+        "price": 4.55,
+        "currency": "$",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam pharetra, magna et blandit faucibus, tortor turpis euismod tellus, eu efficitur lorem ligula in ante.Maecenas finibus velit vel ante dictum sagittis. Morbi vitae eros tellus. Fusce mollis sit amet est sed accumsan."
+    },
+    {
+        "Id":3,
+        "name": "INPOST",
+        "price": 5.20,
+        "currency": "$",
+        "description": "Vivamus sed nulla quam. Aliquam sit amet risus hendrerit orci scelerisque pellentesque."
+    },
+    {
+        "Id":4,
+        "name": "DIGITAL_PRODUCT",
+        "price": 0,
+        "currency": "$",
+        "description": "Usce mollis sit amet est sed accumsan. Proin vel quam vitae velit condimentum lobortis et ac diam."
+    }
+]

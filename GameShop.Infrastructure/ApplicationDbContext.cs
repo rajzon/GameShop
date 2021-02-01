@@ -37,6 +37,8 @@ namespace GameShop.Infrastructure
         public DbSet<OrderStock> OrderStocks { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<StockOnHold> StockOnHolds { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<DeliveryOpt> DeliveryOpts { get; set; }
         
 
 
@@ -57,6 +59,9 @@ namespace GameShop.Infrastructure
             builder.ApplyConfiguration(new OrderConfiguration());
             builder.ApplyConfiguration(new OrderStockConfiguration());
             builder.ApplyConfiguration(new StockOnHoldConfiguration());
+            builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfiguration(new AddressConfiguration());
+            builder.ApplyConfiguration(new DeliveryOptConfiguration());
 
 
             builder.Entity<Product>()
