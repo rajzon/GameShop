@@ -1,9 +1,0 @@
-C:\Users\Dawid\Documents\GameShop\GameShop.Domain\bin\release\netstandard2.0\GameShop.Domain.deps.json
-C:\Users\Dawid\Documents\GameShop\GameShop.Domain\bin\release\netstandard2.0\GameShop.Domain.dll
-C:\Users\Dawid\Documents\GameShop\GameShop.Domain\bin\release\netstandard2.0\GameShop.Domain.pdb
-C:\Users\Dawid\Documents\GameShop\GameShop.Domain\obj\release\netstandard2.0\GameShop.Domain.csprojAssemblyReference.cache
-C:\Users\Dawid\Documents\GameShop\GameShop.Domain\obj\release\netstandard2.0\GameShop.Domain.csproj.CoreCompileInputs.cache
-C:\Users\Dawid\Documents\GameShop\GameShop.Domain\obj\release\netstandard2.0\GameShop.Domain.AssemblyInfoInputs.cache
-C:\Users\Dawid\Documents\GameShop\GameShop.Domain\obj\release\netstandard2.0\GameShop.Domain.AssemblyInfo.cs
-C:\Users\Dawid\Documents\GameShop\GameShop.Domain\obj\release\netstandard2.0\GameShop.Domain.dll
-C:\Users\Dawid\Documents\GameShop\GameShop.Domain\obj\release\netstandard2.0\GameShop.Domain.pdb
