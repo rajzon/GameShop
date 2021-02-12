@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,7 +14,7 @@ namespace GameShop.UI.Controllers
 
     [ApiController]
     [AllowAnonymous]
-    [TransferStockOnHoldWhenExpireAttribute]
+    [TransferStockOnHoldWhenExpire]
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
@@ -51,7 +52,6 @@ namespace GameShop.UI.Controllers
 
             Response.AddPagination(products.CurrentPage, products.PageSize, 
                             products.TotalCount, products.TotalPages); 
-
 
             return Ok(productToReturn);
         }

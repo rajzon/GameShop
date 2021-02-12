@@ -79,7 +79,7 @@ namespace TestsLib
         [InlineData(7)]
         [InlineData(10)]
         [InlineData(11)]
-        public void Given_UserId_When_GetUser_ThenReturn_OkStatusWithUsers(int userId)
+        public void Given_UserId_When_GetUserForAccInfo_ThenReturn_OkStatusWithUsers(int userId)
         {
             //Arrange
             var expected = Data.OrderedUsers().FirstOrDefault(u => u.Id == userId);

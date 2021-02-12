@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GameShop.Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameShop.Application.StockManipulations
 {
@@ -22,21 +23,31 @@ namespace GameShop.Application.StockManipulations
 
             if (stockOnHoldsToTransfer.Any())
             { 
-                foreach (var stockOnHold in stockOnHoldsToTransfer)
+
+                try 
                 {
-                    var stockToUpdate = await _unitOfWork.Stock.GetAsync(stockOnHold.StockId);
-                    if (stockToUpdate == null)
+
+                
+                    foreach (var stockOnHold in stockOnHoldsToTransfer)
                     {
-                        throw new NullReferenceException("StockId from StockOnHold not exist in Stock Entity - that's unexpected"); 
+                        var stockToUpdate = await _unitOfWork.Stock.GetAsync(stockOnHold.StockId);
+                        if (stockToUpdate == null)
+                        {
+                            throw new NullReferenceException("StockId from StockOnHold not exist in Stock Entity - that's unexpected"); 
+                        }
+                        stockToUpdate.Quantity += stockOnHold.StockQty;
                     }
-                    stockToUpdate.Quantity += stockOnHold.StockQty;
+
+                    _unitOfWork.StockOnHold.DeleteRange(stockOnHoldsToTransfer);
+
+                    result = await _unitOfWork.SaveAsync()? true : false;
+
+                    return result;
                 }
-
-                _unitOfWork.StockOnHold.DeleteRange(stockOnHoldsToTransfer);
-
-               result = await _unitOfWork.SaveAsync()? true : false;
-
-               return result;
+                catch (DbUpdateConcurrencyException)
+                {
+                    return false;
+                }
                 
             }
 

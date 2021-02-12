@@ -44,12 +44,11 @@ export class NavComponent implements OnInit {
 
     this.shopOrdering.clearBasket().subscribe(response => {
       this.messagePopup.displaySuccess('Basket cleared successfully');
-      this.router.navigate(['/home']);
     }, error => {
-      this.messagePopup.displayError(error);
-      this.router.navigate(['/home']);
+      this.messagePopup.displayError(error);   
     });
-
+    
+    this.router.navigate(['/home']);
        
     this.messagePopup.displaySuccess('Logged out successfully');
   }

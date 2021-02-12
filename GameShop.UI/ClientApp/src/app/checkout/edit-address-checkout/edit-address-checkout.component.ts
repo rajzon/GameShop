@@ -55,8 +55,7 @@ export class EditAddressCheckoutComponent implements OnInit {
       phone: new FormControl(this.orderInfo.phone, [Validators.required, IsPhoneNumber()]),
       email: new FormControl(this.orderInfo.email, [Validators.required, IsEmailAddress()]),
       city: new FormControl(this.orderInfo.city, [Validators.maxLength(this.cityMaxLength)]),
-      country: new FormControl(this.orderInfo.country, [Validators.maxLength(this.countryMaxLength)]),
-      deliveryType: new FormControl(this.orderInfo.deliveryType)
+      country: new FormControl(this.orderInfo.country, [Validators.maxLength(this.countryMaxLength)])
     });
   }
 
@@ -80,7 +79,9 @@ export class EditAddressCheckoutComponent implements OnInit {
 
 
   submitCustomerAddress(): void {
+    const deliveryType = this.orderInfo.deliveryType;
     this.orderInfo = this.editAddressForm.value;
+    (deliveryType !== null)? this.orderInfo.deliveryType = deliveryType: {};
     const orderInfo = JSON.stringify(this.orderInfo);
     localStorage.setItem('orderInfo', orderInfo);
     this.editionMode.emit(false);

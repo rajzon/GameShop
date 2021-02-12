@@ -37,14 +37,12 @@ export class SignInComponent implements OnInit {
 
       localStorage.removeItem('orderInfo');
       this.shopOrdering.clearBasket().subscribe(response => {
-        this.messagePopup.displaySuccess('Basket cleared successfully');
-        this.router.navigate(['/home']); 
+        this.messagePopup.displaySuccess('Basket cleared successfully');      
       }, error => {
         this.messagePopup.displayError(error);
-        this.router.navigate(['/home']);
       });
 
-      
+      this.router.navigate(['/home']); 
       
     });
 

@@ -66,7 +66,8 @@ namespace TestsLib
   
 
             //Assert
-            result.Should().BeOfType(typeof(UnauthorizedResult));
+            result.Should().BeOfType(typeof(BadRequestObjectResult));
+            result.As<BadRequestObjectResult>().Value.Should().Be("Trying to change photo that do not exists for that product");
         }
 
 
