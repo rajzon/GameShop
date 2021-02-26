@@ -118,6 +118,11 @@ namespace GameShop.UI.Controllers
         {
             var basketJson = HttpContext.Session.GetString("Basket");
 
+            if (string.IsNullOrEmpty(basketJson))
+            {
+                return BadRequest("Basket is empty, there is no elements to be cleared");
+            }
+
             var basketCookie = JsonConvert.DeserializeObject<List<ProductFromBasketCookieDto>>(basketJson);
 
             if (!await _deleteStockFromBasket.Do(HttpContext.Session, basketCookie, stockId))

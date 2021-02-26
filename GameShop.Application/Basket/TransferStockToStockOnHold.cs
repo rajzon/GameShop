@@ -38,18 +38,9 @@ namespace GameShop.Application.Basket
             {
                 return null;
             }
-            if (transferType == TransferStockToStockOnHoldTypeEnum.OneWithUpdatingExpireTimeForBasketProducts)
-            {
-                var stocksOnHoldToChangeExpireTime = await _unitOfWork.StockOnHold.FindAllAsync(s => s.SessionId == session.Id);
 
-                if (stocksOnHoldToChangeExpireTime.Count() > 1)
-                {
-                    foreach (var stockOnHold in stocksOnHoldToChangeExpireTime)
-                    {        
-                        stockOnHold.ExpireTime = DateTime.Now.AddMinutes(_basketOptions.Value.StockOnHoldExpireMinutes);
-                    }
-                }
-            }           
+            await ChangeExpireTimeForExistingStocksOnHold(transferType, session);
+
             var stockOnHoldToBeAdded = await _unitOfWork.StockOnHold.FindAsync(s => s.SessionId == session.Id && s.StockId == stockToSubtract.Id);
 
             if (stockOnHoldToBeAdded != null)
@@ -77,5 +68,22 @@ namespace GameShop.Application.Basket
             return stockOnHoldToBeAdded;
 
         }
+
+
+        private async Task ChangeExpireTimeForExistingStocksOnHold(TransferStockToStockOnHoldTypeEnum transferType ,ISession session)
+        {
+            if (transferType == TransferStockToStockOnHoldTypeEnum.OneWithUpdatingExpireTimeForBasketProducts)
+            {
+                var stocksOnHoldToChangeExpireTime = await _unitOfWork.StockOnHold.FindAllAsync(s => s.SessionId == session.Id);
+
+                if (stocksOnHoldToChangeExpireTime.Count() > 0)
+                {
+                    foreach (var stockOnHold in stocksOnHoldToChangeExpireTime)
+                    {        
+                        stockOnHold.ExpireTime = DateTime.Now.AddMinutes(_basketOptions.Value.StockOnHoldExpireMinutes);
+                    }
+                }
+            }        
+        }  
     }
 }
