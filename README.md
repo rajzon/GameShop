@@ -1,8 +1,6 @@
-## App in Development
-
 ## GameShop
 
-GameShop app will allow user and anonymous to buy product and admin will be able to: edit products, track orders, etc.
+GameShop app allow user and anonymous to buy product. Admin is able to do things like: manage products, manage users roles. 
 ### Store already have the following functionalities:
 - basket functionality with holding Stock for concrete customer and synchronize basket,
 - returning expired stock that is hold for specific customer to the stock that is available to retrieve by another customer,
@@ -16,24 +14,6 @@ GameShop app will allow user and anonymous to buy product and admin will be able
 - adding and removing images for product that are stored in cloud
 - editing stock quanitity for products,
 - editing roles for users
-
-
-
-### Store will have the following functionalities:
-- extended product purchase functionality (for example sending e-mail about order etc.),
-- extended user registration functionality,
-- additional refresh token,
-- user panel,
-- extended browsing products functionality by adding filtering,
-- extended payment functionality by adding more payment options and sending info about payment to an e-mail etc.,
-- generating invoice for order,
-- chat system which will allow customers to talk with shop employee,
-- and so on...
-#### Administrator panel
-- extended administrator panel,
-- data import, data export,
-- creating new categories and subcategories,
-- and so on...
 
 ## Angular packages installation
 
